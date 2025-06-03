@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+
+<head th:insert="~{index :: head}"></head>
+
+<body>
+    <div th:insert="~{index :: navbar}"></div>
+
+    <div class="container-fluid">
+        <div class="row ms-5 vh-100 align-items-center">
+            <div class="col-10">
+                <h1 class="mb-5">
+                    Welcome to
+                    <span class="display-4 fw-bold d-block">
+                        New Aulab Chronicle
+                    </span>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div th:insert="~{index :: footer}"></div>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+
+</html>
