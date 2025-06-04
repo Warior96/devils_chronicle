@@ -21,7 +21,7 @@ CREATE TABLE articles (
     title VARCHAR(100),
     subtitle VARCHAR(100),
     body TEXT,
-    pubish_date DATE,
+    publish_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id BIGINT,
     category_id BIGINT,

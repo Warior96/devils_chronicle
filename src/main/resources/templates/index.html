@@ -31,9 +31,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="">
-                            Crea articolo
+                    <li sec:authorize="isAuthenticated" class="nav-item">
+                        <a class="nav-link" href="/articles/create">
+                            Crete article
                         </a>
                     </li>
                     <li class="nav-item">
@@ -44,7 +44,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Accesso
+                            Access
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li sec:authorize="isAnonymous">
@@ -66,8 +66,8 @@
                     </li>
                 </ul>
                 <div sec:authorize="isAuthenticated"
-                    th:text="'Benvenuto ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')}">
-                    Benvenuto
+                    th:text="'Hello ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')}">
+                    Hello
                 </div>
             </div>
         </div>
@@ -90,9 +90,9 @@
                 </div>
                 <!-- Contact info -->
                 <div class="col-md-4 mb-3 text-end">
-                    <h5>Lavora con noi</h5>
+                    <h5>Work with us</h5>
                     <a href="#" class="btn btn-primary">
-                        Richiedi
+                        Get in touch
                     </a>
                 </div>
             </div>
