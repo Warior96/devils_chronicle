@@ -54,9 +54,9 @@ public class UserController {
 
         userService.saveUser(userDto, redirectAttributes, request, response);
 
-        redirectAttributes.addFlashAttribute("successMessage", "User registered successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "User successfully registered");
 
-        return "redirect:/register?success";
+        return "redirect:/";
     }
 
     // rotta get per il login
