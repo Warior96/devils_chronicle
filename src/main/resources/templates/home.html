@@ -6,6 +6,12 @@
 <body>
     <div th:insert="~{index :: navbar}"></div>
 
+    <div th:if="${param.notAuthorized}">
+        <div class="alert alert-danger">
+            Not authorized!
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="row ms-5 vh-100 align-items-center">
             <div class="col-10">
@@ -18,7 +24,9 @@
             </div>
         </div>
     </div>
+
     <div th:insert="~{index :: footer}"></div>
+
     <script th:replace="~{index :: bootstrapScript}"></script>
 </body>
 
