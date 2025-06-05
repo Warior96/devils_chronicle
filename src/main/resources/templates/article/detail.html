@@ -50,7 +50,7 @@
                         <p>Edited at
                             <span th:text="${article.publishDate}">date</span>
                             by
-                            <a class="text-muted" href="">
+                            <a class="text-muted" th:href="@{/search/{id}(id=${article.user.id})}">
                                 <p th:text="${article.user.username}">User</p>
                             </a>
                         </p>
