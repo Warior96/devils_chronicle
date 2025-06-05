@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +41,7 @@ public class Article {
     @Size(max = 100)
     private String subtitle;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 1000)
     @NotEmpty
     @Size(max = 1000)
     private String body;
@@ -57,5 +58,9 @@ public class Article {
     @ManyToOne
     @JsonIgnoreProperties({ "articles" })
     private Category category;
+
+    @OneToOne(mappedBy = "article")
+    @JsonIgnoreProperties({ "article" })
+    private Image image;
 
 }
