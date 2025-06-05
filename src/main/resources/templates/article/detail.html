@@ -41,7 +41,7 @@
 
                 <div class="text-center">
                     <h2 th:text="${article.subtitle}">Subtitle</h2>
-                    <p class="fs-5">Category:
+                    <p class="fs-5" th:if="${article.category != null}">Category:
                         <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
                             class="text-capitalize fw-bold text-muted" th:text="${article.category.name}">category</a>
                     </p>
