@@ -21,7 +21,8 @@
 
 <body>
     <!-- inizio fragment navbar -->
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light position-fixed top-0 left-0 w-100">
+    <nav th:fragment="navbar"
+        class="navbar navbar-expand-lg navbar-light bg-light position-fixed top-0 left-0 w-100 z-3">
         <div class="container-fluid">
             <a th:href="@{/}" class="navbar-brand">Aulab Chronicle</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -37,8 +38,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">
-                            Link
+                        <a class="nav-link" href="/articles">
+                            All articles
                         </a>
                     </li>
                     <li class="nav-item dropdown">

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+
+<head th:insert="~{index :: head}"></head>
+
+<body>
+    <div th:insert="~{index :: navbar}"></div>
+
+    <div class="min-vh-100">
+        <div th:if="${successMessage}" class="alert aler-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-10 mb-5">
+                    <h1 class="text-center" th:text="${title}">Index articles</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" th:if="${articles.size() > 0}">
+            <div class="row justify-content-center mb-5">
+                <div th:each="article : ${articles}" class="col-12 col-md-4 d-flex justify-content-center">
+                    <div class="card mb-3">
+                        <img th:if="${article.image != null}" th:src="${article.image.path}"
+                            th:alt="'image of ' + ${article.title}" class="card-img-top">
+                        <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
+                            class="card-img-top">
+
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${article.title}"></h5>
+                            <p class="card-text" th:text="${article.subtitle}"></p>
+                            <p class="card-text" th:text="${article.user.username}"></p>
+                            <a th:href="@{/articles/detail/{id}(id=${article.id})}" class="btn btn-primary">Read
+                                more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" th:unless="${articles.size() > 0}">
+            <div class="row justify-content-center">
+                <div class="col-10 mb-5">
+                    <h1 class="text-center">No articles found</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{index :: footer}"></div>
+
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+
+</html>
