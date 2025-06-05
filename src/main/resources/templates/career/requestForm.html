@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+
+<head th:insert="~{index :: head}"></head>
+
+<body>
+    <div th:insert="~{index :: navbar}"></div>
+
+
+    <div class="vh-100">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+
+                <div class="col-12 my-5 justify-content-between align-items-center">
+                    <div class="d-flex justify-content-center align-items-center flex-grow-1">
+                        <h1 th:text="${title}">request</h1>
+                    </div>
+                </div>
+
+                <div class="col-7 my-5">
+                    <!-- enctype="multipart/form-data" -->
+                    <form th:action="@{/operations/career/request/save}" method="POST" th:object="${careerRequest}">
+                        <div class="mb-3">
+                            <label for="body" class="form-label">Reason for request:</label>
+                            <textarea id="body" class="form-control" th:field="*{body}"
+                                placeholder="Enter reason"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">For which role?</label>
+                            <select id="role" th:field="*{role}" class="form-select">
+                                <option th:each="role:${roles}" th:value="${role.id}"
+                                    th:text="${#strings.substring(role.name, 5)}"></option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Send request</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div th:insert="~{index :: footer}"></div>
+
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+
+</html>

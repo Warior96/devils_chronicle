@@ -5,14 +5,19 @@
 
 <body>
     <div th:insert="~{index :: navbar}"></div>
+    <div class="mt-5">
 
-    <div th:if="${param.notAuthorized}">
-        <div class="alert alert-danger">
-            Not authorized!
+        <div th:if="${param.notAuthorized}">
+            <div class="alert alert-danger">
+                Not authorized!
+            </div>
         </div>
-    </div>
-    <div th:if="${successMessage}" class="alert alert-success">
-        <p th:text="${successMessage}"></p>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-success">
+            <p th:text="${errorMessage}"></p>
+        </div>
     </div>
 
     <div class="container-fluid">
