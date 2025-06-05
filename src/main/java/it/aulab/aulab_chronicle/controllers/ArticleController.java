@@ -24,6 +24,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -79,6 +80,14 @@ public class ArticleController {
         redirectAttributes.addFlashAttribute("successMessage", "Article successfully created");
         return "redirect:/";
 
+    }
+
+    // rotta get per visualizzazione dettaglio articolo
+    @GetMapping("detail/{id}")
+    public String detailArticle(@PathVariable("id") Long id, Model viewModel) {
+        viewModel.addAttribute("title", "Article Detail");
+        viewModel.addAttribute("article", articleService.read(id));
+        return "article/detail";
     }
 
 }
