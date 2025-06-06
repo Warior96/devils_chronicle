@@ -13,7 +13,9 @@ import org.springframework.validation.BindingResult;
 import it.aulab.aulab_chronicle.dtos.ArticleDto;
 import it.aulab.aulab_chronicle.dtos.UserDto;
 import it.aulab.aulab_chronicle.models.User;
+import it.aulab.aulab_chronicle.repositories.CareerRequestRepository;
 import it.aulab.aulab_chronicle.services.ArticleService;
+import it.aulab.aulab_chronicle.services.CategoryService;
 import it.aulab.aulab_chronicle.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 @Controller
 public class UserController {
 
@@ -34,21 +37,11 @@ public class UserController {
     @Autowired
     private ArticleService articleService;
 
-    // rotta get per la home
-    @GetMapping("/")
-    public String home(Model viewModel) {
+    @Autowired
+    private CareerRequestRepository careerRequestRepository;
 
-        List<ArticleDto> articles = articleService.readAll();
-
-        // ordine di visualizzazione articoli
-        Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
-
-        List<ArticleDto> lastThreeArticles = articles.stream().limit(3).collect(Collectors.toList());
-
-        viewModel.addAttribute("articles", lastThreeArticles);
-
-        return "home";
-    }
+    @Autowired
+    private CategoryService categoryService;
 
     // rotta get per la registrazione
     @GetMapping("/register")
@@ -80,6 +73,28 @@ public class UserController {
         return "redirect:/";
     }
 
+    // rotta get per il login
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
+
+    // rotta get per la home
+    @GetMapping("/")
+    public String home(Model viewModel) {
+
+        List<ArticleDto> articles = articleService.readAll();
+
+        // ordine di visualizzazione articoli
+        Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
+
+        List<ArticleDto> lastThreeArticles = articles.stream().limit(3).collect(Collectors.toList());
+
+        viewModel.addAttribute("articles", lastThreeArticles);
+
+        return "home";
+    }
+
     // rotta get per la ricerca articoli per utente
     @GetMapping("/search/{id}")
     public String userArticlesSearch(@PathVariable("id") Long id, Model viewModel) {
@@ -93,10 +108,17 @@ public class UserController {
         return "article/articles";
     }
 
-    // rotta get per il login
-    @GetMapping("/login")
-    public String login() {
-        return "auth/login";
+    // rotta get per la dashboard
+    @GetMapping("/admin/dashboard")
+    public String adminDashboard(Model viewModel) {
+        
+        viewModel.addAttribute("title", "Received career requests");
+        viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
+        viewModel.addAttribute("categories", categoryService.readAll());
+
+        return "admin/dashboard";
+
     }
+    
 
 }

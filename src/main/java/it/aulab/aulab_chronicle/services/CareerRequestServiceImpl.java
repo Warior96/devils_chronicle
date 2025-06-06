@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.aulab.aulab_chronicle.models.CareerRequest;
+import it.aulab.aulab_chronicle.models.Role;
 import it.aulab.aulab_chronicle.models.User;
 import it.aulab.aulab_chronicle.repositories.CareerRequestRepository;
+import it.aulab.aulab_chronicle.repositories.RoleRepository;
+import it.aulab.aulab_chronicle.repositories.UserRepository;
 
 @Service
 public class CareerRequestServiceImpl implements CareerRequestService {
@@ -18,6 +21,12 @@ public class CareerRequestServiceImpl implements CareerRequestService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Transactional
     public boolean isRoleAlreadyAssigned(User user, CareerRequest careerRequest) {
@@ -50,14 +59,30 @@ public class CareerRequestServiceImpl implements CareerRequestService {
 
     @Override
     public void careerAccept(Long requestId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'careerAccept'");
+       
+        CareerRequest request = careerRequestRepository.findById(requestId).get();
+
+        User user = request.getUser();
+        Role role = request.getRole();
+
+        List<Role> rolesUser = user.getRoles();
+        Role newRole = roleRepository.findByName(role.getName());
+        rolesUser.add(newRole);
+
+        user.setRoles(rolesUser);
+        userRepository.save(user);
+        request.setIsChecked(true);
+        careerRequestRepository.save(request);
+
+        emailService.sendSimpleEmail(user.getEmail(), "Richiesta di collaborazione accettata",  "Salve, la sua richiesta di collaborazione per il " + role.getName() + " è stata accettata.");
+        
     }
 
     @Override
     public CareerRequest find(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'find'");
+
+        return careerRequestRepository.findById(id).get();
+
     }
 
 }

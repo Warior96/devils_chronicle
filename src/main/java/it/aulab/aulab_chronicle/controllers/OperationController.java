@@ -18,7 +18,10 @@ import it.aulab.aulab_chronicle.services.CareerRequestService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+
 
 @Controller
 @RequestMapping("/operations")
@@ -48,7 +51,7 @@ public class OperationController {
         return "career/requestForm";
     }
 
-    //
+    // rotta post per richiesta collaborazione
     @PostMapping("/career/request/save")
     public String careerRequestStore(@ModelAttribute("careerRequest") CareerRequest careerRequest, Principal principal,
             RedirectAttributes redirectAttributes) {
@@ -67,5 +70,29 @@ public class OperationController {
         return "redirect:/";
 
     }
+
+    // rotta get per visualizzazione dettaglio richiesta
+    @GetMapping("career/request/detail/{id}")
+    public String careerRequestDetail(@PathVariable("id") Long id, Model viewModel) {
+
+        viewModel.addAttribute("title", "Request Detail");
+        viewModel.addAttribute("request", careerRequestService.find(id));
+
+        return "career/requestDetail";
+    }
+
+    // rotta post per accettazione richiesta
+    @PostMapping("/career/request/accept/{requestId}")
+    public String careerReqeustAccept(@PathVariable Long requestId, RedirectAttributes redirectAttributes) {
+
+        careerRequestService.careerAccept(requestId);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Request successfully accepted, role assigned");
+
+        return "redirect:/admin/dashboard";
+        
+    }
+    
+    
 
 }
