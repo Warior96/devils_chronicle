@@ -30,7 +30,10 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(
-                                                (authorize) -> authorize.requestMatchers("/register/**").permitAll()
+                                                (authorize) -> authorize
+                                                                .requestMatchers("/css/**", "/js/**", "/images/**")
+                                                                .permitAll()
+                                                                .requestMatchers("/register/**").permitAll()
                                                                 .requestMatchers("/admin/dashboard").hasRole("ADMIN")
                                                                 .requestMatchers("/register", "/", "/articles",
                                                                                 "/images/**", "/articles/detail/**",
