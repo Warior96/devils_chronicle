@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 @Controller
 public class UserController {
 
@@ -111,14 +110,17 @@ public class UserController {
     // rotta get per la dashboard
     @GetMapping("/admin/dashboard")
     public String adminDashboard(Model viewModel) {
+
+        viewModel.addAttribute("title", "Admin Dashboard");
         
-        viewModel.addAttribute("title", "Received career requests");
-        viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
+        viewModel.addAttribute("pendingRequests", careerRequestRepository.findByIsAcceptedIsNull());
+        viewModel.addAttribute("acceptedRequests", careerRequestRepository.findByIsAcceptedTrue());
+        viewModel.addAttribute("rejectedRequests", careerRequestRepository.findByIsAcceptedFalse());
+
         viewModel.addAttribute("categories", categoryService.readAll());
 
         return "admin/dashboard";
 
     }
-    
 
 }

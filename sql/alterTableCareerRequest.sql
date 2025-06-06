@@ -1,0 +1,2 @@
+ALTER TABLE career_request
+ADD COLUMN is_accepted BOOLEAN DEFAULT NULL;

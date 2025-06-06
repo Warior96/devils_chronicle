@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
 @Controller
 @RequestMapping("/operations")
 public class OperationController {
@@ -57,9 +55,16 @@ public class OperationController {
             RedirectAttributes redirectAttributes) {
 
         User user = userRepository.findByEmail(principal.getName());
+        Role role = roleRepository.findById(careerRequest.getRole().getId()).get();
+        careerRequest.setRole(role);
 
         if (careerRequestService.isRoleAlreadyAssigned(user, careerRequest)) {
             redirectAttributes.addFlashAttribute("errorMessage", "You are already assigned to this role");
+            return "redirect:/";
+        }
+
+        if (careerRequestService.hasPendingRequest(user, role)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You already have a pending request for this role.");
             return "redirect:/";
         }
 
@@ -75,6 +80,7 @@ public class OperationController {
     @GetMapping("career/request/detail/{id}")
     public String careerRequestDetail(@PathVariable("id") Long id, Model viewModel) {
 
+        careerRequestService.markAsChecked(id);
         viewModel.addAttribute("title", "Request Detail");
         viewModel.addAttribute("request", careerRequestService.find(id));
 
@@ -90,9 +96,28 @@ public class OperationController {
         redirectAttributes.addFlashAttribute("successMessage", "Request successfully accepted, role assigned");
 
         return "redirect:/admin/dashboard";
-        
+
     }
-    
-    
+
+    // rotta post per rifiuto richiesta
+    @PostMapping("/career/request/reject/{requestId}")
+    public String careerRequestReject(@PathVariable Long requestId, RedirectAttributes redirectAttributes) {
+
+        careerRequestService.careerReject(requestId);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Request has been rejected");
+        return "redirect:/admin/dashboard";
+
+    }
+
+    // rotta post per revocare un ruolo precedentemente accettato
+    @PostMapping("/career/request/revoke/{requestId}")
+    public String careerRequestRevoke(@PathVariable Long requestId, RedirectAttributes redirectAttributes) {
+
+        careerRequestService.revokeAndReject(requestId);
+        redirectAttributes.addFlashAttribute("successMessage", "Role has been revoked and request updated to rejected");
+        return "redirect:/admin/dashboard";
+
+    }
 
 }

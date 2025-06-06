@@ -35,12 +35,39 @@
                     <p>Body request:</p>
                     <h3 class="ms-4" th:text="${request.body}">body</h3>
                 </div>
-                <div class="col-12 col-md-8 mb-4">
-                    <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="POST">
-                        <button type="submit" class="btn btn-primary m-2">
-                            Accept
-                        </button>
-                    </form>
+
+                <div class="col-12 col-md-8 mb-4 d-flex flex-column align-items-start">
+
+                    <div th:if="${request.isAccepted == true}"  class="d-flex">
+                        <p class="text-success fw-bold ms-2 mb-0">Richiesta approvata</p>
+                        <form th:action="@{/operations/career/request/revoke/{id}(id=${request.id})}" method="POST">
+                            <button type="submit" class="btn btn-danger mx-4">
+                                Rifiuta
+                            </button>
+                        </form>
+                    </div>
+
+                    <div th:if="${request.isAccepted == false}"  class="d-flex">
+                        <p class="text-danger fw-bold ms-2 mb-0">Richiesta rifiutata</p>
+                        <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="POST">
+                            <button type="submit" class="btn btn-success mx-4">
+                                Accetta
+                            </button>
+                        </form>
+                    </div>
+
+                    <div th:if="${request.isAccepted == null}" class="d-flex">
+                        <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="POST">
+                            <button type="submit" class="btn btn-success mx-4">
+                                Accetta
+                            </button>
+                        </form>
+                        <form th:action="@{/operations/career/request/reject/{id}(id=${request.id})}" method="POST">
+                            <button type="submit" class="btn btn-danger mx-4">
+                                Rifiuta
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
             </div>
