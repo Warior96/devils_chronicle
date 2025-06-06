@@ -16,6 +16,9 @@ public class CareerRequestServiceImpl implements CareerRequestService {
     @Autowired
     private CareerRequestRepository careerRequestRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
     public boolean isRoleAlreadyAssigned(User user, CareerRequest careerRequest) {
 
@@ -37,6 +40,11 @@ public class CareerRequestServiceImpl implements CareerRequestService {
         careerRequest.setUser(user);
         careerRequest.setIsChecked(false);
         careerRequestRepository.save(careerRequest);
+
+        // invio email di richiesta collaborazione all'admin
+        emailService.sendSimpleEmail("adminAulabChronicle@admin.com",
+                "Richiesta per ruolo: " + careerRequest.getRole().getName(),
+                "Richiesta di collaborazione da parte di " + user.getUsername());
 
     }
 
