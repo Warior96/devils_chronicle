@@ -1,0 +1,91 @@
+/* :root {} */
+
+/* h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-title {
+    font-family: "", "Arial Black", "Impact", sans-serif;
+}
+
+* {
+    font-family: "", Arial, Helvetica, sans-serif;
+} */
+
+.fs-7 {
+    font-size: 0.60rem;
+}
+
+.navbar-brand,
+.nav-link {
+    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+
+.notification {
+    top: -7px;
+    left: 14px;
+    animation: updown 1s infinite;
+}
+
+
+
+
+
+@keyframes bell {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(-15deg);
+    }
+
+    100% {
+        transform: rotate(15deg);
+    }
+}
+
+@keyframes updown {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+
+}
+
+
+/* media query solo per sm smartphone */
+@media (max-width: 767px) {}
+
+/* media query solo per md tablet */
+@media (min-width: 768px) and (max-width: 991px) {}
+
+/* media query solo per lg desktop */
+@media (min-width: 992px) {
+
+    /* hover */
+    .nav-item:hover .fa-bell {
+        animation: bell 0.8s infinite;
+    }
+
+    .nav-item:hover .notification {
+        animation: none;
+    }
+
+}
+
+/* media query in: md tablet e sm smartphone*/
+@media (max-width: 991px) {}
+
+/* media query in: lg desktop e md tablet*/
+@media (min-width: 768px) {}

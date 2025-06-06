@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- CDN CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <!-- title -->
     <title th:text="${title}">Title</title>
 </head>
@@ -24,7 +26,7 @@
     <nav th:fragment="navbar"
         class="navbar navbar-expand-lg navbar-light bg-light position-fixed top-0 left-0 w-100 z-3">
         <div class="container-fluid">
-            <a th:href="@{/}" class="navbar-brand">Aulab Chronicle</a>
+            <a th:href="@{/}" class="navbar-brand me-0 pe-2">Aulab Chronicle</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -43,8 +45,13 @@
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
-                        <a class="nav-link" href="/admin/dashboard">
+                        <a class="nav-link d-flex align-items-center pe-3" href="/admin/dashboard">
                             Admin dashboard
+                            <span class="position-relative me-2" th:if="${careerRequests > 0}">
+                                <i class="fa-solid fa-bell ms-1"></i>
+                                <span class="badge rounded-pill bg-danger text-white fs-7 position-absolute notification"
+                                    th:text="${careerRequests}"></span>
+                            </span>
                         </a>
                     </li>
                     <li class="nav-item dropdown">
