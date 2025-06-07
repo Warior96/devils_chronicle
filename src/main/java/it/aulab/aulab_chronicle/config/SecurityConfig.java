@@ -39,6 +39,9 @@ public class SecurityConfig {
                                                                                 "/categories/edit/{id}",
                                                                                 "/categories/delete/{id}")
                                                                 .hasRole("ADMIN")
+                                                                .requestMatchers("/revisor/dashboard",
+                                                                                "/revisor/detail/{id}", "/accept")
+                                                                .hasRole("REVISOR")
                                                                 .requestMatchers("/register", "/", "/articles",
                                                                                 "/images/**", "/articles/detail/**",
                                                                                 "/categories/search/{id}",

@@ -49,8 +49,20 @@
                             Admin dashboard
                             <span class="position-relative me-2" th:if="${careerRequests > 0}">
                                 <i class="fa-solid fa-bell ms-1"></i>
-                                <span class="badge rounded-pill bg-danger text-white fs-7 position-absolute notification"
+                                <span
+                                    class="badge rounded-pill bg-danger text-white fs-7 position-absolute notification"
                                     th:text="${careerRequests}"></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
+                        <a class="nav-link d-flex align-items-center pe-3" href="/revisor/dashboard">
+                            Revisor dashboard
+                            <span class="position-relative me-2" th:if="${articlesToBeRevised > 0}">
+                                <i class="fa-solid fa-bell ms-1"></i>
+                                <span
+                                    class="badge rounded-pill bg-danger text-white fs-7 position-absolute notification"
+                                    th:text="${articlesToBeRevised}"></span>
                             </span>
                         </a>
                     </li>

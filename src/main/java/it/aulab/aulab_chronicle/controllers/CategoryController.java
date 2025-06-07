@@ -1,6 +1,7 @@
 package it.aulab.aulab_chronicle.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.aulab.aulab_chronicle.dtos.ArticleDto;
 import it.aulab.aulab_chronicle.dtos.CategoryDto;
+import it.aulab.aulab_chronicle.models.Article;
 import it.aulab.aulab_chronicle.models.Category;
 import it.aulab.aulab_chronicle.services.ArticleService;
 import it.aulab.aulab_chronicle.services.CategoryService;
@@ -35,7 +37,7 @@ public class CategoryController {
     @Autowired
     private ModelMapper modelMapper;
 
-    // rotta get per ricerca articoli per categoria
+    // rotta get per ricerca articoli accettati per categoria
     @GetMapping("/search/{id}")
     public String categorySearch(@PathVariable("id") Long id, Model viewModel) {
 
@@ -43,7 +45,11 @@ public class CategoryController {
         viewModel.addAttribute("title", "All articles found in " + category.getName() + " category");
 
         List<ArticleDto> articles = articleService.searchByCategory(modelMapper.map(category, Category.class));
-        viewModel.addAttribute("articles", articles);
+
+        List<ArticleDto> acceptedArticles = articles.stream()
+                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+
+        viewModel.addAttribute("articles", acceptedArticles);
 
         return "article/articles";
     }
@@ -102,7 +108,7 @@ public class CategoryController {
 
         categoryService.delete(id);
         redirectAttributes.addFlashAttribute("successMessage", "Category successfully deleted");
-        
+
         return "redirect:/admin/dashboard";
 
     }

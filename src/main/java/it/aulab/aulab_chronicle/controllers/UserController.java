@@ -1,10 +1,11 @@
 package it.aulab.aulab_chronicle.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,9 @@ import org.springframework.validation.BindingResult;
 
 import it.aulab.aulab_chronicle.dtos.ArticleDto;
 import it.aulab.aulab_chronicle.dtos.UserDto;
+import it.aulab.aulab_chronicle.models.Article;
 import it.aulab.aulab_chronicle.models.User;
+import it.aulab.aulab_chronicle.repositories.ArticleRepository;
 import it.aulab.aulab_chronicle.repositories.CareerRequestRepository;
 import it.aulab.aulab_chronicle.services.ArticleService;
 import it.aulab.aulab_chronicle.services.CategoryService;
@@ -41,6 +44,12 @@ public class UserController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     // rotta get per la registrazione
     @GetMapping("/register")
@@ -82,7 +91,10 @@ public class UserController {
     @GetMapping("/")
     public String home(Model viewModel) {
 
-        List<ArticleDto> articles = articleService.readAll();
+        List<ArticleDto> articles = new ArrayList<ArticleDto>();
+        for (Article article : articleRepository.findByIsAcceptedTrue()) {
+            articles.add(modelMapper.map(article, ArticleDto.class));
+        }
 
         // ordine di visualizzazione articoli
         Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
@@ -102,17 +114,21 @@ public class UserController {
         viewModel.addAttribute("title", "All articles found by " + user.getUsername() + " user");
 
         List<ArticleDto> articles = articleService.searchByAuthor(user);
-        viewModel.addAttribute("articles", articles);
+
+        List<ArticleDto> acceptedArticles = articles.stream()
+                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+
+        viewModel.addAttribute("articles", acceptedArticles);
 
         return "article/articles";
     }
 
-    // rotta get per la dashboard
+    // rotta get per la dashboard amministratore
     @GetMapping("/admin/dashboard")
     public String adminDashboard(Model viewModel) {
 
         viewModel.addAttribute("title", "Admin Dashboard");
-        
+
         viewModel.addAttribute("pendingRequests", careerRequestRepository.findByIsAcceptedIsNull());
         viewModel.addAttribute("acceptedRequests", careerRequestRepository.findByIsAcceptedTrue());
         viewModel.addAttribute("rejectedRequests", careerRequestRepository.findByIsAcceptedFalse());
@@ -121,6 +137,19 @@ public class UserController {
 
         return "admin/dashboard";
 
+    }
+
+    // rotta get per la dashboard revisore
+    @GetMapping("/revisor/dashboard")
+    public String revisorDashboard(Model viewModel) {
+
+        viewModel.addAttribute("title", "Revisor Dashboard");
+
+        viewModel.addAttribute("pendingArticles", articleRepository.findByIsAcceptedNull());
+        viewModel.addAttribute("acceptedArticles", articleRepository.findByIsAcceptedTrue());
+        viewModel.addAttribute("rejectedArticles", articleRepository.findByIsAcceptedFalse());
+
+        return "revisor/dashboard";
     }
 
 }
