@@ -34,7 +34,11 @@ public class SecurityConfig {
                                                                 .requestMatchers("/css/**", "/js/**", "/images/**")
                                                                 .permitAll()
                                                                 .requestMatchers("/register/**").permitAll()
-                                                                .requestMatchers("/admin/dashboard").hasRole("ADMIN")
+                                                                .requestMatchers("/admin/dashboard",
+                                                                                "/categories/create",
+                                                                                "/categories/edit/{id}",
+                                                                                "/categories/delete/{id}")
+                                                                .hasRole("ADMIN")
                                                                 .requestMatchers("/register", "/", "/articles",
                                                                                 "/images/**", "/articles/detail/**",
                                                                                 "/categories/search/{id}",

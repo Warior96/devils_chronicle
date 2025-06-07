@@ -23,12 +23,13 @@ h6,
     box-shadow: 1px 0 0 rgba(0, 0, 0, 0.2);
 }
 
-
 .notification {
     top: -7px;
     left: 14px;
     animation: updown 1s infinite;
 }
+
+
 
 
 
@@ -73,6 +74,13 @@ h6,
 /* media query solo per lg desktop */
 @media (min-width: 992px) {
 
+    .plus-category {
+        position: absolute;
+        top: 0;
+        scale: 0.8;
+        left: 17%;
+    }
+
     /* hover */
     .nav-item:hover .fa-bell {
         animation: bell 0.8s infinite;
@@ -85,7 +93,13 @@ h6,
 }
 
 /* media query in: md tablet e sm smartphone*/
-@media (max-width: 991px) {}
+@media (max-width: 991px) {
+
+    .plus-category {
+        scale: 0.8;
+    }
+
+}
 
 /* media query in: lg desktop e md tablet*/
 @media (min-width: 768px) {}
