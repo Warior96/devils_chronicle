@@ -118,6 +118,8 @@ public class UserController {
         List<ArticleDto> acceptedArticles = articles.stream()
                 .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
 
+        viewModel.addAttribute("keyword", "author: " + user.getUsername());
+
         viewModel.addAttribute("articles", acceptedArticles);
 
         return "article/articles";
