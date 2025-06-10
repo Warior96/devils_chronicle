@@ -82,11 +82,13 @@ h6,
     }
 
     /* hover */
-    .nav-item:hover .fa-bell {
+    .nav-item:hover .fa-bell,
+    .acc-notification:hover .fa-bell {
         animation: bell 0.8s infinite;
     }
 
-    .nav-item:hover .notification {
+    .nav-item:hover .notification,
+    .acc-notification:hover .notification {
         animation: none;
     }
 

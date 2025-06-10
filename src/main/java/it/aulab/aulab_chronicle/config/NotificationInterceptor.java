@@ -26,6 +26,8 @@ public class NotificationInterceptor implements HandlerInterceptor {
         if (modelAndView != null && request.isUserInRole("ROLE_ADMIN")) {
             int careerCount = careerRequestRepository.findByIsCheckedFalse().size();
             modelAndView.addObject("careerRequests", careerCount);
+            int pendingCount = careerRequestRepository.findByIsAcceptedIsNull().size();
+            modelAndView.addObject("careerPending", pendingCount);
         }
 
         if (modelAndView != null && request.isUserInRole("ROLE_REVISOR")) {
