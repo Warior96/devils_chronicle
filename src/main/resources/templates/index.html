@@ -139,12 +139,15 @@
     </footer>
     <!-- fine fragment footer -->
 
-    <!-- inizio fragment script bootstrap -->
-    <script th:fragment="bootstrapScript"
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-        crossorigin="anonymous"></script>
-    <!-- fine fragment script bootstrap -->
+    <!-- inizio fragment script esterno + bootstrap -->
+    <div th:fragment="script">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+            crossorigin="anonymous"></script>
+        <script th:src="@{/js/script.js}"></script>
+    </div>
+    <!-- fine fragment script esterno + bootstrap -->
+
 </body>
 
 </html>

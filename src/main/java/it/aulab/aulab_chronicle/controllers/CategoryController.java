@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.aulab.aulab_chronicle.dtos.ArticleDto;
 import it.aulab.aulab_chronicle.dtos.CategoryDto;
-import it.aulab.aulab_chronicle.models.Article;
 import it.aulab.aulab_chronicle.models.Category;
 import it.aulab.aulab_chronicle.services.ArticleService;
 import it.aulab.aulab_chronicle.services.CategoryService;

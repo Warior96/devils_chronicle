@@ -38,7 +38,7 @@
 
                 <div class="col-12 col-md-8 mb-4 d-flex flex-column align-items-start">
 
-                    <div th:if="${request.isAccepted == true}"  class="d-flex">
+                    <div th:if="${request.isAccepted == true}" class="d-flex">
                         <p class="text-success fw-bold ms-2 mb-0">Richiesta approvata</p>
                         <form th:action="@{/operations/career/request/revoke/{id}(id=${request.id})}" method="POST">
                             <button type="submit" class="btn btn-danger mx-4">
@@ -47,7 +47,7 @@
                         </form>
                     </div>
 
-                    <div th:if="${request.isAccepted == false}"  class="d-flex">
+                    <div th:if="${request.isAccepted == false}" class="d-flex">
                         <p class="text-danger fw-bold ms-2 mb-0">Richiesta rifiutata</p>
                         <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="POST">
                             <button type="submit" class="btn btn-success mx-4">
@@ -79,7 +79,10 @@
 
     <div th:insert="~{index :: footer}"></div>
 
-    <script th:replace="~{index :: bootstrapScript}"></script>
+
+
+    <!-- script esterno + bootstrap -->
+    <div th:replace="~{index :: script}"></div>
 </body>
 
 </html>

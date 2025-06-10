@@ -70,7 +70,11 @@
 
 
     <div th:insert="~{index :: footer}"></div>
-    <script th:replace="~{index :: bootstrapScript}"></script>
+
+
+
+    <!-- script esterno + bootstrap -->
+    <div th:replace="~{index :: script}"></div>
 </body>
 
 </html>
