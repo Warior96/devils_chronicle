@@ -92,15 +92,88 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
     }
 
     @Override
-    public ArticleDto update(Long key, Article model, MultipartFile file) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public ArticleDto update(Long key, Article updatedArticle, MultipartFile file) {
+
+        String url = "";
+
+        // se l'articolo esiste
+        if (articleRepository.existsById(key)) {
+
+            // recupero l'articolo originale senza modifiche
+            Article article = articleRepository.findById(key).get();
+            // assegno all'articolo del form, l'id dell'articolo originale
+            updatedArticle.setId(key);
+            // assegno all'articolo del form, l'autore dell'articolo originale
+            updatedArticle.setUser(article.getUser());
+
+            // se è presente una nuova immagine nel form
+            if (!file.isEmpty()) {
+                try {
+                    // elimino l'immagine dell'articolo originale dal cloud
+                    imageService.deleteImage(article.getImage().getPath());
+                    try {
+                        // salvo l'immagine nuova del form nel cloud
+                        CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                        url = futureUrl.get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // salvo il nuovo path dell'immagine nel db
+                    imageService.saveImageOnDB(url, updatedArticle);
+                    // articolo torna in revisione
+                    updatedArticle.setIsAccepted(null);
+
+                    return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else if (article.getImage() == null) { // se l'articolo originale non ha immagine e il form non
+                                                     // ha immagine
+                updatedArticle.setIsAccepted(article.getIsAccepted());
+
+            } else { // se il form NON ha immagine
+                // assegno all'articolo del form, l'immagine dell'articolo originale
+                updatedArticle.setImage(article.getImage());
+
+                // se il form ha modifiche
+                if (updatedArticle.equals(article) == false) {
+                    // articolo ha modifiche quindi torna in revisione
+                    updatedArticle.setIsAccepted(null);
+                } else {
+                    // articolo NON ha modifiche quindi NON torna in revisione
+                    updatedArticle.setIsAccepted(article.getIsAccepted());
+                }
+                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+            }
+
+        } else { // articolo non esiste
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        return null;
+
     }
 
     @Override
     public void delete(Long key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+
+        if (articleRepository.existsById(key)) {
+            Article article = articleRepository.findById(key).get();
+
+            try {
+                String path = article.getImage().getPath();
+                article.getImage().setArticle(null);
+                imageService.deleteImage(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            articleRepository.deleteById(key);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     public List<ArticleDto> searchByCategory(Category category) {

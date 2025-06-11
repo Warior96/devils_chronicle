@@ -9,16 +9,26 @@
 
     <div class="min-vh-100">
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center my-5">
 
                 <div class="col-12 my-5 d-flex justify-content-between align-items-center">
                     <div class="d-flex justify-content-center align-items-center flex-grow-1">
-                        <h1 th:text="${title}">Create Article</h1>
+                        <h1 th:text="${title}">Edit Article</h1>
                     </div>
                 </div>
 
-                <div class="col-7 my-5">
-                    <form th:action="@{/articles}" method="POST" th:object="${article}" enctype="multipart/form-data">
+                <div class="alert alert-warning d-flex align-items-center col-7" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <div>
+                        <strong>Notice: </strong>
+                        If you update any of the article fields, it will be sent back for the
+                        review.
+                    </div>
+                </div>
+
+                <div class="col-7 mb-5">
+                    <form th:action="@{/articles/update/{id}(id=${article.id})}" method="POST" th:object="${article}"
+                        enctype="multipart/form-data">
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="articleTitle" class="form-label">Title</label>
@@ -56,11 +66,30 @@
                                 </p>
                             </select>
                         </div>
+                        <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
+                            <label for="oldImage" class="form-label">Image of article</label>
+                            <img th:src="${article.image.path}" th:alt="'image of ' + ${article.title}" id="oldImage">
+                        </div>
+                        <div class="mb-3" th:unless="${article.image != null}">
+                            <label for="noImage" class="form-label">Image of article</label>
+                            <p>No image uploaded</p>
+                        </div>
                         <div class="mb-3">
-                            <label for="image" class="form-label">Image</label>
+                            <label for="image" class="form-label">New image</label>
                             <input type="file" name="file" id="image" class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-success">Create article</button>
+
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <div>
+                                <strong>Notice: </strong>
+                                If you update any of the article fields, it will be sent back for the review.
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-warning">Update article</button>
+                        <button type="reset" class="btn btn-outline-danger">Reset form</button>
                     </form>
                 </div>
 

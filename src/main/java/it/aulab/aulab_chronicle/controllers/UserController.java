@@ -1,5 +1,6 @@
 package it.aulab.aulab_chronicle.controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -116,7 +117,7 @@ public class UserController {
         List<ArticleDto> articles = articleService.searchByAuthor(user);
 
         List<ArticleDto> acceptedArticles = articles.stream()
-                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).toList();
 
         viewModel.addAttribute("keyword", "author: " + user.getUsername());
 
@@ -152,6 +153,37 @@ public class UserController {
         viewModel.addAttribute("rejectedArticles", articleRepository.findByIsAcceptedFalse());
 
         return "revisor/dashboard";
+    }
+
+    //
+    @GetMapping("/writer/dashboard")
+    public String writerDashboard(Model viewModel, Principal principal) {
+
+        viewModel.addAttribute("title", "Writer Dashboard: your articles");
+
+        List<ArticleDto> userArticles = articleService.readAll().stream()
+                .filter(article -> article.getUser().getEmail().equals(principal.getName()))
+                .toList();
+
+        List<ArticleDto> acceptedArticles = userArticles.stream()
+                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted()))
+                .toList();
+
+        List<ArticleDto> rejectedArticles = userArticles.stream()
+                .filter(article -> Boolean.FALSE.equals(article.getIsAccepted()))
+                .toList();
+
+        List<ArticleDto> pendingArticles = userArticles.stream()
+                .filter(article -> article.getIsAccepted() == null)
+                .toList();
+
+        viewModel.addAttribute("acceptedArticles", acceptedArticles);
+        viewModel.addAttribute("rejectedArticles", rejectedArticles);
+        viewModel.addAttribute("pendingArticles", pendingArticles);
+
+        viewModel.addAttribute("articles", userArticles);
+
+        return "writer/dashboard";
     }
 
 }
