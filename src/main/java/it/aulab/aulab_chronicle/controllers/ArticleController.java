@@ -172,7 +172,7 @@ public class ArticleController {
     @GetMapping("/search")
     public String articleSearch(@Param("keyword") String keyword, Model viewModel) {
 
-        viewModel.addAttribute("title", "All searched articles");
+        viewModel.addAttribute("title", "All searched articles for " + keyword);
 
         viewModel.addAttribute("keyword", keyword);
 

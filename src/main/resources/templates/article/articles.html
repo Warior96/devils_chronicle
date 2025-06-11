@@ -13,26 +13,33 @@
 
 
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-10 mb-5">
-                    <h1 class="text-center" th:text="${title}">Index articles</h1>
+            <div class="row justify-content-center pt-5">
+                <div class="col-10 my-5">
+                    <h1 class="text-center">
+                        <span th:text="${title}">
+                            Index articles
+                        </span>
+                        <span class="fs-6">
+                            (<span th:text="${articles.size()}" class="fs-6">size</span>)
+                        </span>
+                    </h1>
                 </div>
             </div>
         </div>
 
         <div class="container" th:if="${articles.size() > 0}">
             <div class="row justify-content-center mb-5">
-                <h3 th:if="${articles.size() == 1}" class="col-12 mb-4">
+                <!-- <h3 th:if="${articles.size() == 1} and ${keyword != null and !keyword.isEmpty()}" class="col-12 mb-4">
                     Article found for
                     <span th:text="${keyword}">keyword</span>
                 </h3>
-                <h3 th:if="${articles.size() > 1}" class="col-12 mb-4">
+                <h3 th:if="${articles.size() > 1} and ${keyword != null and !keyword.isEmpty()}" class="col-12 mb-4">
                     Articles found for
                     <span th:text="${keyword}">keyword</span>
                     <span class="fs-6">
                         (<span th:text="${articles.size()}" class="fs-6">size</span>)
                     </span>
-                </h3>
+                </h3> -->
                 <div th:each="article : ${articles}" class="col-12 col-md-4 d-flex justify-content-center">
                     <div class="card mb-3">
                         <img th:if="${article.image != null}" th:src="${article.image.path}"
