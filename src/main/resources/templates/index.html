@@ -118,6 +118,26 @@
     <!-- fine fragment navbar -->
 
 
+    <!-- inizio fragment card -->
+    <div th:fragment="card" th:each="article : ${articles}" class="col-12 col-md-6 d-flex justify-content-center">
+        <article class="row border border-1 mb-5 mx-3 py-3 w-100">
+            <div class="col-5">
+                <img th:if="${article.image != null}" th:src="${article.image.path}"
+                    th:alt="'image of ' + ${article.title}" class="card-img-top">
+                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
+                    class="card-img-top">
+            </div>
+            <div class="col-7 d-flex justify-content-around align-items-start flex-column px-3">
+                <h4 class="card-title" th:text="${article.title}"></h4>
+                <h6 class="card-text" th:text="${article.subtitle}"></h6>
+                <cite class="card-text" th:text="${article.user.username}"></cite>
+                <a th:href="@{/articles/detail/{id}(id=${article.id})}" class="btn btn-outline-primary">Read more</a>
+            </div>
+        </article>
+    </div>
+    <!-- fine fragment card -->
+
+
     <!-- inizio fragment footer -->
     <footer th:fragment="footer" class="bg-dark text-white pt-4">
         <div class="container">

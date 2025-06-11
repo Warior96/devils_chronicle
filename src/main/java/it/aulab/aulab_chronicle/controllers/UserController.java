@@ -100,7 +100,7 @@ public class UserController {
         // ordine di visualizzazione articoli
         Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
 
-        List<ArticleDto> lastThreeArticles = articles.stream().limit(3).collect(Collectors.toList());
+        List<ArticleDto> lastThreeArticles = articles.stream().limit(4).collect(Collectors.toList());
 
         viewModel.addAttribute("articles", lastThreeArticles);
 

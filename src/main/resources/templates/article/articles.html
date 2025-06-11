@@ -29,18 +29,8 @@
 
         <div class="container" th:if="${articles.size() > 0}">
             <div class="row justify-content-center mb-5">
-                <!-- <h3 th:if="${articles.size() == 1} and ${keyword != null and !keyword.isEmpty()}" class="col-12 mb-4">
-                    Article found for
-                    <span th:text="${keyword}">keyword</span>
-                </h3>
-                <h3 th:if="${articles.size() > 1} and ${keyword != null and !keyword.isEmpty()}" class="col-12 mb-4">
-                    Articles found for
-                    <span th:text="${keyword}">keyword</span>
-                    <span class="fs-6">
-                        (<span th:text="${articles.size()}" class="fs-6">size</span>)
-                    </span>
-                </h3> -->
-                <div th:each="article : ${articles}" class="col-12 col-md-4 d-flex justify-content-center">
+                <!--  <div class="row justify-content-center mb-5">
+                <div th:each="article : ${articles}" class="col-12 col-md-6 d-flex justify-content-center">
                     <div class="card mb-3">
                         <img th:if="${article.image != null}" th:src="${article.image.path}"
                             th:alt="'image of ' + ${article.title}" class="card-img-top">
@@ -56,6 +46,8 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+                <div th:replace="~{index :: card}"></div>
             </div>
         </div>
 
