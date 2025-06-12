@@ -11,9 +11,9 @@ public interface CrudService<ReadDto, Model, Key> {
 
     ReadDto read(Key key); // restituisce un elemento per key
 
-    ReadDto create(Model model, Principal principal, MultipartFile file); // crea un nuovo elemento
+    ReadDto create(Model model, Principal principal, MultipartFile file, MultipartFile[] galleryFiles); // crea nuovo el
 
-    ReadDto update(Key key, Model model, MultipartFile file); // aggiorna un elemento
+    ReadDto update(Key key, Model model, MultipartFile file, MultipartFile[] galleryFiles); // aggiorna un elemento
 
     void delete(Key key);
 

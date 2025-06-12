@@ -17,14 +17,20 @@
 
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 d-flex flex-column">
+            <div class="col-12 col-md-5">
+                <img th:if="${article.image != null}" th:src="${article.image.path}"
+                    th:alt="'image of ' + ${article.title}" class="card-img-top">
+                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
+                    class="card-img-top">
+            </div>
+
+            <div th:if="${article.galleryImages != null and !article.galleryImages.isEmpty()}" class="col-12 col-md-5">
                 <div id="carouselExample" class="carousel slide">
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img th:if="${article.image != null}" th:src="${article.image.path}"
-                                th:alt="'image of ' + ${article.title}" class="card-img-top">
-                            <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"
-                                alt="default image" class="card-img-top">
+                        <div class="carousel-item" th:each="galleryImage, iterStat : ${article.galleryImages}"
+                            th:classappend="${iterStat.index == 0} ? ' active'">
+                            <img th:src="${galleryImage.path}" th:alt="|gallery image of ${article.title}|"
+                                class="d-block w-100">
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
@@ -38,33 +44,33 @@
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
-
-                <div class="text-center">
-                    <h2 th:text="${article.subtitle}">Subtitle</h2>
-                    <p class="fs-5" th:if="${article.category != null}">Category:
-                        <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
-                            class="text-capitalize fw-bold text-muted" th:text="${article.category.name}">category</a>
-                    </p>
-                    <p class="fs-5" th:if="${article.category == null}">No category</p>
-                    <div class="text-muted my-3">
-                        <p>Edited at
-                            <span th:text="${article.publishDate}">date</span>
-                            by
-                            <a class="text-muted" th:href="@{/search/{id}(id=${article.user.id})}">
-                                <p th:text="${article.user.username}">User</p>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <p th:text="${article.body}"></p>
-
-                <div class="text-center">
-                    <a href="#" class="text-secondary pointer" onclick="goBack()">Go back</a>
-                </div>
-
             </div>
+            <div class="col-12 col-md-8 d-flex flex-column">
+                <h2 th:text="${article.subtitle}">Subtitle</h2>
+                <p class="fs-5" th:if="${article.category != null}">Category:
+                    <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
+                        class="text-capitalize fw-bold text-muted" th:text="${article.category.name}">category</a>
+                </p>
+                <p class="fs-5" th:if="${article.category == null}">No category</p>
+                <div class="text-muted my-3">
+                    <p>Edited at
+                        <span th:text="${article.publishDate}">date</span>
+                        by
+                        <a class="text-muted" th:href="@{/search/{id}(id=${article.user.id})}">
+                            <p th:text="${article.user.username}">User</p>
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <p th:text="${article.body}"></p>
+
+            <div class="text-center">
+                <a href="#" class="text-secondary pointer" onclick="goBack()">Go back</a>
+            </div>
+
         </div>
+    </div>
 
     </div>
 

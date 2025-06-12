@@ -1,6 +1,8 @@
 package it.aulab.aulab_chronicle.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -66,6 +69,10 @@ public class Article {
     @JsonIgnoreProperties({ "article" })
     private Image image;
 
+    @OneToMany(mappedBy = "article")
+    @JsonIgnoreProperties({ "article" })
+    private List<GalleryImage> galleryImages = new ArrayList<>();
+
     @Override
     public boolean equals(Object obj) {
 
@@ -76,7 +83,15 @@ public class Article {
                 body.equals(article.getBody()) &&
                 publishDate.equals(article.getPublishDate()) &&
                 category.getName().equals(article.getCategory().getName()) &&
-                image.getPath().equals(article.getImage().getPath())) {
+                image.getPath().equals(article.getImage().getPath()) &&
+                galleryImages.size() == article.getGalleryImages().size()) {
+
+            for (int i = 0; i < galleryImages.size(); i++) {
+                if (!galleryImages.get(i).getPath().equals(article.getGalleryImages().get(i).getPath())) {
+                    return false;
+                }
+            }
+
             return true;
         }
 

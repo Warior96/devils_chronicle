@@ -1,8 +1,10 @@
 package it.aulab.aulab_chronicle.dtos;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import it.aulab.aulab_chronicle.models.Category;
+import it.aulab.aulab_chronicle.models.GalleryImage;
 import it.aulab.aulab_chronicle.models.Image;
 import it.aulab.aulab_chronicle.models.User;
 import lombok.Getter;
@@ -23,5 +25,7 @@ public class ArticleDto {
     private User user;
     private Category category;
     private Image image;
+    private List<GalleryImage> galleryImages;
+
 
 }

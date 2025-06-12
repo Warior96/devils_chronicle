@@ -18,9 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 import it.aulab.aulab_chronicle.dtos.ArticleDto;
 import it.aulab.aulab_chronicle.models.Article;
 import it.aulab.aulab_chronicle.models.Category;
+import it.aulab.aulab_chronicle.models.GalleryImage;
 import it.aulab.aulab_chronicle.models.User;
 import it.aulab.aulab_chronicle.repositories.ArticleRepository;
 import it.aulab.aulab_chronicle.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ArticleService implements CrudService<ArticleDto, Article, Long> {
@@ -58,8 +60,9 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
         }
     }
 
+    @Transactional
     @Override
-    public ArticleDto create(Article article, Principal principal, MultipartFile file) {
+    public ArticleDto create(Article article, Principal principal, MultipartFile file, MultipartFile[] galleryFiles) {
 
         String url = "";
 
@@ -84,15 +87,29 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
         ArticleDto dto = modelMapper.map(articleRepository.save(article), ArticleDto.class);
 
         if (!file.isEmpty()) {
-            imageService.saveImageOnDB(url, article);
+            imageService.saveImageOnDB(url, article, true);
+        }
+
+        if (galleryFiles != null) {
+            for (MultipartFile galleryFile : galleryFiles) {
+                if (!galleryFile.isEmpty()) {
+                    try {
+                        String galleryUrl = imageService.saveImageOnCloud(galleryFile).get();
+                        imageService.saveImageOnDB(galleryUrl, article, false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
 
         return dto;
 
     }
 
+    @Transactional
     @Override
-    public ArticleDto update(Long key, Article updatedArticle, MultipartFile file) {
+    public ArticleDto update(Long key, Article updatedArticle, MultipartFile file, MultipartFile[] galleryFiles) {
 
         String url = "";
 
@@ -110,7 +127,7 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
             if (!file.isEmpty()) {
                 try {
                     // elimino l'immagine dell'articolo originale dal cloud
-                    imageService.deleteImage(article.getImage().getPath());
+                    imageService.deleteImage(article.getImage().getPath(), true);
                     try {
                         // salvo l'immagine nuova del form nel cloud
                         CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
@@ -119,7 +136,7 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
                         e.printStackTrace();
                     }
                     // salvo il nuovo path dell'immagine nel db
-                    imageService.saveImageOnDB(url, updatedArticle);
+                    imageService.saveImageOnDB(url, updatedArticle, true);
                     // articolo torna in revisione
                     updatedArticle.setIsAccepted(null);
 
@@ -144,6 +161,41 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
                     // articolo NON ha modifiche quindi NON torna in revisione
                     updatedArticle.setIsAccepted(article.getIsAccepted());
                 }
+
+                // gallery
+                if (galleryFiles != null && galleryFiles.length > 0) {
+                    try {
+                        // elimina dal cloud tutte le immagini della galleria esistenti
+                        if (article.getGalleryImages() != null && !article.getGalleryImages().isEmpty()) {
+                            for (GalleryImage img : article.getGalleryImages()) {
+                                try {
+                                    imageService.deleteImage(img.getPath(), false);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        // salva nuove immagini di galleria
+                        for (MultipartFile galleryFile : galleryFiles) {
+                            if (!galleryFile.isEmpty()) {
+                                try {
+                                    String galleryUrl = imageService.saveImageOnCloud(galleryFile).get();
+                                    imageService.saveImageOnDB(galleryUrl, updatedArticle, false);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        // poiché galleria modificata, resetto lo stato di accettazione
+                        updatedArticle.setIsAccepted(null);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
             }
 
@@ -155,18 +207,37 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
 
     }
 
+    @Transactional
     @Override
     public void delete(Long key) {
 
         if (articleRepository.existsById(key)) {
             Article article = articleRepository.findById(key).get();
 
-            try {
-                String path = article.getImage().getPath();
-                article.getImage().setArticle(null);
-                imageService.deleteImage(path);
-            } catch (Exception e) {
-                e.printStackTrace();
+            // elimino la cover dell'articolo
+            if (article.getImage() != null) {
+                try {
+                    String path = article.getImage().getPath();
+                    article.getImage().setArticle(null);
+                    article.setImage(null);
+                    imageService.deleteImage(path, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // elimino tutte le immagini della galleria
+            if (article.getGalleryImages() != null && !article.getGalleryImages().isEmpty()) {
+                for (GalleryImage img : article.getGalleryImages()) {
+                    try {
+                        String path = img.getPath();
+                        img.setArticle(null); // disaccoppia l'immagine
+                        imageService.deleteImage(path, false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                article.setGalleryImages(null);
             }
 
             articleRepository.deleteById(key);

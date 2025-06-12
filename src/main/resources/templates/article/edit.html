@@ -66,17 +66,54 @@
                                 </p>
                             </select>
                         </div>
+
                         <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
-                            <label for="oldImage" class="form-label">Image of article</label>
+                            <label for="oldImage" class="form-label">Cover of article</label>
                             <img th:src="${article.image.path}" th:alt="'image of ' + ${article.title}" id="oldImage">
                         </div>
                         <div class="mb-3" th:unless="${article.image != null}">
-                            <label for="noImage" class="form-label">Image of article</label>
+                            <label for="noImage" class="form-label">Cover of article</label>
                             <p>No image uploaded</p>
                         </div>
                         <div class="mb-3">
-                            <label for="image" class="form-label">New image</label>
+                            <label for="image" class="form-label">New cover</label>
                             <input type="file" name="file" id="image" class="form-control">
+                        </div>
+
+
+                        <div th:if="${article.galleryImages != null and !article.galleryImages.isEmpty()}"
+                            class="col-12 col-md-5">
+                            <label for="galleryImages" class="form-label">Gallery of article</label>
+                            <div id="galleryImages" class="carousel slide">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item"
+                                        th:each="galleryImage, iterStat : ${article.galleryImages}"
+                                        th:classappend="${iterStat.index == 0} ? ' active'">
+                                        <img th:src="${galleryImage.path}" th:alt="|gallery image of ${article.title}|"
+                                            class="d-block w-100">
+                                    </div>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#galleryImages"
+                                    data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#galleryImages"
+                                    data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-3"
+                            th:unless="${article.galleryImages != null and !article.galleryImages.isEmpty()}">
+                            <label for="noGallery" class="form-label">Gallery of article</label>
+                            <p>No image uploaded</p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="oldGalleryImages" class="form-label">Gallery images
+                                <small>(optional)</small></label>
+                            <input type="file" name="galleryFiles" id="oldGalleryImages" class="form-control" multiple>
                         </div>
 
                         <div class="alert alert-warning d-flex align-items-center" role="alert">

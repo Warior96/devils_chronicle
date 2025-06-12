@@ -14,7 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.aulab.aulab_chronicle.models.Article;
+import it.aulab.aulab_chronicle.models.GalleryImage;
 import it.aulab.aulab_chronicle.models.Image;
+import it.aulab.aulab_chronicle.repositories.GalleryImageRepository;
 import it.aulab.aulab_chronicle.repositories.ImageRepository;
 import it.aulab.aulab_chronicle.utils.StringManipulation;
 
@@ -27,6 +29,9 @@ public class ImageServiceImpl implements ImageService {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private GalleryImageRepository galleryImageRepository;
 
     @Value("${supabase.url}")
     private String supabaseUrl;
@@ -42,12 +47,23 @@ public class ImageServiceImpl implements ImageService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public void saveImageOnDB(String url, Article article) {
+    @Override
+    public void saveImageOnDB(String url, Article article, boolean isCover) {
 
         url = url.replace(supabaseBucket, supabaseImage);
-        imageRepository.save(Image.builder().path(url).article(article).build());
+        if (isCover) {
+            imageRepository.save(Image.builder().path(url).article(article).build());
+        } else {
+            galleryImageRepository.save(GalleryImage.builder().path(url).article(article).build());
+        }
 
     }
+
+    // @Override
+    // public void saveGalleryImageOnDB(String url, Article article) {
+    // url = url.replace(supabaseBucket, supabaseImage);
+    // galleryImageRepository.save(GalleryImage.builder().path(url).article(article).build());
+    // }
 
     @Async
     public CompletableFuture<String> saveImageOnCloud(MultipartFile file) throws Exception {
@@ -87,11 +103,15 @@ public class ImageServiceImpl implements ImageService {
 
     @Async
     @Transactional
-    public void deleteImage(String imagePath) throws IOException {
+    public void deleteImage(String imagePath, boolean isCover) throws IOException {
 
         String url = imagePath.replace(supabaseImage, supabaseBucket);
 
-        imageRepository.deleteByPath(imagePath);
+        if (isCover) {
+            imageRepository.deleteByPath(imagePath);
+        } else {
+            galleryImageRepository.deleteByPath(imagePath);
+        }
 
         RestTemplate restTemplate = new RestTemplate();
 

@@ -9,8 +9,10 @@ import it.aulab.aulab_chronicle.models.Article;
 
 public interface ImageService {
 
-    void saveImageOnDB(String url, Article article);
+    void saveImageOnDB(String url, Article article, boolean isCover);
+
     CompletableFuture<String> saveImageOnCloud(MultipartFile file) throws Exception;
-    void deleteImage(String imagePath) throws IOException;
+
+    void deleteImage(String imagePath, boolean isCover) throws IOException;
 
 }

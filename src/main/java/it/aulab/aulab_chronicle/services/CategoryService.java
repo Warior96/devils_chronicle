@@ -45,14 +45,14 @@ public class CategoryService implements CrudService<CategoryDto, Category, Long>
     }
 
     @Override
-    public CategoryDto create(Category model, Principal principal, MultipartFile file) {
+    public CategoryDto create(Category model, Principal principal, MultipartFile file, MultipartFile[] galleryFiles) {
 
         return modelMapper.map(categoryRepository.save(model), CategoryDto.class);
 
     }
 
     @Override
-    public CategoryDto update(Long key, Category model, MultipartFile file) {
+    public CategoryDto update(Long key, Category model, MultipartFile file, MultipartFile[] galleryFiles) {
 
         if (categoryRepository.existsById(key)) {
             return modelMapper.map(categoryRepository.save(model), CategoryDto.class);
@@ -76,7 +76,7 @@ public class CategoryService implements CrudService<CategoryDto, Category, Long>
             }
 
             categoryRepository.deleteById(id);
-            
+
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }

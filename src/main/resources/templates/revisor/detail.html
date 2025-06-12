@@ -8,7 +8,7 @@
 
     <div class="container-fluid p-5 bg-secondary-subtle text-center">
         <div class="row justify-content-center">
-            <div class="col-12">
+            <div class="col-12 py-4">
                 <h1>Detail</h1>
                 <h2 th:text="${article.title}">Title</h2>
             </div>
@@ -17,14 +17,20 @@
 
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 d-flex flex-column">
+            <div class="col-12 col-md-5">
+                <img th:if="${article.image != null}" th:src="${article.image.path}"
+                    th:alt="'image of ' + ${article.title}" class="card-img-top">
+                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
+                    class="card-img-top">
+            </div>
+
+            <div th:if="${article.galleryImages != null and !article.galleryImages.isEmpty()}" class="col-12 col-md-5">
                 <div id="carouselExample" class="carousel slide">
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img th:if="${article.image != null}" th:src="${article.image.path}"
-                                th:alt="'image of ' + ${article.title}" class="card-img-top">
-                            <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"
-                                alt="default image" class="card-img-top">
+                        <div class="carousel-item" th:each="galleryImage, iterStat : ${article.galleryImages}"
+                            th:classappend="${iterStat.index == 0} ? ' active'">
+                            <img th:src="${galleryImage.path}" th:alt="|gallery image of ${article.title}|"
+                                class="d-block w-100">
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
@@ -38,7 +44,8 @@
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
-
+            </div>
+            <div class="col-12 col-md-8 d-flex flex-column">
                 <div class="text-center">
                     <h2 th:text="${article.subtitle}">Subtitle</h2>
                     <p class="fs-5" th:if="${article.category != null}">Category:

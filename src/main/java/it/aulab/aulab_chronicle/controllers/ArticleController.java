@@ -81,7 +81,8 @@ public class ArticleController {
     @PostMapping
     public String articleStore(
             @Valid @ModelAttribute("article") Article article, BindingResult result,
-            RedirectAttributes redirectAttributes, Principal principal, MultipartFile file, Model model) {
+            RedirectAttributes redirectAttributes, Principal principal, @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "galleryFiles", required = false) MultipartFile[] galleryFiles, Model model) {
 
         // validazione
         if (result.hasErrors()) {
@@ -91,7 +92,7 @@ public class ArticleController {
             return "article/create";
         }
 
-        articleService.create(article, principal, file);
+        articleService.create(article, principal, file, galleryFiles);
         redirectAttributes.addFlashAttribute("successMessage", "Article successfully created, awaiting approval");
         return "redirect:/";
 
@@ -117,7 +118,9 @@ public class ArticleController {
     // rotta post per modifica articolo
     @PostMapping("/update/{id}")
     public String articleUpdate(@PathVariable("id") Long id, @Valid @ModelAttribute("article") Article article,
-            BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file,
+            BindingResult result, RedirectAttributes redirectAttributes, Principal principal,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "galleryFiles", required = false) MultipartFile[] galleryFiles,
             Model viewModel) {
 
         if (result.hasErrors()) {
@@ -128,7 +131,7 @@ public class ArticleController {
             return "article/edit";
         }
 
-        articleService.update(id, article, file);
+        articleService.update(id, article, file, galleryFiles);
 
         redirectAttributes.addFlashAttribute("successMessage", "Article successfully updated, awaiting approval");
         return "redirect:/";

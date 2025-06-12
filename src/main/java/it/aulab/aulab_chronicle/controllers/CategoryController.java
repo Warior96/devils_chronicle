@@ -73,7 +73,7 @@ public class CategoryController {
             viewModel.addAttribute("category", category);
             return "category/create";
         }
-        categoryService.create(category, null, null);
+        categoryService.create(category, null, null, null);
         redirectAttributes.addFlashAttribute("successMessage", "Category successfully created");
         return "redirect:/admin/dashboard";
     }
@@ -97,7 +97,7 @@ public class CategoryController {
             return "category/update";
         }
 
-        categoryService.update(id, category, null);
+        categoryService.update(id, category, null, null);
         redirectAttributes.addFlashAttribute("successMessage", "Category successfully updated");
 
         return "redirect:/admin/dashboard";
