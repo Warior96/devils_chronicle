@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,36 +68,12 @@ class AulabChronicleApplicationTests {
 	}
 
 	@Test
-	void testCreateArticleWithoutMedia() {
-		assertThat(article.getId()).isNotNull();
-		assertThat(article.getImage()).isNull();
-		assertThat(article.getGalleryImages()).isEmpty();
-	}
-
-	@Test
 	void testFindByCategory() {
 		List<Article> articles = articleRepository.findByCategory(category);
 		assertThat(articles).isNotEmpty();
-	}
-
-	@Test
-	void testUpdateArticleWithoutMedia() {
-		article.setTitle("Titolo aggiornato");
-		article.setBody("Nuovo corpo articolo");
-		articleRepository.save(article);
-
-		Optional<Article> updated = articleRepository.findById(article.getId());
-		assertThat(updated).isPresent();
-		assertThat(updated.get().getTitle()).isEqualTo("Titolo aggiornato");
-		assertThat(updated.get().getImage()).isNull();
-		assertThat(updated.get().getGalleryImages()).isEmpty();
-	}
-
-	@Test
-	void testDeleteArticleWithoutMedia() {
-		articleRepository.delete(article);
-		Optional<Article> deleted = articleRepository.findById(article.getId());
-		assertThat(deleted).isEmpty();
+		assertThat(articles).hasSize(1);
+		assertThat(articles.get(0).getCategory().getId()).isEqualTo(category.getId());
+		assertThat(articles.get(0).getTitle()).isEqualTo("Titolo Test");
 	}
 
 }

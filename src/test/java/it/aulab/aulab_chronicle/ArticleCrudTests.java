@@ -28,7 +28,7 @@ import java.util.ArrayList;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
-public class ArticleWithMediaTests {
+public class ArticleCrudTests {
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -43,30 +43,55 @@ public class ArticleWithMediaTests {
     private GalleryImageRepository galleryImageRepository;
 
     private Category category;
+
     private User user;
+
     private Article article;
+
+    private Article articleNoMedia;
 
     @BeforeEach
     void setup() {
+        // Creo e salvo categoria di test
         category = new Category();
         category.setName("Categoria Test");
         category = categoryRepository.save(category);
+        // --------------
 
+        // Creo e salvo utente di test
         user = new User();
         user.setUsername("utenteTest");
         user.setEmail("utente@test.it");
         user.setPassword("password123");
         user = userRepository.save(user);
+        // --------------
 
+        // Creo articolo senza cover e senza gallery
+        articleNoMedia = new Article();
+        articleNoMedia.setTitle("Titolo Test");
+        articleNoMedia.setSubtitle("Sottotitolo Test");
+        articleNoMedia.setBody("Testo dell'articolo...");
+        articleNoMedia.setPublishDate(LocalDate.now());
+        articleNoMedia.setCategory(category);
+        articleNoMedia.setUser(user);
+        articleNoMedia.setIsAccepted(true);
+        articleNoMedia = articleRepository.save(articleNoMedia);
+        // --------------
+
+        // Creo articolo con cover e gallery
+        // Cover
         Image image = Image.builder().path("cover.jpg").build();
 
+        // Img di gallery
         GalleryImage g1 = GalleryImage.builder().path("gallery1.jpg").build();
         GalleryImage g2 = GalleryImage.builder().path("gallery2.jpg").build();
 
+        // Associazione immagini a gallery
         List<GalleryImage> gallery = new ArrayList<>();
         gallery.add(g1);
         gallery.add(g2);
 
+        // Creo articolo con media
         article = new Article();
         article.setTitle("Titolo");
         article.setSubtitle("Sottotitolo");
@@ -78,13 +103,49 @@ public class ArticleWithMediaTests {
         article.setImage(image);
         article.setGalleryImages(gallery);
 
+        // Associazioni
         image.setArticle(article);
         g1.setArticle(article);
         g2.setArticle(article);
 
         article = articleRepository.save(article);
     }
+    // --------------
 
+    // test CRUD articolo senza media
+    // Test create
+    @Test
+    void testCreateArticleWithoutMedia() {
+        assertThat(articleNoMedia.getId()).isNotNull();
+        assertThat(articleNoMedia.getImage()).isNull();
+        assertThat(articleNoMedia.getGalleryImages()).isEmpty();
+    }
+
+    // Test update
+    @Test
+    void testUpdateArticleWithoutMedia() {
+        articleNoMedia.setTitle("Titolo aggiornato");
+        articleNoMedia.setBody("Nuovo corpo articolo");
+        articleRepository.save(articleNoMedia);
+
+        Optional<Article> updated = articleRepository.findById(articleNoMedia.getId());
+        assertThat(updated).isPresent();
+        assertThat(updated.get().getTitle()).isEqualTo("Titolo aggiornato");
+        assertThat(updated.get().getImage()).isNull();
+        assertThat(updated.get().getGalleryImages()).isEmpty();
+    }
+
+    // Test delete
+    @Test
+    void testDeleteArticleWithoutMedia() {
+        articleRepository.delete(articleNoMedia);
+        Optional<Article> deleted = articleRepository.findById(articleNoMedia.getId());
+        assertThat(deleted).isEmpty();
+    }
+    // ------------
+
+    // test CRUD articolo con media
+    // Test create
     @Test
     void testCreateArticleWithMedia() {
         assertThat(article.getId()).isNotNull();
@@ -92,6 +153,7 @@ public class ArticleWithMediaTests {
         assertThat(article.getGalleryImages()).hasSize(2);
     }
 
+    // Test update
     @Test
     void testUpdateArticleWithNewMedia() {
 
@@ -127,6 +189,7 @@ public class ArticleWithMediaTests {
         assertThat(updated.get().getGalleryImages().get(1).getPath()).isEqualTo("gallery4.jpg");
     }
 
+    // Test delete
     @Test
     void testDeleteArticleWithMedia() {
         Long id = article.getId();
