@@ -62,17 +62,28 @@
                         <div class="row mb-3">
                             <div class="col-6">
                                 <label for="image" class="form-label">Cover image</label>
-                                <input type="file" name="file" id="image" class="form-control">
+                                <div class="d-flex flex-row">
+                                    <input type="file" name="file" id="image" class="form-control">
+                                    <button type="button" id="removeCover" class="btn btn-danger ms-2 d-none">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
                                 <div class="row justify-content-center align-items-center">
-                                    <img src="" alt="coverPreview" id="coverPreview" class="d-none col-8 my-3"
+                                    <img src="" alt="coverPreview" id="coverPreview"
+                                        class="d-none col-8 my-3 border border-secondary-subtle p-1 rounded"
                                         accept=".jpg,.jpeg,.png">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <label for="galleryImages" class="form-label">Gallery images
                                     <small>(optional)</small></label>
-                                <input type="file" name="galleryFiles" id="galleryImages" class="form-control" multiple
-                                    accept=".jpg,.jpeg,.png">
+                                <div class="d-flex flex-row">
+                                    <input type="file" name="galleryFiles" id="galleryImages" class="form-control"
+                                        multiple accept=".jpg,.jpeg,.png">
+                                    <button type="button" id="removeGallery" class="btn btn-danger ms-2 d-none">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
                                 <div id="galleryPreview" class="row justify-content-center align-items-center mb-3">
                                 </div>
                             </div>
