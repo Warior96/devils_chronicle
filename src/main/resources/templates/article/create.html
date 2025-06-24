@@ -43,7 +43,8 @@
                         <div class="row mb-3">
                             <div class="col-6">
                                 <label for="date" class="form-label">Publish Date</label>
-                                <input id="date" type="date" class="form-control" th:field="*{publishDate}">
+                                <input id="date" type="date" class="form-control" th:field="*{publishDate}"
+                                    th:attr="min=${today}">
                                 <p th:errors="*{publishDate}" class="text-danger"
                                     th:if="${#fields.hasErrors('publishDate')}"></p>
                             </div>

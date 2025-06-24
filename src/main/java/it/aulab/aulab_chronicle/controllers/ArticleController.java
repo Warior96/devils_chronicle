@@ -1,6 +1,7 @@
 package it.aulab.aulab_chronicle.controllers;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -89,6 +90,7 @@ public class ArticleController {
             model.addAttribute("title", "Create Article");
             model.addAttribute("article", article);
             model.addAttribute("categories", categoryService.readAll());
+            model.addAttribute("today", LocalDate.now());
             return "article/create";
         }
 
