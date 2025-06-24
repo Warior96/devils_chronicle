@@ -11,22 +11,22 @@
         <div class="container">
             <div class="row justify-content-center">
 
-                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
+                <div class="col-12 my-5 pt-5 d-flex justify-content-between align-items-center">
                     <div class="d-flex justify-content-center align-items-center flex-grow-1">
                         <h1 th:text="${title}">Create Article</h1>
                     </div>
                 </div>
 
-                <div class="col-7 my-5">
+                <div class="col-10 col-lg-7 mb-5">
                     <form th:action="@{/articles}" method="POST" th:object="${article}" enctype="multipart/form-data">
                         <div class="row mb-3">
-                            <div class="col">
+                            <div class="col-12 col-md-6">
                                 <label for="articleTitle" class="form-label">Title</label>
                                 <input id="articleTitle" type="text" class="form-control" th:field="*{title}"
                                     placeholder="Enter article title">
                                 <p th:errors="*{title}" class="text-danger" th:if="${#fields.hasErrors('title')}"></p>
                             </div>
-                            <div class="col">
+                            <div class="col-12 col-md-6">
                                 <label for="subtitle" class="form-label">Subtitle</label>
                                 <input id="subtitle" type="text" class="form-control" th:field="*{subtitle}"
                                     placeholder="Enter article subtitle">
@@ -35,35 +35,48 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="body" class="form-label">Article:</label>
-                            <input id="body" type="text" class="form-control" th:field="*{body}"
-                                placeholder="Enter article description">
+                            <label for="body" class="form-label">Article body:</label>
+                            <textarea id="body" class="form-control" th:field="*{body}" rows="2"
+                                placeholder="Enter article description"></textarea>
                             <p th:errors="*{body}" class="text-danger" th:if="${#fields.hasErrors('body')}"></p>
                         </div>
-                        <div class="mb-3">
-                            <label for="date" class="form-label">Publish Date (yyyy-mm-dd)</label>
-                            <input id="date" type="date" class="form-control" th:field="*{publishDate}"
-                                placeholder="Enter article publish date yyyy-mm-dd">
-                            <p th:errors="*{publishDate}" class="text-danger"
-                                th:if="${#fields.hasErrors('publishDate')}"></p>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="date" class="form-label">Publish Date</label>
+                                <input id="date" type="date" class="form-control" th:field="*{publishDate}">
+                                <p th:errors="*{publishDate}" class="text-danger"
+                                    th:if="${#fields.hasErrors('publishDate')}"></p>
+                            </div>
+                            <div class="col-6">
+                                <label for="category" class="form-label">Category</label>
+                                <select id="category" th:field="*{category}" class="form-select">
+                                    <option th:each="category:${categories}" th:value="${category.id}"
+                                        th:text="${category.name}"></option>
+                                    <p th:errors="*{category}" class="text-danger"
+                                        th:if="${#fields.hasErrors('category')}">
+                                    </p>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select id="category" th:field="*{category}" class="form-select">
-                                <option th:each="category:${categories}" th:value="${category.id}"
-                                    th:text="${category.name}"></option>
-                                <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}">
-                                </p>
-                            </select>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="image" class="form-label">Cover image</label>
+                                <input type="file" name="file" id="image" class="form-control">
+                                <div class="row justify-content-center align-items-center">
+                                    <img src="" alt="coverPreview" id="coverPreview" class="d-none col-8 my-3"
+                                        accept=".jpg,.jpeg,.png">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="galleryImages" class="form-label">Gallery images
+                                    <small>(optional)</small></label>
+                                <input type="file" name="galleryFiles" id="galleryImages" class="form-control" multiple
+                                    accept=".jpg,.jpeg,.png">
+                                <div id="galleryPreview" class="row justify-content-center align-items-center mb-3">
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Cover image</label>
-                            <input type="file" name="file" id="image" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="galleryImages" class="form-label">Gallery images <small>(optional)</small></label>
-                            <input type="file" name="galleryFiles" id="galleryImages" class="form-control" multiple>
-                        </div>
+
                         <button type="submit" class="btn btn-success">Create article</button>
                     </form>
                 </div>
