@@ -65,6 +65,17 @@
 
             <p th:text="${article.body}"></p>
 
+            <div class="text-center my-4">
+                <a th:href="@{/articles/detail/{id}/summary(id=${article.id})}" class="btn btn-primary">
+                    Riassumi
+                </a>
+            </div>
+
+            <div class="text-center my-4" th:if="${summary != null}">
+                <h4>Riassunto</h4>
+                <p th:text="${summary}"></p>
+            </div>
+
             <div class="text-center">
                 <a href="#" class="text-secondary pointer" onclick="goBack()">Go back</a>
             </div>

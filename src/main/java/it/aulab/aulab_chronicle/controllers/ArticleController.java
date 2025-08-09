@@ -27,6 +27,7 @@ import it.aulab.aulab_chronicle.models.Category;
 import it.aulab.aulab_chronicle.repositories.ArticleRepository;
 import it.aulab.aulab_chronicle.services.ArticleService;
 import it.aulab.aulab_chronicle.services.CrudService;
+import it.aulab.aulab_chronicle.services.GeminiService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +51,9 @@ public class ArticleController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private GeminiService geminiService;
 
     // rotta get per visualizzazione articoli
     @GetMapping
@@ -190,6 +194,18 @@ public class ArticleController {
 
         return "article/articles";
 
+    }
+
+    // rotta get per ottenere il riassunto di un articolo
+    @GetMapping("/detail/{id}/summary")
+    public String summarizeArticle(@PathVariable Long id, Model model) {
+        ArticleDto article = articleService.read(id);
+        String summary = geminiService.getSummary(article.getTitle(), article.getBody());
+
+        model.addAttribute("article", article);
+        model.addAttribute("summary", summary);
+
+        return "article/detail";
     }
 
 }
