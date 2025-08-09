@@ -3,7 +3,7 @@
 
 <head th:insert="~{index :: head}"></head>
 
-<body>
+<body th:data-article-id="${article.id}">
     <div th:insert="~{index :: navbar}"></div>
 
     <div class="container-fluid p-5 bg-secondary-subtle text-center">
@@ -65,32 +65,49 @@
 
             <p th:text="${article.body}"></p>
 
-            <div class="text-center my-4">
+            <div class="my-4 d-flex justify-content-center">
                 <a th:href="@{/articles/detail/{id}/summary(id=${article.id})}" class="btn btn-primary">
                     Riassumi
                 </a>
-            </div>
 
-            <div class="text-center my-4" th:if="${summary != null}">
-                <h4>Riassunto</h4>
-                <p th:text="${summary}"></p>
+                <button id="ask-btn" class="btn btn-secondary">
+                    Fai una domanda
+                </button>
             </div>
+            <!-- <div class="my-4 d-flex justify-content-center">
+                <div class="text-center my-4" th:if="${summary != null}">
+                    <h4>Riassunto</h4>
+                    <p th:text="${summary}"></p>
+                </div>
+            </div> -->
+            <div id="ai-output" class="text-center my-4">
+                <div id="summary-section" th:if="${summary != null}">
+                    <h4>Riassunto</h4>
+                    <p th:text="${summary}"></p>
+                </div>
+                <div id="chat-container" class="mt-4" style="display:none;">
+                    <h4>Chat con l'AI</h4>
+                    <div id="chat-messages" class="border p-3 mb-3 text-start" style="height: 300px; overflow-y: auto;">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" id="chat-input" class="form-control" placeholder="Scrivi la tua domanda...">
+                        <button class="btn btn-outline-secondary" type="button" id="send-btn">Invia</button>
+                    </div>
+                </div>
 
-            <div class="text-center">
-                <a href="#" class="text-secondary pointer" onclick="goBack()">Go back</a>
+                <div class="text-center">
+                    <a href="#" class="text-secondary pointer" onclick="goBack()">Go back</a>
+                </div>
             </div>
 
         </div>
-    </div>
 
-    </div>
-
-    <div th:insert="~{index :: footer}"></div>
+        <div th:insert="~{index :: footer}"></div>
 
 
 
-    <!-- script esterno + bootstrap -->
-    <div th:replace="~{index :: script}"></div>
+        <!-- script esterno + bootstrap -->
+        <div th:replace="~{index :: script}"></div>
 </body>
 
 </html>

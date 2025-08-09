@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,9 +45,16 @@ public class GeminiService {
         // Incapsulo headers e corpo in un HttpEntity per la chiamata REST
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
 
+        // Usiamo ParameterizedTypeReference per specificare il tipo di ritorno in modo
+        // sicuro
+        ParameterizedTypeReference<Map<String, Object>> responseType = new ParameterizedTypeReference<Map<String, Object>>() {
+        };
+
         try {
             // Chiamo il microservizio con POST e ricevo una risposta mappata in Map
-            Map<String, Object> response = restTemplate.postForObject(url, request, Map.class);
+            ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(url, HttpMethod.POST, request,
+                    responseType);
+            Map<String, Object> response = responseEntity.getBody();
 
             if (response != null) {
                 // Se la risposta contiene il campo "response" (riassunto), lo ritorno
@@ -87,8 +97,12 @@ public class GeminiService {
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
 
+        ParameterizedTypeReference<Map<String, Object>> responseType = new ParameterizedTypeReference<Map<String, Object>>() {
+        };
         try {
-            Map<String, Object> response = restTemplate.postForObject(url, request, Map.class);
+            ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(url, HttpMethod.POST, request,
+                    responseType);
+            Map<String, Object> response = responseEntity.getBody();
 
             if (response != null) {
                 if (response.containsKey("response")) {

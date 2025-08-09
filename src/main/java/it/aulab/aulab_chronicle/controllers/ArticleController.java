@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/articles")
@@ -206,6 +209,30 @@ public class ArticleController {
         model.addAttribute("summary", summary);
 
         return "article/detail";
+    }
+
+    // rotta post per fare domande su un articolo all'AI
+    @PostMapping("/detail/{id}/ask")
+    public ResponseEntity<String> askQuestionAboutArticle(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> requestBody) {
+
+        // 1. Recupera l'articolo dal database usando l'ID
+        ArticleDto article = articleService.read(id);
+
+        // 2. Estrai la domanda dal corpo della richiesta JSON
+        String question = requestBody.get("question");
+
+        // 3. Esegui la validazione di base della domanda
+        if (question == null || question.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("La domanda non può essere vuota.");
+        }
+
+        // 4. Invia titolo, contenuto e domanda al servizio Gemini
+        String response = geminiService.askQuestion(article.getTitle(), article.getBody(), question);
+
+        // 5. Restituisci la risposta dell'AI al frontend
+        return ResponseEntity.ok(response);
     }
 
 }
