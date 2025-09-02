@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>it.aulab</groupId>
-	<artifactId>aulab_chronicle</artifactId>
+	<artifactId>devils_chronicle</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>aulab_chronicle</name>
+	<name>devils_chronicle</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
