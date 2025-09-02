@@ -22,6 +22,21 @@ public interface ArticleRepository extends ListCrudRepository<Article, Long> {
 
     List<Article> findByIsAcceptedNull();
 
+    // Trova articoli in evidenza accettati
+    List<Article> findByIsFeaturedTrueAndIsAcceptedTrue();
+
+    // Ultimo articolo accettato
+    Article findTopByIsAcceptedTrueOrderByPublishDateDesc();
+
+    // Ultimo articolo featured accettato
+    Article findTopByIsFeaturedTrueAndIsAcceptedTrueOrderByPublishDateDesc();
+
+    // Secondo articolo accettato (serve se non ci sono featured)
+    List<Article> findTop2ByIsAcceptedTrueOrderByPublishDateDesc();
+
+    // Trova articoli per tipo
+    List<Article> findByArticleTypeAndIsAcceptedTrue(String articleType);
+
     // ricerca per titolo, sottotitolo, autore e categoria
     @Query("SELECT a FROM Article a WHERE " +
             "LOWER(a.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +

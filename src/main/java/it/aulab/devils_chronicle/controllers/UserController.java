@@ -1,11 +1,12 @@
 package it.aulab.devils_chronicle.controllers;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.time.LocalDateTime;
+// import java.util.ArrayList;
+// import java.util.Collections;
+// import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,9 +26,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.aulab.devils_chronicle.dtos.ArticleDto;
 import it.aulab.devils_chronicle.dtos.UserDto;
 import it.aulab.devils_chronicle.models.Article;
+import it.aulab.devils_chronicle.models.Match;
 import it.aulab.devils_chronicle.models.User;
 import it.aulab.devils_chronicle.repositories.ArticleRepository;
 import it.aulab.devils_chronicle.repositories.CareerRequestRepository;
+import it.aulab.devils_chronicle.repositories.MatchRepository;
 import it.aulab.devils_chronicle.services.ArticleService;
 import it.aulab.devils_chronicle.services.CategoryService;
 import it.aulab.devils_chronicle.services.UserService;
@@ -49,6 +52,9 @@ public class UserController {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private MatchRepository matchRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -93,17 +99,55 @@ public class UserController {
     @GetMapping("/")
     public String home(Model viewModel) {
 
-        List<ArticleDto> articles = new ArrayList<ArticleDto>();
-        for (Article article : articleRepository.findByIsAcceptedTrue()) {
-            articles.add(modelMapper.map(article, ArticleDto.class));
+        // Recupera l'ultimo articolo accettato
+        // List<Article> acceptedArticles = articleRepository.findByIsAcceptedTrue();
+        // ArticleDto latestArticle = null;
+        // if (!acceptedArticles.isEmpty()) {
+        // Collections.sort(acceptedArticles,
+        // Comparator.comparing(Article::getPublishDate).reversed());
+        // latestArticle = modelMapper.map(acceptedArticles.get(0), ArticleDto.class);
+        // }
+        Article latest = articleRepository.findTopByIsAcceptedTrueOrderByPublishDateDesc();
+        ArticleDto latestArticle = latest != null ? modelMapper.map(latest, ArticleDto.class) : null;
+
+        // // Recupera un articolo in evidenza (featured)
+        // ArticleDto featuredArticle = null;
+        // List<Article> featuredArticles =
+        // articleRepository.findByIsFeaturedTrueAndIsAcceptedTrue();
+        // if (!featuredArticles.isEmpty()) {
+        // // Prendi il più recente tra gli articoli in evidenza
+        // Collections.sort(featuredArticles,
+        // Comparator.comparing(Article::getPublishDate).reversed());
+        // featuredArticle = modelMapper.map(featuredArticles.get(0), ArticleDto.class);
+        // } else if (acceptedArticles.size() > 1) {
+        // // Se non ci sono articoli in evidenza, prendi il secondo più recente
+        // featuredArticle = modelMapper.map(acceptedArticles.get(1), ArticleDto.class);
+        // }
+        Article featured = articleRepository.findTopByIsFeaturedTrueAndIsAcceptedTrueOrderByPublishDateDesc();
+        ArticleDto featuredArticle = null;
+
+        if (featured != null) {
+            featuredArticle = modelMapper.map(featured, ArticleDto.class);
+        } else {
+            List<Article> top2 = articleRepository.findTop2ByIsAcceptedTrueOrderByPublishDateDesc();
+            if (top2.size() > 1) {
+                // il secondo articolo più recente
+                featuredArticle = modelMapper.map(top2.get(1), ArticleDto.class);
+            }
         }
 
-        // ordine di visualizzazione articoli
-        Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
+        // Recupera l'ultima partita giocata
+        Match lastMatch = matchRepository.findTopByIsPlayedTrueOrderByDateDesc();
 
-        List<ArticleDto> lastThreeArticles = articles.stream().limit(4).collect(Collectors.toList());
+        // Recupera la prossima partita
+        Match nextMatch = matchRepository.findTopByIsPlayedFalseAndDateAfterOrderByDateAsc(LocalDateTime.now());
 
-        viewModel.addAttribute("articles", lastThreeArticles);
+        // Aggiungi gli oggetti al model
+        viewModel.addAttribute("latestArticle", latestArticle);
+        viewModel.addAttribute("featuredArticle", featuredArticle);
+        viewModel.addAttribute("lastMatch", lastMatch);
+        viewModel.addAttribute("nextMatch", nextMatch);
+        viewModel.addAttribute("title", "Devil's Chronicle - AC Milan News");
 
         return "home";
     }
@@ -156,7 +200,7 @@ public class UserController {
         return "revisor/dashboard";
     }
 
-    //
+    // rotta get per la dashboard scrittore
     @GetMapping("/writer/dashboard")
     public String writerDashboard(Model viewModel, Principal principal) {
 

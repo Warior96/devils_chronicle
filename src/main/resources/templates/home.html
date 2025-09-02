@@ -4,9 +4,10 @@
 <head th:insert="~{index :: head}"></head>
 
 <body>
-    <div th:insert="~{index :: navbar}"></div>
-    <div class="mt-5">
 
+    <div th:insert="~{index :: navbar}"></div>
+
+    <div class="mt-5">
         <div th:if="${param.notAuthorized}">
             <div class="alert alert-danger">
                 Not authorized!
@@ -20,42 +21,10 @@
         </div>
     </div>
 
-    <!-- <div class="container-fluid">
-        <div class="row ms-5 vh-100 align-items-center">
-            <div class="col-10">
-                <h1 class="mb-5">
-                    Welcome to
-                    <span class="display-4 fw-bold d-block">
-                        New Aulab Chronicle
-                    </span>
-                </h1>
-            </div>
-        </div>
-    </div> -->
 
-    <div class="container vh-100" th:if="${articles.size() > 0}">
-        <!-- <div class="row justify-content-center">
-            <div class="col-10 mb-5">
-                <h1 class="text-center">Last articles</h1>
-            </div>
-        </div> -->
+
+    <!--     <div class="container vh-100" th:if="${articles.size() > 0}">
         <div class="row justify-content-center mb-5">
-            <!-- <div th:each="article : ${articles}" class="col-12 col-md-6 d-flex justify-content-center">
-                <article class="row border border-1 mb-5 mx-3 py-3 w-100">
-                    <div class="col-5">
-                        <img th:if="${article.image != null}" th:src="${article.image.path}"
-                            th:alt="'image of ' + ${article.title}" class="card-img-top">
-                        <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
-                            class="card-img-top">
-                    </div>
-                    <div class="col-7 d-flex justify-content-around align-items-start flex-column px-3">
-                        <h4 class="card-title" th:text="${article.title}"></h4>
-                        <h6 class="card-text" th:text="${article.subtitle}"></h6>
-                        <cite class="card-text" th:text="${article.user.username}"></cite>
-                        <a th:href="@{/articles/detail/{id}(id=${article.id})}" class="btn btn-outline-primary">Read more</a>
-                    </div>
-                </article>
-            </div> -->
             <div class="col-6">
                 <div class="row">
                     <div th:replace="~{index :: card}"></div>
@@ -66,7 +35,177 @@
             </div>
 
         </div>
+    </div> -->
+
+
+
+    <style>
+        .milan-red {
+            background-color: #FB090B;
+        }
+
+        .milan-black {
+            background-color: #000000;
+        }
+
+        .match-card {
+            background: linear-gradient(135deg, #FB090B 0%, #000000 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .featured-badge {
+            background-color: #FFD700;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- Hero Section con Logo e Nome -->
+    <div class="container-fluid milan-red text-white py-4 mt-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <h1 class="display-3 fw-bold">DEVIL'S CHRONICLE</h1>
+                    <p class="lead">Il giornale rossonero - AC Milan News & Updates</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Main Content Section -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Left Column - Articles -->
+            <div class="col-lg-8">
+                <!-- Latest Article -->
+                <div th:if="${latestArticle != null}" class="mb-4">
+                    <h3 class="border-bottom border-danger pb-2 mb-3">
+                        <i class="fas fa-newspaper"></i> Ultimo Articolo
+                    </h3>
+                    <div class="card shadow">
+                        <div class="row g-0">
+                            <div class="col-md-5">
+                                <img th:if="${latestArticle.image != null}" th:src="${latestArticle.image.path}"
+                                    th:alt="'image of ' + ${latestArticle.title}"
+                                    class="img-fluid rounded-start h-100 object-fit-cover">
+                                <img th:unless="${latestArticle.image != null}" th:src="@{/images/default.jpg}"
+                                    alt="default image" class="img-fluid rounded-start h-100 object-fit-cover">
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <h4 class="card-title" th:text="${latestArticle.title}"></h4>
+                                    <p class="card-text" th:text="${latestArticle.subtitle}"></p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-user"></i> <span
+                                                th:text="${latestArticle.user.username}"></span>
+                                            | <i class="fas fa-calendar"></i> <span
+                                                th:text="${#temporals.format(latestArticle.publishDate, 'dd/MM/yyyy')}"></span>
+                                        </small>
+                                    </p>
+                                    <a th:href="@{/articles/detail/{id}(id=${latestArticle.id})}"
+                                        class="btn btn-danger">Leggi tutto</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Article -->
+                <div th:if="${featuredArticle != null}" class="mb-4">
+                    <h3 class="border-bottom border-danger pb-2 mb-3">
+                        <i class="fas fa-star"></i> In Evidenza
+                        <span class="featured-badge ms-2" th:if="${featuredArticle.isFeatured}">ESCLUSIVA</span>
+                    </h3>
+                    <div class="card shadow">
+                        <div class="row g-0">
+                            <div class="col-md-5">
+                                <img th:if="${featuredArticle.image != null}" th:src="${featuredArticle.image.path}"
+                                    th:alt="'image of ' + ${featuredArticle.title}"
+                                    class="img-fluid rounded-start h-100 object-fit-cover">
+                                <img th:unless="${featuredArticle.image != null}" th:src="@{/images/default.jpg}"
+                                    alt="default image" class="img-fluid rounded-start h-100 object-fit-cover">
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <h4 class="card-title" th:text="${featuredArticle.title}"></h4>
+                                    <p class="card-text" th:text="${featuredArticle.subtitle}"></p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-user"></i>
+                                            <span th:text="${featuredArticle.user.username}"></span>
+                                            <i class="fas fa-calendar"></i>
+                                            <span
+                                                th:text="${#temporals.format(featuredArticle.publishDate, 'dd/MM/yyyy')}"></span>
+                                        </small>
+                                    </p>
+                                    <a th:href="@{/articles/detail/{id}(id=${featuredArticle.id})}"
+                                        class="btn btn-danger">Leggi tutto</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Match Info -->
+            <div class="col-lg-4">
+                <h3 class="border-bottom border-danger pb-2 mb-3">
+                    <i class="fas fa-futbol"></i> Partite AC Milan
+                </h3>
+
+                <!-- Last Match -->
+                <div class="match-card">
+                    <h5 class="text-center mb-3">Last match</h5>
+                    <div th:if="${lastMatch != null}">
+                        <div class="text-center">
+                            <p class="mb-1" th:text="${lastMatch.competition}"></p>
+                            <h6 th:text="${lastMatch.homeTeam + ' ' + lastMatch.score + ' ' + lastMatch.awayTeam}"></h6>
+                            <small th:text="${#temporals.format(lastMatch.date, 'dd/MM/yyyy HH:mm')}"></small>
+                        </div>
+                    </div>
+                    <div th:unless="${lastMatch != null}" class="text-center">
+                        <p class="text-muted">Nessuna partita disponibile</p>
+                    </div>
+                </div>
+
+                <!-- Next Match -->
+                <div class="match-card">
+                    <h5 class="text-center mb-3">Next match</h5>
+                    <div th:if="${nextMatch != null}">
+                        <div class="text-center">
+                            <p class="mb-1" th:text="${nextMatch.competition}"></p>
+                            <h6 th:text="${nextMatch.homeTeam + ' vs ' + nextMatch.awayTeam}"></h6>
+                            <small th:text="${#temporals.format(nextMatch.date, 'dd/MM/yyyy HH:mm')}"></small>
+                        </div>
+                    </div>
+                    <div th:unless="${lastMatch != null}" class="text-center">
+                        <p class="text-muted">Nessuna partita disponibile</p>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Link Rapidi</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="/articles" class="text-danger">Tutti gli Articoli</a></li>
+                            <li><a href="/categories/search/1" class="text-danger">Calciomercato</a></li>
+                            <li><a href="/categories/search/2" class="text-danger">Match Report</a></li>
+                            <li><a href="/categories/search/3" class="text-danger">Interviste</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div th:insert="~{index :: footer}"></div>
 

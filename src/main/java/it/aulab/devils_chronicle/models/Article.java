@@ -58,6 +58,12 @@ public class Article {
     @Column(nullable = true)
     private Boolean isAccepted;
 
+    @Column(nullable = false)
+    private Boolean isFeatured = false;
+
+    @Column(length = 50)
+    private String articleType;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({ "articles" })

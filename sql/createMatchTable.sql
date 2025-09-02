@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS matches (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    home_team VARCHAR(255) NOT NULL,
+    away_team VARCHAR(255) NOT NULL,
+    score VARCHAR(20),
+    date DATETIME NOT NULL,
+    competition VARCHAR(100),
+    is_played BOOLEAN DEFAULT FALSE,
+    stadium VARCHAR(255),
+    notes TEXT,
+    is_milan_home BOOLEAN,
+    external_id BIGINT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

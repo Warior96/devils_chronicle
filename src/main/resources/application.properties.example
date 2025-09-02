@@ -1,0 +1,29 @@
+# Database
+spring.application.name=YOUR_NAME
+spring.datasource.url=jdbc:mysql://localhost:3306/YOUR_DB_NAME
+spring.datasource.username=YOUR_DB_USERNAME
+spring.datasource.password=YOUR_DB_PASSWORD
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+# Supabase
+supabase.key=YOUR_SUPABASE_KEY
+supabase.url=YOUR_SUPABASE_URL
+supabase.bucket=YOUR_SUPABASE_BUCKET
+supabase.image=YOUR_SUPABASE_IMAGE
+
+# Mailtrap
+spring.mail.host=sandbox.smtp.mailtrap.io
+spring.mail.port=YOUR_MAILTRAP_PORT
+spring.mail.username=YOUR_MAILTRAP_USERNAME
+spring.mail.password=YOUR_MAILTRAP_PASSWORD
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.strattls.enable=true
+spring.mail.properties.mail.smtp.strattls.required=true
+
+# API Football
+football.api.key=YOUR_FOOTBALL_KEY
+football.api.url=https://api.football-data.org/v4/
+
+# Cache per le partite
+spring.cache.type=simple
+spring.cache.cache-names=matches

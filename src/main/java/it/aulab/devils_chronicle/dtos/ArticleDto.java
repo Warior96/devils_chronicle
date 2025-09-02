@@ -22,10 +22,11 @@ public class ArticleDto {
     private String body;
     private LocalDate publishDate;
     private Boolean isAccepted;
+    private Boolean isFeatured;
+    private String articleType;
     private User user;
     private Category category;
     private Image image;
     private List<GalleryImage> galleryImages;
-
 
 }
