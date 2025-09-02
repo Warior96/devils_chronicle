@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+
+<head th:insert="~{index :: head}"></head>
+
+<body>
+    <div th:insert="~{index :: navbar}"></div>
+
+    <div class="container mt-5">
+        <!-- Titolo e messaggi -->
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4">
+                    <i class="fas fa-futbol"></i> <span th:text="${title}"></span>
+                </h1>
+
+                <!-- Messaggi di feedback -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                    <i class="fas fa-check-circle"></i>
+                    <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pulsanti azioni -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-cogs"></i> Azioni
+                        </h5>
+                        <p class="card-text text-muted">
+                            Aggiorna le partite dall'API esterna o gestisci i dati esistenti.
+                        </p>
+                        <form th:action="@{/admin/matches/update}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-primary"
+                                onclick="return confirm('Aggiornare le partite dall\'API? Questa operazione potrebbe richiedere alcuni secondi.')">
+                                <i class="fas fa-sync-alt"></i> Aggiorna da API
+                            </button>
+                        </form>
+                        <a href="/admin/dashboard" class="btn btn-secondary ms-2">
+                            <i class="fas fa-arrow-left"></i> Torna alla Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiche -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Partite Giocate</h6>
+                                <h3 id="playedCount">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Partite Future</h6>
+                                <h3 id="futureCount">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-clock fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Totale Partite</h6>
+                                <h3 th:text="${#lists.size(matches)}">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-list fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabella partite -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-table"></i> Elenco Partite
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(matches)}" class="text-center py-4">
+                            <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">Nessuna partita trovata</h5>
+                            <p class="text-muted">Prova ad aggiornare i dati dall'API</p>
+                        </div>
+
+                        <div th:unless="${#lists.isEmpty(matches)}" class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Partita</th>
+                                        <th scope="col">Risultato</th>
+                                        <th scope="col">Competizione</th>
+                                        <th scope="col">Stato</th>
+                                        <th scope="col">Casa/Trasferta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="match : ${matches}">
+                                        <td>
+                                            <small th:text="${#temporals.format(match.date, 'dd/MM/yyyy')}"></small><br>
+                                            <small class="text-muted"
+                                                th:text="${#temporals.format(match.date, 'HH:mm')}"></small>
+                                        </td>
+                                        <td>
+                                            <strong>
+                                                <span th:text="${match.homeTeam}"></span>
+                                                <span class="mx-2 text-muted">vs</span>
+                                                <span th:text="${match.awayTeam}"></span>
+                                            </strong>
+                                            <div th:if="${match.stadium}" class="small text-muted">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span th:text="${match.stadium}"></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span th:if="${match.score != null}" class="badge bg-success fs-6"
+                                                th:text="${match.score}"></span>
+                                            <span th:unless="${match.score != null}" class="text-muted">-</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary" th:text="${match.competition}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:if="${match.isPlayed}" class="badge bg-success">
+                                                <i class="fas fa-check"></i> Giocata
+                                            </span>
+                                            <span th:unless="${match.isPlayed}" class="badge bg-warning">
+                                                <i class="fas fa-clock"></i> Programmata
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span th:if="${match.isMilanHome}" class="badge bg-info">
+                                                <i class="fas fa-home"></i> Casa
+                                            </span>
+                                            <span th:unless="${match.isMilanHome}" class="badge bg-secondary">
+                                                <i class="fas fa-plane"></i> Trasferta
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info API -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-info-circle"></i> Informazioni
+                        </h6>
+                        <p class="card-text small text-muted mb-0">
+                            I dati delle partite vengono aggiornati automaticamente ogni 6 ore dall'API
+                            Football-Data.org.
+                            Se non è configurata alcuna API key, vengono utilizzati dati di esempio per il testing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{index :: footer}"></div>
+    <div th:replace="~{index :: script}"></div>
+
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function () {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+
+        // Calcola statistiche partite
+        document.addEventListener('DOMContentLoaded', function () {
+            const rows = document.querySelectorAll('tbody tr');
+            let playedCount = 0;
+            let futureCount = 0;
+
+            rows.forEach(function (row) {
+                const statusCell = row.querySelector('td:nth-child(5)'); // Colonna stato
+                if (statusCell) {
+                    const statusText = statusCell.textContent.trim();
+                    if (statusText.includes('Giocata')) {
+                        playedCount++;
+                    } else if (statusText.includes('Programmata')) {
+                        futureCount++;
+                    }
+                }
+            });
+
+            document.getElementById('playedCount').textContent = playedCount;
+            document.getElementById('futureCount').textContent = futureCount;
+        });
+    </script>
+</body>
+
+</html>

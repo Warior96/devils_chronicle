@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,15 @@ public class MatchService {
 
     // AC Milan team ID in Football-Data.org
     private static final int AC_MILAN_ID = 98;
+
+    /**
+     * Caricamento iniziale dei dati all'avvio dell'applicazione
+     */
+    @EventListener(ApplicationReadyEvent.class)
+    public void loadInitialData() {
+        System.out.println("Caricamento iniziale dati partite...");
+        updateMatchesFromAPI();
+    }
 
     /**
      * Metodo per aggiornare il risultato di una partita
@@ -74,29 +85,41 @@ public class MatchService {
      */
     @Scheduled(cron = "0 0 */6 * * *") // Ogni 6 ore
     public void updateMatchesFromAPI() {
-        if (apiKey != null && !apiKey.isEmpty()) {
-            try {
-                // Chiamata API a Football-Data.org
-                String url = apiUrl + "teams/" + AC_MILAN_ID + "/matches?status=SCHEDULED&status=FINISHED&limit=10";
 
-                // Headers per l'autenticazione
-                org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-                headers.set("X-Auth-Token", apiKey);
+        System.out.println("Tentativo di aggiornamento partite dall'API...");
 
-                org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(headers);
+        if (apiKey == null || apiKey.isEmpty() || "YOUR_API_KEY_HERE".equals(apiKey)) {
+            System.out.println("API Key non configurata, salto l'aggiornamento");
+            // Se non c'è API key, crea dati di esempio
+            createSampleMatches();
+            return;
+        }
 
-                ResponseEntity<String> response = restTemplate.exchange(
-                        url,
-                        org.springframework.http.HttpMethod.GET,
-                        entity,
-                        String.class);
+        try {
+            // Chiamata API a Football-Data.org
+            String url = apiUrl + "teams/" + AC_MILAN_ID + "/matches?status=SCHEDULED&status=FINISHED&limit=10";
 
-                // Parsing JSON
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(response.getBody());
-                JsonNode matches = root.path("matches");
+            // Headers per l'autenticazione
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.set("X-Auth-Token", apiKey);
 
-                for (JsonNode matchNode : matches) {
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    org.springframework.http.HttpMethod.GET,
+                    entity,
+                    String.class);
+
+            // Parsing JSON
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(response.getBody());
+            JsonNode matches = root.path("matches");
+
+            int processedMatches = 0;
+
+            for (JsonNode matchNode : matches) {
+                try {
                     Long externalId = matchNode.path("id").asLong();
                     String homeTeam = matchNode.path("homeTeam").path("name").asText();
                     String awayTeam = matchNode.path("awayTeam").path("name").asText();
@@ -129,10 +152,63 @@ public class MatchService {
                     match.setIsMilanHome("AC Milan".equals(homeTeam));
 
                     matchRepository.save(match);
+                    processedMatches++;
+                } catch (Exception e) {
+                    System.err.println("Errore nel processare una partita: " + e.getMessage());
                 }
-            } catch (Exception e) {
-                System.err.println("Errore nel recupero dati da API: " + e.getMessage());
             }
+            System.out.println("Aggiornate " + processedMatches + " partite dall'API");
+        } catch (Exception e) {
+            System.err.println("Errore nel recupero dati da API: " + e.getMessage());
+            // Se l'API fallisce, crea dati di esempio
+            createSampleMatches();
+        }
+    }
+
+    /**
+     * Crea partite di esempio se l'API non è disponibile
+     */
+    private void createSampleMatches() {
+        System.out.println("Creazione dati di esempio per le partite...");
+
+        // Controlla se esistono già partite nel database
+        if (matchRepository.count() > 0) {
+            System.out.println("Partite già presenti nel database, salto la creazione di esempi");
+            return;
+        }
+
+        try {
+            // Ultima partita giocata (esempio)
+            Match lastMatch = Match.builder()
+                    .externalId(999001L)
+                    .homeTeam("AC Milan")
+                    .awayTeam("Inter")
+                    .score("7-0")
+                    .date(LocalDateTime.now().minusDays(7))
+                    .competition("Serie A")
+                    .isPlayed(true)
+                    .isMilanHome(true)
+                    .stadium("San Siro")
+                    .build();
+
+            // Prossima partita (esempio)
+            Match nextMatch = Match.builder()
+                    .externalId(999002L)
+                    .homeTeam("AC Milan")
+                    .awayTeam("Juventus")
+                    .date(LocalDateTime.now().plusDays(7))
+                    .competition("Serie A")
+                    .isPlayed(false)
+                    .isMilanHome(true)
+                    .stadium("San Siro")
+                    .build();
+
+            matchRepository.save(lastMatch);
+            matchRepository.save(nextMatch);
+
+            System.out.println("Partite di esempio create con successo");
+        } catch (Exception e) {
+            System.err.println("Errore nella creazione delle partite di esempio: " + e.getMessage());
         }
     }
 

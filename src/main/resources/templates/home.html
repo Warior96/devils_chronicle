@@ -23,21 +23,6 @@
 
 
 
-    <!--     <div class="container vh-100" th:if="${articles.size() > 0}">
-        <div class="row justify-content-center mb-5">
-            <div class="col-6">
-                <div class="row">
-                    <div th:replace="~{index :: card}"></div>
-                </div>
-            </div>
-            <div class="col-6">
-
-            </div>
-
-        </div>
-    </div> -->
-
-
 
     <style>
         .milan-red {
@@ -86,7 +71,7 @@
                 <!-- Latest Article -->
                 <div th:if="${latestArticle != null}" class="mb-4">
                     <h3 class="border-bottom border-danger pb-2 mb-3">
-                        <i class="fas fa-newspaper"></i> Ultimo Articolo
+                        <i class="fas fa-newspaper"></i>Last article
                     </h3>
                     <div class="card shadow">
                         <div class="row g-0">
@@ -103,9 +88,10 @@
                                     <p class="card-text" th:text="${latestArticle.subtitle}"></p>
                                     <p class="card-text">
                                         <small class="text-muted">
-                                            <i class="fas fa-user"></i> <span
-                                                th:text="${latestArticle.user.username}"></span>
-                                            | <i class="fas fa-calendar"></i> <span
+                                            <i class="fas fa-user"></i>
+                                            <span th:text="${latestArticle.user.username}"></span>
+                                            <i class="fas fa-calendar"></i>
+                                            <span
                                                 th:text="${#temporals.format(latestArticle.publishDate, 'dd/MM/yyyy')}"></span>
                                         </small>
                                     </p>
@@ -117,11 +103,21 @@
                     </div>
                 </div>
 
+                <!-- No Articles Message -->
+                <div th:unless="${latestArticle != null}" class="mb-4">
+                    <h3 class="border-bottom border-danger pb-2 mb-3">
+                        <i class="fas fa-newspaper"></i> Articles
+                    </h3>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No articles have been published yet.
+                    </div>
+                </div>
+
                 <!-- Featured Article -->
                 <div th:if="${featuredArticle != null}" class="mb-4">
                     <h3 class="border-bottom border-danger pb-2 mb-3">
-                        <i class="fas fa-star"></i> In Evidenza
-                        <span class="featured-badge ms-2" th:if="${featuredArticle.isFeatured}">ESCLUSIVA</span>
+                        <i class="fas fa-star"></i> Featured
+                        <span class="featured-badge ms-2" th:if="${featuredArticle.isFeatured}">EXCLUSIVE</span>
                     </h3>
                     <div class="card shadow">
                         <div class="row g-0">
@@ -146,7 +142,7 @@
                                         </small>
                                     </p>
                                     <a th:href="@{/articles/detail/{id}(id=${featuredArticle.id})}"
-                                        class="btn btn-danger">Leggi tutto</a>
+                                        class="btn btn-danger">Read more</a>
                                 </div>
                             </div>
                         </div>
@@ -157,51 +153,112 @@
             <!-- Right Column - Match Info -->
             <div class="col-lg-4">
                 <h3 class="border-bottom border-danger pb-2 mb-3">
-                    <i class="fas fa-futbol"></i> Partite AC Milan
+                    <i class="fas fa-futbol"></i> Matches AC Milan
                 </h3>
 
                 <!-- Last Match -->
-                <div class="match-card">
-                    <h5 class="text-center mb-3">Last match</h5>
-                    <div th:if="${lastMatch != null}">
-                        <div class="text-center">
-                            <p class="mb-1" th:text="${lastMatch.competition}"></p>
-                            <h6 th:text="${lastMatch.homeTeam + ' ' + lastMatch.score + ' ' + lastMatch.awayTeam}"></h6>
-                            <small th:text="${#temporals.format(lastMatch.date, 'dd/MM/yyyy HH:mm')}"></small>
+                <div th:if="${lastMatch != null}" class="match-card">
+                    <h5 class="text-center mb-3">
+                        <i class="fas fa-history"></i> Ultima Partita
+                    </h5>
+                    <div class="text-center">
+                        <p class="mb-1 fw-bold" th:text="${lastMatch.competition}"></p>
+                        <h6 class="mb-2">
+                            <span th:text="${lastMatch.homeTeam}"></span>
+                            <span class="mx-2 fw-bold text-warning" th:text="${lastMatch.score}"></span>
+                            <span th:text="${lastMatch.awayTeam}"></span>
+                        </h6>
+                        <small>
+                            <i class="fas fa-calendar-alt"></i>
+                            <span th:text="${#temporals.format(lastMatch.date, 'dd/MM/yyyy HH:mm')}"></span>
+                        </small>
+                        <div th:if="${lastMatch.stadium}" class="mt-2">
+                            <small>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span th:text="${lastMatch.stadium}"></span>
+                            </small>
                         </div>
                     </div>
-                    <div th:unless="${lastMatch != null}" class="text-center">
-                        <p class="text-muted">Nessuna partita disponibile</p>
+                </div>
+
+                <!-- No Last Match -->
+                <div th:unless="${lastMatch != null}" class="no-match">
+                    <h5 class="text-center mb-3">
+                        <i class="fas fa-history"></i> Ultima Partita
+                    </h5>
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                        <p class="mb-0">Nessuna partita recente disponibile</p>
                     </div>
                 </div>
 
                 <!-- Next Match -->
-                <div class="match-card">
-                    <h5 class="text-center mb-3">Next match</h5>
-                    <div th:if="${nextMatch != null}">
-                        <div class="text-center">
-                            <p class="mb-1" th:text="${nextMatch.competition}"></p>
-                            <h6 th:text="${nextMatch.homeTeam + ' vs ' + nextMatch.awayTeam}"></h6>
-                            <small th:text="${#temporals.format(nextMatch.date, 'dd/MM/yyyy HH:mm')}"></small>
+                <div th:if="${nextMatch != null}" class="match-card">
+                    <h5 class="text-center mb-3">
+                        <i class="fas fa-clock"></i> Prossima Partita
+                    </h5>
+                    <div class="text-center">
+                        <p class="mb-1 fw-bold" th:text="${nextMatch.competition}"></p>
+                        <h6 class="mb-2">
+                            <span th:text="${nextMatch.homeTeam}"></span>
+                            <span class="mx-2 text-warning">vs</span>
+                            <span th:text="${nextMatch.awayTeam}"></span>
+                        </h6>
+                        <small>
+                            <i class="fas fa-calendar-alt"></i>
+                            <span th:text="${#temporals.format(nextMatch.date, 'dd/MM/yyyy HH:mm')}"></span>
+                        </small>
+                        <div th:if="${nextMatch.stadium}" class="mt-2">
+                            <small>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span th:text="${nextMatch.stadium}"></span>
+                            </small>
                         </div>
                     </div>
-                    <div th:unless="${lastMatch != null}" class="text-center">
-                        <p class="text-muted">Nessuna partita disponibile</p>
+                </div>
+
+                <!-- No Next Match -->
+                <div th:unless="${nextMatch != null}" class="no-match">
+                    <h5 class="text-center mb-3">
+                        <i class="fas fa-clock"></i> Prossima Partita
+                    </h5>
+                    <div class="text-center">
+                        <i class="fas fa-question-circle fa-2x mb-2"></i>
+                        <p class="mb-0">Nessuna partita programmata</p>
                     </div>
                 </div>
 
                 <!-- Quick Links -->
                 <div class="card mt-4">
                     <div class="card-body">
-                        <h5 class="card-title">Link Rapidi</h5>
+                        <h5 class="card-title">
+                            <i class="fas fa-external-link-alt"></i> Link Rapidi
+                        </h5>
                         <ul class="list-unstyled">
-                            <li><a href="/articles" class="text-danger">Tutti gli Articoli</a></li>
-                            <li><a href="/categories/search/1" class="text-danger">Calciomercato</a></li>
-                            <li><a href="/categories/search/2" class="text-danger">Match Report</a></li>
-                            <li><a href="/categories/search/3" class="text-danger">Interviste</a></li>
+                            <li class="mb-2">
+                                <a href="/articles" class="text-danger text-decoration-none">
+                                    <i class="fas fa-newspaper"></i> Tutti gli Articoli
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/categories/search/1" class="text-danger text-decoration-none">
+                                    <i class="fas fa-exchange-alt"></i> Calciomercato
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/categories/search/2" class="text-danger text-decoration-none">
+                                    <i class="fas fa-file-alt"></i> Match Report
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/categories/search/3" class="text-danger text-decoration-none">
+                                    <i class="fas fa-microphone"></i> Interviste
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

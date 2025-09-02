@@ -19,6 +19,208 @@
                 <h1 th:text="${title}">Dashboard</h1>
             </div>
 
+            <!-- Menu rapido -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-bolt"></i> Azioni Rapide
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-3 mb-2">
+                                    <a href="/categories/create" class="btn btn-success btn-block w-100">
+                                        <i class="fas fa-plus"></i> Nuova Categoria
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <a href="/admin/matches" class="btn btn-info btn-block w-100">
+                                        <i class="fas fa-futbol"></i> Gestisci Partite
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <a href="/articles" class="btn btn-primary btn-block w-100">
+                                        <i class="fas fa-newspaper"></i> Vedi Articoli
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <a href="/" class="btn btn-secondary btn-block w-100">
+                                        <i class="fas fa-home"></i> Torna alla Home
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiche richieste carriera -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Richieste in Attesa</h6>
+                                    <h3 th:text="${#lists.size(pendingRequests)}">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Richieste Accettate</h6>
+                                    <h3 th:text="${#lists.size(acceptedRequests)}">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-danger">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Richieste Rifiutate</h6>
+                                    <h3 th:text="${#lists.size(rejectedRequests)}">0</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-times-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Richieste in attesa -->
+          <div class="row mb-4" th:if="${#lists.size(pendingRequests) > 0}">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-hourglass-half"></i> Richieste di Carriera in Attesa
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Utente</th>
+                                            <th>Ruolo Richiesto</th>
+                                            <th>Azioni</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="request : ${pendingRequests}">
+                                            <td th:text="${request.user.username}"></td>
+                                            <td>
+                                                <span class="badge bg-info" th:text="${request.role.name}"></span>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
+                                                    class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> Dettagli
+                                                </a>
+                                                <form
+                                                    th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
+                                                    method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-success"
+                                                        onclick="return confirm('Accettare questa richiesta?')">
+                                                        <i class="fas fa-check"></i> Accetta
+                                                    </button>
+                                                </form>
+                                                <form
+                                                    th:action="@{/operations/career/request/reject/{id}(id=${request.id})}"
+                                                    method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Rifiutare questa richiesta?')">
+                                                        <i class="fas fa-times"></i> Rifiuta
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categorie esistenti -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-tags"></i> Gestione Categorie
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${#lists.isEmpty(categories)}" class="text-center py-4">
+                                <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Nessuna categoria trovata</h5>
+                                <a href="/categories/create" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Crea Prima Categoria
+                                </a>
+                            </div>
+
+                            <div th:unless="${#lists.isEmpty(categories)}" class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Numero Articoli</th>
+                                            <th>Azioni</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="category : ${categories}">
+                                            <td th:text="${category.id}"></td>
+                                            <td th:text="${category.name}"></td>
+                                            <td>
+                                                <span class="badge bg-info"
+                                                    th:text="${category.numeberOfArticles ?: 0}"></span>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/categories/search/{id}(id=${category.id})}"
+                                                    class="btn btn-sm btn-outline-info">
+                                                    <i class="fas fa-eye"></i> Vedi Articoli
+                                                </a>
+                                                <a th:href="@{/categories/edit/{id}(id=${category.id})}"
+                                                    class="btn btn-sm btn-outline-warning">
+                                                    <i class="fas fa-edit"></i> Modifica
+                                                </a>
+                                                <a th:href="@{/categories/delete/{id}(id=${category.id})}"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('Eliminare questa categoria? Gli articoli associati non verranno eliminati.')">
+                                                    <i class="fas fa-trash"></i> Elimina
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="accordion col-10 mt-4">
                 <!-- table pending requests -->
                 <div class="accordion-item acc-notification">
@@ -235,6 +437,16 @@
 
     <div th:insert="~{index :: footer}"></div>
 
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function () {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
 
     <!-- script esterno + bootstrap -->
     <div th:replace="~{index :: script}"></div>
