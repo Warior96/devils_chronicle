@@ -26,7 +26,9 @@
     <nav th:fragment="navbar"
         class="navbar navbar-expand-lg navbar-light bg-light position-fixed top-0 left-0 w-100 z-3">
         <div class="container-fluid">
-            <a th:href="@{/}" class="navbar-brand me-0 pe-2">Aulab Chronicle</a>
+            <a th:href="@{/}" class="navbar-brand me-0 pe-2">
+                <i class="fa-regular fa-newspaper"></i>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -119,7 +121,7 @@
 
 
     <!-- inizio fragment card -->
-    <div th:fragment="card" th:each="article : ${articles}" class="col-12 col-md-6 d-flex justify-content-center">
+    <div th:fragment="card" th:each="article : ${articles}" class="col-12 d-flex justify-content-center">
         <article class="row border border-1 mb-5 mx-3 py-3 w-100">
             <div class="col-5">
                 <img th:if="${article.image != null}" th:src="${article.image.path}"

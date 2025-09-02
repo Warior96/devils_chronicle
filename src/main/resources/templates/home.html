@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <!-- <div class="container-fluid">
         <div class="row ms-5 vh-100 align-items-center">
             <div class="col-10">
                 <h1 class="mb-5">
@@ -31,14 +31,14 @@
                 </h1>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="container" th:if="${articles.size() > 0}">
-        <div class="row justify-content-center">
+    <div class="container vh-100" th:if="${articles.size() > 0}">
+        <!-- <div class="row justify-content-center">
             <div class="col-10 mb-5">
                 <h1 class="text-center">Last articles</h1>
             </div>
-        </div>
+        </div> -->
         <div class="row justify-content-center mb-5">
             <!-- <div th:each="article : ${articles}" class="col-12 col-md-6 d-flex justify-content-center">
                 <article class="row border border-1 mb-5 mx-3 py-3 w-100">
@@ -56,7 +56,14 @@
                     </div>
                 </article>
             </div> -->
-    <div th:replace="~{index :: card}"></div>
+            <div class="col-6">
+                <div class="row">
+                    <div th:replace="~{index :: card}"></div>
+                </div>
+            </div>
+            <div class="col-6">
+
+            </div>
 
         </div>
     </div>
