@@ -284,6 +284,73 @@ public class MatchService {
     }
 
     /**
+     * Determina il risultato della partita dal punto di vista del Milan
+     * 
+     * @param match La partita da analizzare
+     * @return "WIN", "DRAW", "LOSS", o null se non giocata
+     */
+    public String getMilanResult(Match match) {
+        if (!Boolean.TRUE.equals(match.getIsPlayed()) || match.getScore() == null) {
+            return null;
+        }
+
+        try {
+            String[] scoreParts = match.getScore().split("-");
+            if (scoreParts.length != 2) {
+                return null;
+            }
+
+            int homeGoals = Integer.parseInt(scoreParts[0].trim());
+            int awayGoals = Integer.parseInt(scoreParts[1].trim());
+
+            boolean isMilanHome = Boolean.TRUE.equals(match.getIsMilanHome());
+
+            if (isMilanHome) {
+                // Milan gioca in casa
+                if (homeGoals > awayGoals)
+                    return "WIN";
+                else if (homeGoals < awayGoals)
+                    return "LOSS";
+                else
+                    return "DRAW";
+            } else {
+                // Milan gioca in trasferta
+                if (awayGoals > homeGoals)
+                    return "WIN";
+                else if (awayGoals < homeGoals)
+                    return "LOSS";
+                else
+                    return "DRAW";
+            }
+
+        } catch (NumberFormatException e) {
+            System.err.println("Errore nel parsing del risultato: " + match.getScore());
+            return null;
+        }
+    }
+
+    /**
+     * Ottiene la classe CSS per il badge del risultato dal punto di vista del Milan
+     */
+    public String getResultBadgeClass(Match match) {
+        String result = getMilanResult(match);
+        if (result == null) {
+            return "bg-success"; // Default per partite non ancora giocate
+        }
+
+        switch (result) {
+            case "WIN":
+                return "bg-success"; // 🟢 Verde per le vittorie
+            case "DRAW":
+                return "bg-warning"; // 🟡 Giallo per i pareggi
+            case "LOSS":
+                return "bg-danger"; // 🔴 Rosso per le sconfitte
+            default:
+                return "bg-success";
+        }
+    }
+
+    /**
      * Crea partite di esempio realistiche per la stagione 2025/26
      */
     private void createSampleMatchesIfEmpty() {

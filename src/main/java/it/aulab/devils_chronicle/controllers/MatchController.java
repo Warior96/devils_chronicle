@@ -24,6 +24,7 @@ public class MatchController {
         
         model.addAttribute("title", "Partite AC Milan");
         model.addAttribute("matches", matchService.getAllMatches());
+        model.addAttribute("matchService", matchService);
         
         return "admin/matches";
     }

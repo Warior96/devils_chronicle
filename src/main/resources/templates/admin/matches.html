@@ -56,37 +56,52 @@
 
         <!-- Statistiche -->
         <div class="row mb-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card text-white bg-success">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h6 class="card-title">Partite Giocate</h6>
-                                <h3 id="playedCount">0</h3>
+                                <h6 class="card-title">Vittorie</h6>
+                                <h3 id="winsCount">0</h3>
                             </div>
                             <div class="align-self-center">
-                                <i class="fas fa-check-circle fa-2x"></i>
+                                <i class="fas fa-trophy fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card text-white bg-warning">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h6 class="card-title">Partite Future</h6>
-                                <h3 id="futureCount">0</h3>
+                                <h6 class="card-title">Pareggi</h6>
+                                <h3 id="drawsCount">0</h3>
                             </div>
                             <div class="align-self-center">
-                                <i class="fas fa-clock fa-2x"></i>
+                                <i class="fas fa-equals fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Sconfitte</h6>
+                                <h3 id="lossesCount">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-times-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
                 <div class="card text-white bg-info">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
@@ -120,7 +135,7 @@
                         </div>
 
                         <div th:unless="${#lists.isEmpty(matches)}" class="table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
                                         <th scope="col">Data</th>
@@ -150,9 +165,25 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span th:if="${match.score != null}" class="badge bg-success fs-6"
-                                                th:text="${match.score}"></span>
+                                            <!-- RISULTATO CON COLORI DINAMICI -->
+                                            <span th:if="${match.score != null}" class="badge fs-6"
+                                                th:class="'badge fs-6 ' + ${matchService.getResultBadgeClass(match)}"
+                                                th:text="${match.score}">
+                                            </span>
                                             <span th:unless="${match.score != null}" class="text-muted">-</span>
+
+                                            <!-- Indicatore testo risultato per Milan -->
+                                            <div th:if="${match.score != null}" class="mt-1">
+                                                <small th:if="${matchService.getMilanResult(match) == 'WIN'}"
+                                                    class="text-success">
+                                                </small>
+                                                <small th:if="${matchService.getMilanResult(match) == 'DRAW'}"
+                                                    class="text-warning">
+                                                </small>
+                                                <small th:if="${matchService.getMilanResult(match) == 'LOSS'}"
+                                                    class="text-danger">
+                                                </small>
+                                            </div>
                                         </td>
                                         <td>
                                             <span class="badge bg-primary" th:text="${match.competition}"></span>
@@ -214,28 +245,39 @@
             });
         }, 5000);
 
-        // Calcola statistiche partite
+        // Calcola statistiche partite Milan
         document.addEventListener('DOMContentLoaded', function () {
             const rows = document.querySelectorAll('tbody tr');
-            let playedCount = 0;
-            let futureCount = 0;
+            let winsCount = 0;
+            let drawsCount = 0;
+            let lossesCount = 0;
 
             rows.forEach(function (row) {
-                const statusCell = row.querySelector('td:nth-child(5)'); // Colonna stato
-                if (statusCell) {
-                    const statusText = statusCell.textContent.trim();
-                    if (statusText.includes('Giocata')) {
-                        playedCount++;
-                    } else if (statusText.includes('Programmata')) {
-                        futureCount++;
+                const resultCell = row.querySelector('td:nth-child(3)'); // Colonna risultato
+                if (resultCell) {
+                    const resultText = resultCell.textContent.toLowerCase();
+
+                    if (resultText.includes('vittoria')) {
+                        winsCount++;
+                    } else if (resultText.includes('pareggio')) {
+                        drawsCount++;
+                    } else if (resultText.includes('sconfitta')) {
+                        lossesCount++;
                     }
                 }
             });
 
-            document.getElementById('playedCount').textContent = playedCount;
-            document.getElementById('futureCount').textContent = futureCount;
+            document.getElementById('winsCount').textContent = winsCount;
+            document.getElementById('drawsCount').textContent = drawsCount;
+            document.getElementById('lossesCount').textContent = lossesCount;
         });
     </script>
+
+    <style>
+        .badge.fs-6 {
+            font-size: 0.9rem !important;
+        }
+    </style>
 </body>
 
 </html>
