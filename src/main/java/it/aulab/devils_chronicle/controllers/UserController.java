@@ -98,49 +98,52 @@ public class UserController {
     // rotta get per la home
     @GetMapping("/")
     public String home(Model viewModel) {
+        System.out.println("Accesso alla home page");
 
         // Recupera l'ultimo articolo accettato
-        // List<Article> acceptedArticles = articleRepository.findByIsAcceptedTrue();
-        // ArticleDto latestArticle = null;
-        // if (!acceptedArticles.isEmpty()) {
-        // Collections.sort(acceptedArticles,
-        // Comparator.comparing(Article::getPublishDate).reversed());
-        // latestArticle = modelMapper.map(acceptedArticles.get(0), ArticleDto.class);
-        // }
         Article latest = articleRepository.findTopByIsAcceptedTrueOrderByPublishDateDesc();
         ArticleDto latestArticle = latest != null ? modelMapper.map(latest, ArticleDto.class) : null;
 
-        // // Recupera un articolo in evidenza (featured)
-        // ArticleDto featuredArticle = null;
-        // List<Article> featuredArticles =
-        // articleRepository.findByIsFeaturedTrueAndIsAcceptedTrue();
-        // if (!featuredArticles.isEmpty()) {
-        // // Prendi il più recente tra gli articoli in evidenza
-        // Collections.sort(featuredArticles,
-        // Comparator.comparing(Article::getPublishDate).reversed());
-        // featuredArticle = modelMapper.map(featuredArticles.get(0), ArticleDto.class);
-        // } else if (acceptedArticles.size() > 1) {
-        // // Se non ci sono articoli in evidenza, prendi il secondo più recente
-        // featuredArticle = modelMapper.map(acceptedArticles.get(1), ArticleDto.class);
-        // }
+        if (latestArticle != null) {
+            System.out.println("Ultimo articolo trovato: " + latestArticle.getTitle());
+        } else {
+            System.out.println("Nessun articolo recente trovato");
+        }
+
+        // Recupera un articolo in evidenza (featured)
         Article featured = articleRepository.findTopByIsFeaturedTrueAndIsAcceptedTrueOrderByPublishDateDesc();
         ArticleDto featuredArticle = null;
 
         if (featured != null) {
             featuredArticle = modelMapper.map(featured, ArticleDto.class);
+            System.out.println("Articolo in evidenza trovato: " + featuredArticle.getTitle());
         } else {
             List<Article> top2 = articleRepository.findTop2ByIsAcceptedTrueOrderByPublishDateDesc();
             if (top2.size() > 1) {
                 // il secondo articolo più recente
                 featuredArticle = modelMapper.map(top2.get(1), ArticleDto.class);
+                System.out.println("Articolo featured (secondo più recente): " + featuredArticle.getTitle());
+            } else {
+                System.out.println("Nessun articolo in evidenza disponibile");
             }
         }
 
         // Recupera l'ultima partita giocata
         Match lastMatch = matchRepository.findTopByIsPlayedTrueOrderByDateDesc();
+        if (lastMatch != null) {
+            System.out.println("Ultima partita trovata: " + lastMatch.getHomeTeam() + " vs " + lastMatch.getAwayTeam());
+        } else {
+            System.out.println("Nessuna partita recente trovata");
+        }
 
         // Recupera la prossima partita
         Match nextMatch = matchRepository.findTopByIsPlayedFalseAndDateAfterOrderByDateAsc(LocalDateTime.now());
+        if (nextMatch != null) {
+            System.out
+                    .println("Prossima partita trovata: " + nextMatch.getHomeTeam() + " vs " + nextMatch.getAwayTeam());
+        } else {
+            System.out.println("Nessuna partita futura programmata");
+        }
 
         // Aggiungi gli oggetti al model
         viewModel.addAttribute("latestArticle", latestArticle);
@@ -149,6 +152,7 @@ public class UserController {
         viewModel.addAttribute("nextMatch", nextMatch);
         viewModel.addAttribute("title", "Devil's Chronicle - AC Milan News");
 
+        System.out.println("Home page caricata con successo");
         return "home";
     }
 

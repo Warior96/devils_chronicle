@@ -20,22 +20,30 @@ public class MatchController {
     // Vista per gestione partite (solo lettura)
     @GetMapping
     public String matchesIndex(Model model) {
+        System.out.println("Accesso alla pagina di gestione partite");
+        
         model.addAttribute("title", "Partite AC Milan");
         model.addAttribute("matches", matchService.getAllMatches());
+        
         return "admin/matches";
     }
 
     // Endpoint per aggiornare manualmente le partite dall'API
     @PostMapping("/update")
     public String updateMatches(RedirectAttributes redirectAttributes) {
+        System.out.println("Richiesta di aggiornamento manuale delle partite");
+        
         try {
             matchService.updateMatchesFromAPI();
             redirectAttributes.addFlashAttribute("successMessage", "Partite aggiornate con successo dall'API");
+            System.out.println("Aggiornamento manuale completato con successo");
         } catch (Exception e) {
+            System.err.println("Errore durante l'aggiornamento manuale delle partite: " + e.getMessage());
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Errore durante l'aggiornamento delle partite: " + e.getMessage());
         }
+        
         return "redirect:/admin/matches";
     }
-    
 }

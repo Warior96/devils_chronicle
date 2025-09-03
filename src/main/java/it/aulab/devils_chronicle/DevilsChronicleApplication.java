@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DevilsChronicleApplication {
 
 	public static void main(String[] args) {
+		System.out.println("=== Avvio Devil's Chronicle Application ===");
 		SpringApplication.run(DevilsChronicleApplication.class, args);
+		System.out.println("=== Devil's Chronicle avviato con successo ===");
 	}
 
 	@Bean
