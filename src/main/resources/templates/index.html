@@ -24,12 +24,13 @@
 <body>
     <!-- inizio fragment navbar -->
     <nav th:fragment="navbar"
-        class="navbar navbar-expand-lg navbar-light bg-light position-fixed top-0 left-0 w-100 z-3">
+        class="navbar navbar-expand-lg navbar-light bg-white position-fixed top-0 left-0 w-100 z-3">
+        <h2 class="fw-bold mb-0 position-absolute top-50 start-50 translate-middle d-none d-md-block c-black">DEVIL'S CHRONICLE</h2>
         <div class="container-fluid">
             <a th:href="@{/}" class="navbar-brand me-0 pe-2">
                 <i class="fa-regular fa-newspaper"></i>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            <button class="navbar-toggler z-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -101,7 +102,7 @@
                     th:text="'Hello ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')}">
                     Hello
                 </div> -->
-                <div sec:authorize="isAuthenticated">
+                <div sec:authorize="isAuthenticated" class="c-black">
                     Hello
                     <span th:text="${#authentication.principal.fullname}">nome cognome</span>
                     -
@@ -110,9 +111,14 @@
                         <span th:if="${!iStat.last}"> - </span>
                     </span>
                 </div>
+                <form class="d-flex d-md-none pe-3" th:action="@{/articles/search}" method="GET">
+                    <input class="form-control me-2" type="search" placeholder="Search" name="keyword"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
             </div>
         </div>
-        <form class="d-flex pe-3" th:action="@{/articles/search}" method="GET">
+        <form class="d-none d-md-flex pe-3" th:action="@{/articles/search}" method="GET">
             <input class="form-control me-2" type="search" placeholder="Search" name="keyword" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>

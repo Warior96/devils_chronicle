@@ -19,13 +19,17 @@
 
                 <div class="col-10 col-lg-7 mb-5">
                     <form th:action="@{/articles}" method="POST" th:object="${article}" enctype="multipart/form-data">
+
+                        <!-- Article Title | Subtitle -->
                         <div class="row mb-3">
+                            <!-- Article Title -->
                             <div class="col-12 col-md-6">
                                 <label for="articleTitle" class="form-label">Title</label>
                                 <input id="articleTitle" type="text" class="form-control" th:field="*{title}"
                                     placeholder="Enter article title">
                                 <p th:errors="*{title}" class="text-danger" th:if="${#fields.hasErrors('title')}"></p>
                             </div>
+                            <!-- Article Subtitle -->
                             <div class="col-12 col-md-6">
                                 <label for="subtitle" class="form-label">Subtitle</label>
                                 <input id="subtitle" type="text" class="form-control" th:field="*{subtitle}"
@@ -34,21 +38,29 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="body" class="form-label">Article body:</label>
-                            <textarea id="body" class="form-control" th:field="*{body}" rows="2"
-                                placeholder="Enter article description"></textarea>
-                            <p th:errors="*{body}" class="text-danger" th:if="${#fields.hasErrors('body')}"></p>
-                        </div>
+
+                        <!-- Article Body -->
                         <div class="row mb-3">
-                            <div class="col-6">
+                            <div class="col-12">
+                                <label for="body" class="form-label">Article body:</label>
+                                <textarea id="body" class="form-control" th:field="*{body}" rows="2"
+                                    placeholder="Enter article description"></textarea>
+                                <p th:errors="*{body}" class="text-danger" th:if="${#fields.hasErrors('body')}"></p>
+                            </div>
+                        </div>
+
+                        <!-- Publish Date | Category -->
+                        <div class="row mb-3">
+                            <!-- Publish Date -->
+                            <div class="col-12 col-md-6">
                                 <label for="date" class="form-label">Publish Date</label>
                                 <input id="date" type="date" class="form-control" th:field="*{publishDate}"
                                     th:attr="min=${today}">
                                 <p th:errors="*{publishDate}" class="text-danger"
                                     th:if="${#fields.hasErrors('publishDate')}"></p>
                             </div>
-                            <div class="col-6">
+                            <!-- Article Category -->
+                            <div class="col-12 col-md-6">
                                 <label for="category" class="form-label">Category</label>
                                 <select id="category" th:field="*{category}" class="form-select">
                                     <option th:each="category:${categories}" th:value="${category.id}"
@@ -59,8 +71,42 @@
                                 </select>
                             </div>
                         </div>
+
+                        <!-- Is Featured | Article Type -->
                         <div class="row mb-3">
-                            <div class="col-6">
+                            <!-- Is Featured -->
+                            <div class="col-12 col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:field="*{isFeatured}"
+                                        id="isFeatured">
+                                    <label class="form-check-label" for="isFeatured">
+                                        Mark as Featured Article
+                                    </label>
+                                </div>
+                                <small class="form-text text-muted fs-7">Featured articles will be highlighted on the
+                                    homepage</small>
+                            </div>
+                            <!-- Article Type -->
+                            <div class="col-12 col-md-6">
+                                <label for="articleType" class="form-label">Article Type</label>
+                                <select id="articleType" th:field="*{articleType}" class="form-select">
+                                    <option value="">-- Select Type --</option>
+                                    <option value="Match Report">Match Report</option>
+                                    <option value="Interview">Interview</option>
+                                    <option value="Analysis">Analysis</option>
+                                    <option value="News">News</option>
+                                    <option value="Opinion">Opinion</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Youth">Youth</option>
+                                    <option value="History">History</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Cover Image | Gallery Images -->
+                        <div class="row mb-3">
+                            <!-- Cover Image -->
+                            <div class="col-12 col-md-6">
                                 <label for="image" class="form-label">Cover image</label>
                                 <div class="d-flex flex-row">
                                     <input type="file" name="file" id="image" class="form-control">
@@ -74,7 +120,8 @@
                                         accept=".jpg,.jpeg,.png">
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <!-- Gallery Images -->
+                            <div class="col-12 col-md-6">
                                 <label for="galleryImages" class="form-label">Gallery images
                                     <small>(optional)</small></label>
                                 <div class="d-flex flex-row">

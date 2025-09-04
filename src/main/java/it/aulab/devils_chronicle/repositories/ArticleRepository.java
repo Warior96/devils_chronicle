@@ -12,15 +12,23 @@ import it.aulab.devils_chronicle.models.User;
 
 public interface ArticleRepository extends ListCrudRepository<Article, Long> {
 
+    // Trova articoli per categoria
     List<Article> findByCategory(Category category);
 
+    // Trova articoli per autore
     List<Article> findByUser(User user);
 
+    // Trova articoli accettati
     List<Article> findByIsAcceptedTrue();
 
+    // Trova articoli rifiutati
     List<Article> findByIsAcceptedFalse();
 
+    // Trova articoli in attesa di revisione
     List<Article> findByIsAcceptedNull();
+
+    // Trova articoli in evidenza accettati
+    List<Article> findByIsFeaturedTrueAndIsAcceptedTrueOrderByPublishDateDesc();
 
     // Trova articoli in evidenza accettati
     List<Article> findByIsFeaturedTrueAndIsAcceptedTrue();

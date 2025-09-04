@@ -102,6 +102,88 @@
 
         </div>
 
+
+        <div class="container my-5">
+            <h2>Article Detail (Updated)</h2>
+
+            <!-- Featured and type indicators -->
+            <div class="mb-3">
+                <div th:if="${article.isFeatured}" class="d-inline-block me-2">
+                    <span class="badge bg-warning text-dark fs-6">
+                        <i class="fa-solid fa-star"></i> Featured Article
+                    </span>
+                </div>
+                <div th:if="${article.articleType}" class="d-inline-block">
+                    <span class="badge bg-primary fs-6" th:text="${article.articleType}">Article Type</span>
+                </div>
+            </div>
+
+            <div class="container-fluid p-5 bg-secondary-subtle text-center">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <h1>Detail</h1>
+                        <h2 th:text="${article.title}">Title</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-5">
+                        <img th:if="${article.image != null}" th:src="${article.image.path}"
+                            th:alt="'image of ' + ${article.title}" class="img-fluid">
+                        <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
+                            class="img-fluid">
+                    </div>
+
+                    <div class="col-12 col-md-7 d-flex flex-column">
+                        <h2 th:text="${article.subtitle}">Subtitle</h2>
+
+                        <!-- Article metadata with new fields -->
+                        <div class="mb-3">
+                            <p class="fs-5 mb-1" th:if="${article.category != null}">
+                                <strong>Category:</strong>
+                                <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
+                                    class="text-capitalize fw-bold text-muted"
+                                    th:text="${article.category.name}">category</a>
+                            </p>
+                            <p class="fs-5 mb-1" th:if="${article.category == null}">
+                                <strong>Category:</strong> <span class="text-muted">No category</span>
+                            </p>
+
+                            <p class="fs-5 mb-1" th:if="${article.articleType}">
+                                <strong>Type:</strong> <span class="text-muted"
+                                    th:text="${article.articleType}">Type</span>
+                            </p>
+
+                            <div th:if="${article.isFeatured}" class="fs-5 mb-1">
+                                <strong>Status:</strong>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fa-solid fa-star"></i> Featured
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="text-muted my-3">
+                            <p>Published on
+                                <span th:text="${article.publishDate}">date</span>
+                                by
+                                <a class="text-muted" th:href="@{/search/{id}(id=${article.user.id})}">
+                                    <span th:text="${article.user.username}">User</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <p th:text="${article.body}" class="lead">Article content</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <div th:insert="~{index :: footer}"></div>
 
 

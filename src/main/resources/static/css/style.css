@@ -1,4 +1,9 @@
-/* :root {} */
+:root {
+    --milan-red: #FB090B;
+    --milan-black: #000000;
+    --featured-badge: #FFD700;
+    --gradient: linear-gradient(135deg, var(--milan-red) 0%, var(--milan-black) 100%);
+}
 
 /* h1,
 h2,
@@ -29,8 +34,54 @@ h6,
     animation: updown 1s infinite;
 }
 
+.bg-red {
+    background-color: var(--milan-red);
+}
 
+.bg-black {
+    background-color: var(--milan-black);
+}
 
+.bg-gradient {
+    background: var(--gradient);
+}
+
+.c-red {
+    color: var(--milan-red);
+}
+
+.c-black {
+    color: var(--milan-black);
+}
+
+.match-card {
+    background: var(--gradient);
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.featured-badge {
+    background-color: var(--featured-badge);
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 3;
+}
+
+.badge.fs-6 {
+    font-size: 0.9rem !important;
+}
 
 
 
