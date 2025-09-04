@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,13 +22,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.aulab.devils_chronicle.models.Match;
+import it.aulab.devils_chronicle.models.Standing;
 import it.aulab.devils_chronicle.repositories.MatchRepository;
+import it.aulab.devils_chronicle.repositories.StandingRepository;
 
 @Service
 public class MatchService {
 
     @Autowired
     private MatchRepository matchRepository;
+
+    @Autowired
+    private StandingRepository standingRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -40,6 +46,9 @@ public class MatchService {
 
     // AC Milan team ID in Football-Data.org
     private static final int AC_MILAN_ID = 98;
+
+    // Serie A competition ID in Football-Data.org
+    private static final String SERIE_A_ID = "SA";
 
     /**
      * Caricamento iniziale dei dati all'avvio dell'applicazione
@@ -66,10 +75,11 @@ public class MatchService {
     public void scheduledUpdate() {
         System.out.println("=== Aggiornamento programmato partite ===");
         updateMatchesFromAPI();
+        updateStandingsFromAPI();
     }
 
     /**
-     * Metodo principale per aggiornare le partite dall'API
+     * Metodo per aggiornare le partite dall'API
      */
     public void updateMatchesFromAPI() {
         System.out.println("Inizio aggiornamento partite dall'API Football-Data.org");
@@ -531,4 +541,279 @@ public class MatchService {
     public List<Match> getMatchesByCompetition(String competition) {
         return matchRepository.findByCompetitionOrderByDateDesc(competition);
     }
+
+    /**
+     * Metodo principale per aggiornare la classifica dall'API
+     */
+    public void updateStandingsFromAPI() {
+        System.out.println("Inizio aggiornamento classifica dalla API Football-Data.org");
+
+        if (!isApiConfigured()) {
+            System.out.println("API Key non configurata, creo classifica di esempio");
+            createSampleStandingsIfEmpty();
+            return;
+        }
+
+        try {
+            updateStandingsFromFootballApi();
+            System.out.println("Aggiornamento classifica completato con successo");
+
+        } catch (Exception e) {
+            System.err.println("Errore durante l'aggiornamento della classifica dall'API: " + e.getMessage());
+            e.printStackTrace();
+            createSampleStandingsIfEmpty();
+        }
+    }
+
+    /**
+     * Chiamata effettiva all'API per la classifica Serie A
+     */
+    private void updateStandingsFromFootballApi() {
+        System.out.println("Chiamata API Football-Data.org per classifica Serie A");
+
+        // URL per la classifica Serie A 2025-26
+        String url = String.format("%scompetitions/%s/standings?season=2025", apiUrl, SERIE_A_ID);
+        System.out.println("URL API classifica: " + url);
+
+        // Headers per autenticazione
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Auth-Token", apiKey);
+        headers.set("User-Agent", "Devils-Chronicle/1.0");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, entity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("Risposta API classifica ricevuta con successo");
+                parseAndSaveStandings(response.getBody());
+            } else {
+                System.err.println("Errore nella risposta API classifica. Status: " + response.getStatusCode());
+                throw new RuntimeException("API Standings Response error: " + response.getStatusCode());
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nella chiamata API classifica: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("API standings call failed", e);
+        }
+    }
+
+    /**
+     * Parsing e salvataggio della classifica dalla risposta JSON
+     */
+    private void parseAndSaveStandings(String jsonResponse) {
+        System.out.println("Inizio parsing risposta JSON classifica");
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(jsonResponse);
+            JsonNode standings = root.path("standings");
+
+            if (standings.isMissingNode() || !standings.isArray() || standings.size() == 0) {
+                System.out.println("Nodo 'standings' non trovato o vuoto");
+                return;
+            }
+
+            // Prendiamo la prima classifica (di solito è quella generale)
+            JsonNode table = standings.get(0).path("table");
+
+            if (table.isMissingNode() || !table.isArray()) {
+                System.out.println("Tabella classifica non trovata");
+                return;
+            }
+
+            int processedTeams = 0;
+            int errorCount = 0;
+
+            System.out.println("Trovate " + table.size() + " squadre da processare");
+
+            for (JsonNode teamNode : table) {
+                try {
+                    processAndSaveStanding(teamNode);
+                    processedTeams++;
+                } catch (Exception e) {
+                    errorCount++;
+                    System.err.println("Errore nel processare una squadra: " + e.getMessage());
+                }
+            }
+
+            System.out.println("Processamento classifica completato. Squadre elaborate: " + processedTeams +
+                    ", Errori: " + errorCount);
+
+        } catch (Exception e) {
+            System.err.println("Errore nel parsing JSON classifica: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("JSON standings parsing failed", e);
+        }
+    }
+
+    /**
+     * Processa e salva una singola posizione in classifica
+     */
+    private void processAndSaveStanding(JsonNode teamNode) {
+        Long teamId = teamNode.path("team").path("id").asLong();
+        String teamName = teamNode.path("team").path("name").asText();
+        String teamCrest = teamNode.path("team").path("crest").asText();
+
+        Integer position = teamNode.path("position").asInt();
+        Integer playedGames = teamNode.path("playedGames").asInt();
+        Integer won = teamNode.path("won").asInt();
+        Integer draw = teamNode.path("draw").asInt();
+        Integer lost = teamNode.path("lost").asInt();
+        Integer points = teamNode.path("points").asInt();
+        Integer goalsFor = teamNode.path("goalsFor").asInt();
+        Integer goalsAgainst = teamNode.path("goalsAgainst").asInt();
+        Integer goalDifference = teamNode.path("goalDifference").asInt();
+        String form = teamNode.path("form").asText();
+
+        System.out.println("Processando: " + position + ". " + teamName + " - " + points + " punti");
+
+        // Cerca squadra esistente o crea nuova
+        Standing standing = standingRepository.findByTeamId(teamId)
+                .orElse(Standing.builder()
+                        .teamId(teamId)
+                        .build());
+
+        // Aggiorna dati
+        standing.setTeamName(teamName);
+        standing.setTeamCrest(teamCrest.isEmpty() ? null : teamCrest);
+        standing.setPosition(position);
+        standing.setPlayedGames(playedGames);
+        standing.setWon(won);
+        standing.setDraw(draw);
+        standing.setLost(lost);
+        standing.setPoints(points);
+        standing.setGoalsFor(goalsFor);
+        standing.setGoalsAgainst(goalsAgainst);
+        standing.setGoalDifference(goalDifference);
+        standing.setForm(form.isEmpty() ? null : form);
+
+        // Salva nel database
+        standingRepository.save(standing);
+    }
+
+    /**
+     * Restituisce la classifica con Milan centrato (2 sopra, Milan, 2 sotto)
+     */
+    public List<Standing> getStandingAroundMilan() {
+        Optional<Standing> milanOpt = standingRepository.findMilan();
+
+        if (milanOpt.isPresent()) {
+            Standing milan = milanOpt.get();
+            int milanPosition = milan.getPosition();
+
+            // Calcola range: 2 sopra e 2 sotto Milan
+            int startPos = Math.max(1, milanPosition - 2);
+            int endPos = Math.min(20, milanPosition + 2);
+
+            return standingRepository.findStandingAroundPosition(startPos, endPos);
+        }
+
+        // Se Milan non trovato, restituisci top 5
+        return standingRepository.findTop5ByOrderByPositionAsc();
+    }
+
+    /**
+     * Restituisce la classifica completa
+     */
+    public List<Standing> getFullStanding() {
+        return standingRepository.findAllByOrderByPositionAsc();
+    }
+
+    /**
+     * Restituisce le prime 5 squadre
+     */
+    public List<Standing> getTopFiveStanding() {
+        return standingRepository.findTop5ByOrderByPositionAsc();
+    }
+
+    /**
+     * Trova la posizione del Milan
+     */
+    public Optional<Standing> getMilanStanding() {
+        return standingRepository.findMilan();
+    }
+
+    /**
+     * Crea classifica di esempio se il database è vuoto
+     */
+    private void createSampleStandingsIfEmpty() {
+        long existingStandings = standingRepository.count();
+        System.out.println("Posizioni esistenti in classifica: " + existingStandings);
+
+        if (existingStandings > 0) {
+            System.out.println("Classifica già popolata, skip creazione dati di esempio");
+            return;
+        }
+
+        System.out.println("Creazione classifica di esempio Serie A 2025/26...");
+
+        try {
+            Standing[] sampleStandings = {
+                    Standing.builder()
+                            .teamId(109L).teamName("Juventus").position(1).playedGames(10)
+                            .won(8).draw(1).lost(1).points(25).goalsFor(22).goalsAgainst(8)
+                            .goalDifference(14).form("WWDWW").build(),
+
+                    Standing.builder()
+                            .teamId(113L).teamName("Napoli").position(2).playedGames(10)
+                            .won(7).draw(2).lost(1).points(23).goalsFor(20).goalsAgainst(7)
+                            .goalDifference(13).form("WDWWL").build(),
+
+                    Standing.builder()
+                            .teamId(108L).teamName("Inter").position(3).playedGames(10)
+                            .won(6).draw(3).lost(1).points(21).goalsFor(18).goalsAgainst(9)
+                            .goalDifference(9).form("DDWWW").build(),
+
+                    Standing.builder()
+                            .teamId(98L).teamName("AC Milan").position(4).playedGames(10)
+                            .won(6).draw(2).lost(2).points(20).goalsFor(19).goalsAgainst(12)
+                            .goalDifference(7).form("LWWDW").build(),
+
+                    Standing.builder()
+                            .teamId(99L).teamName("Fiorentina").position(5).playedGames(10)
+                            .won(5).draw(4).lost(1).points(19).goalsFor(17).goalsAgainst(11)
+                            .goalDifference(6).form("WDDWW").build(),
+
+                    Standing.builder()
+                            .teamId(102L).teamName("Atalanta").position(6).playedGames(10)
+                            .won(5).draw(3).lost(2).points(18).goalsFor(21).goalsAgainst(14)
+                            .goalDifference(7).form("LWDWW").build(),
+
+                    Standing.builder()
+                            .teamId(103L).teamName("Bologna").position(7).playedGames(10)
+                            .won(5).draw(2).lost(3).points(17).goalsFor(16).goalsAgainst(13)
+                            .goalDifference(3).form("WLWDL").build(),
+
+                    Standing.builder()
+                            .teamId(110L).teamName("Lazio").position(8).playedGames(10)
+                            .won(4).draw(4).lost(2).points(16).goalsFor(14).goalsAgainst(11)
+                            .goalDifference(3).form("DDWLW").build(),
+
+                    Standing.builder()
+                            .teamId(104L).teamName("AS Roma").position(9).playedGames(10)
+                            .won(4).draw(3).lost(3).points(15).goalsFor(13).goalsAgainst(12)
+                            .goalDifference(1).form("LWDDW").build(),
+
+                    Standing.builder()
+                            .teamId(115L).teamName("Udinese").position(10).playedGames(10)
+                            .won(4).draw(3).lost(3).points(15).goalsFor(12).goalsAgainst(13)
+                            .goalDifference(-1).form("DLWDL").build()
+            };
+
+            for (Standing standing : sampleStandings) {
+                standingRepository.save(standing);
+            }
+
+            System.out.println("Classifica di esempio Serie A 2025/26 creata con successo (Top 10)");
+
+        } catch (Exception e) {
+            System.err.println("Errore nella creazione della classifica di esempio: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

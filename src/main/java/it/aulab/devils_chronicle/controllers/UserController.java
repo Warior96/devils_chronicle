@@ -2,11 +2,9 @@ package it.aulab.devils_chronicle.controllers;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-// import java.util.ArrayList;
-// import java.util.Collections;
-// import java.util.Comparator;
 import java.util.List;
-// import java.util.stream.Collectors;
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,11 +25,13 @@ import it.aulab.devils_chronicle.dtos.ArticleDto;
 import it.aulab.devils_chronicle.dtos.UserDto;
 import it.aulab.devils_chronicle.models.Article;
 import it.aulab.devils_chronicle.models.Match;
+import it.aulab.devils_chronicle.models.Standing;
 import it.aulab.devils_chronicle.models.User;
 import it.aulab.devils_chronicle.repositories.ArticleRepository;
 import it.aulab.devils_chronicle.repositories.CareerRequestRepository;
 import it.aulab.devils_chronicle.repositories.MatchRepository;
 import it.aulab.devils_chronicle.services.ArticleService;
+import it.aulab.devils_chronicle.services.MatchService;
 import it.aulab.devils_chronicle.services.CategoryService;
 import it.aulab.devils_chronicle.services.UserService;
 
@@ -55,6 +55,9 @@ public class UserController {
 
     @Autowired
     private MatchRepository matchRepository;
+
+    @Autowired
+    private MatchService matchService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -145,11 +148,35 @@ public class UserController {
             System.out.println("Nessuna partita futura programmata");
         }
 
+        // Recupera classifica con Milan centrato (5 squadre)
+        List<Standing> standingAroundMilan = matchService.getStandingAroundMilan();
+        if (!standingAroundMilan.isEmpty()) {
+            System.out.println("Classifica centrata su Milan trovata (" + standingAroundMilan.size() + " squadre)");
+        } else {
+            System.out.println("Nessuna classifica disponibile");
+        }
+
+        // Recupera classifica completa
+        List<Standing> fullStanding = matchService.getFullStanding();
+        if (!fullStanding.isEmpty()) {
+            System.out.println("Classifica completa trovata (" + fullStanding.size() + " squadre)");
+        }
+
+        // Recupera posizione Milan
+        Optional<Standing> milanStanding = matchService.getMilanStanding();
+        if (milanStanding.isPresent()) {
+            System.out.println("Milan trovato in posizione: " + milanStanding.get().getPosition());
+        }
+
         // Aggiungi gli oggetti al model
         viewModel.addAttribute("latestArticle", latestArticle);
         viewModel.addAttribute("featuredArticle", featuredArticle);
         viewModel.addAttribute("lastMatch", lastMatch);
         viewModel.addAttribute("nextMatch", nextMatch);
+        viewModel.addAttribute("standingAroundMilan", standingAroundMilan);
+        viewModel.addAttribute("fullStanding", fullStanding);
+        viewModel.addAttribute("milanStanding", milanStanding.orElse(null));
+        viewModel.addAttribute("matchService", matchService);
         viewModel.addAttribute("title", "Devil's Chronicle - AC Milan News");
 
         System.out.println("Home page caricata con successo");

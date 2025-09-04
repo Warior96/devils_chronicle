@@ -17,15 +17,18 @@ public class MatchController {
     @Autowired
     private MatchService matchService;
 
-    // Vista per gestione partite (solo lettura)
+    // Vista per gestione partite
     @GetMapping
     public String matchesIndex(Model model) {
         System.out.println("Accesso alla pagina di gestione partite");
-        
+
         model.addAttribute("title", "Partite AC Milan");
         model.addAttribute("matches", matchService.getAllMatches());
+        model.addAttribute("fullStanding", matchService.getFullStanding());
+        model.addAttribute("standingAroundMilan", matchService.getStandingAroundMilan());
+        model.addAttribute("milanStanding", matchService.getMilanStanding().orElse(null));
         model.addAttribute("matchService", matchService);
-        
+
         return "admin/matches";
     }
 
@@ -33,7 +36,7 @@ public class MatchController {
     @PostMapping("/update")
     public String updateMatches(RedirectAttributes redirectAttributes) {
         System.out.println("Richiesta di aggiornamento manuale delle partite");
-        
+
         try {
             matchService.updateMatchesFromAPI();
             redirectAttributes.addFlashAttribute("successMessage", "Partite aggiornate con successo dall'API");
@@ -44,7 +47,47 @@ public class MatchController {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Errore durante l'aggiornamento delle partite: " + e.getMessage());
         }
-        
+
+        return "redirect:/admin/matches";
+    }
+
+    // Endpoint per aggiornare manualmente la classifica dall'API
+    @PostMapping("/update-standings")
+    public String updateStandings(RedirectAttributes redirectAttributes) {
+        System.out.println("Richiesta di aggiornamento manuale della classifica");
+
+        try {
+            matchService.updateStandingsFromAPI();
+            redirectAttributes.addFlashAttribute("successMessage", "Classifica aggiornata con successo dall'API");
+            System.out.println("Aggiornamento manuale classifica completato con successo");
+        } catch (Exception e) {
+            System.err.println("Errore durante l'aggiornamento manuale della classifica: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Errore durante l'aggiornamento della classifica: " + e.getMessage());
+        }
+
+        return "redirect:/admin/matches";
+    }
+
+    // Endpoint per aggiornare sia partite che classifica
+    @PostMapping("/update-all")
+    public String updateAll(RedirectAttributes redirectAttributes) {
+        System.out.println("Richiesta di aggiornamento completo partite e classifica");
+
+        try {
+            matchService.updateMatchesFromAPI();
+            matchService.updateStandingsFromAPI();
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Partite e classifica aggiornate con successo dall'API");
+            System.out.println("Aggiornamento completo completato con successo");
+        } catch (Exception e) {
+            System.err.println("Errore durante l'aggiornamento completo: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Errore durante l'aggiornamento: " + e.getMessage());
+        }
+
         return "redirect:/admin/matches";
     }
 }
