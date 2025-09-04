@@ -699,7 +699,9 @@ public class MatchService {
      * Restituisce la classifica con Milan centrato (2 sopra, Milan, 2 sotto)
      */
     public List<Standing> getStandingAroundMilan() {
-        Optional<Standing> milanOpt = standingRepository.findMilan();
+        // Optional<Standing> milanOpt = standingRepository.findMilan();
+        Optional<Standing> milanOpt = standingRepository.findByTeamName("AC Milan");
+
 
         if (milanOpt.isPresent()) {
             Standing milan = milanOpt.get();
@@ -734,7 +736,7 @@ public class MatchService {
      * Trova la posizione del Milan
      */
     public Optional<Standing> getMilanStanding() {
-        return standingRepository.findMilan();
+        return standingRepository.findByTeamName("AC Milan");
     }
 
     /**

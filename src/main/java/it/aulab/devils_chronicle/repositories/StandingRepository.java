@@ -17,8 +17,9 @@ public interface StandingRepository extends JpaRepository<Standing, Long> {
     Optional<Standing> findByTeamId(Long teamId);
 
     // Trova Milan nella classifica
-    @Query("SELECT s FROM Standing s WHERE LOWER(s.teamName) LIKE '%milan%' OR s.teamName = 'AC Milan'")
-    Optional<Standing> findMilan();
+    // @Query("SELECT s FROM Standing s WHERE LOWER(s.teamName) LIKE '%milan%' OR s.teamName = 'AC Milan'")
+    // Optional<Standing> findMilan();
+    Optional<Standing> findByTeamName(String teamName);
 
     // Trova prime N squadre
     List<Standing> findTop5ByOrderByPositionAsc();

@@ -86,6 +86,350 @@ h6,
 
 
 
+
+
+
+
+
+
+
+.no-match {
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.15), rgba(108, 117, 125, 0.05));
+    border: 1px solid rgba(108, 117, 125, 0.3);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Featured Badge Animation */
+.featured-badge {
+    background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+    background-size: 200% 200%;
+    color: #000;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    font-size: 0.7rem;
+    font-weight: bold;
+    animation: shimmer 3s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e6c300;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0% 50%;
+        opacity: 1;
+    }
+
+    50% {
+        background-position: 100% 50%;
+        opacity: 0.8;
+    }
+
+    100% {
+        background-position: 0% 50%;
+        opacity: 1;
+    }
+}
+
+/* Standings Container */
+.standings-scroll-container {
+    border: 2px solid rgba(220, 53, 69, 0.3);
+    border-radius: 0.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+}
+
+/* Custom Scrollbar */
+.standings-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.standings-scroll-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.standings-scroll-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #dc3545, #c82333);
+    border-radius: 4px;
+}
+
+.standings-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #c82333, #bd2130);
+}
+
+/* Table Columns Sizing */
+.position-col {
+    width: 40px;
+    min-width: 40px;
+}
+
+.team-col {
+    min-width: 130px;
+}
+
+.stats-col {
+    width: 40px;
+    min-width: 40px;
+}
+
+/* Table Styling */
+.table-dark.table-sm td {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.85rem;
+    border-color: rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.table-dark.table-sm th {
+    padding: 0.6rem 0.3rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-bottom: 2px solid #dc3545;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.table-dark.table-sm tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: scale(1.01);
+}
+
+/* Milan Special Highlighting */
+.table-danger.fw-bold {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.3), rgba(220, 53, 69, 0.1)) !important;
+    border: 2px solid #dc3545 !important;
+    box-shadow:
+        0 0 15px rgba(220, 53, 69, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: milanGlow 3s ease-in-out infinite;
+}
+
+@keyframes milanGlow {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 15px rgba(220, 53, 69, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    50% {
+        box-shadow:
+            0 0 25px rgba(220, 53, 69, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* Position Indicators */
+.table-primary {
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.2), rgba(13, 202, 240, 0.05)) !important;
+    border-left: 4px solid #0dcaf0;
+}
+
+.table-warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.05)) !important;
+    border-left: 4px solid #ffc107;
+}
+
+.table-secondary {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(220, 53, 69, 0.05)) !important;
+    border-left: 4px solid #dc3545;
+}
+
+/* Goal Difference Coloring */
+.text-success {
+    color: #28a745 !important;
+    font-weight: bold;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
+/* Truncate Text */
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    line-clamp: 3;
+}
+
+/* Result Badges */
+.bg-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+    color: #000 !important;
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, #dc3545, #e83e8c) !important;
+}
+
+/* Stats Cards */
+.bg-dark.rounded {
+    background: linear-gradient(135deg, rgba(33, 37, 41, 0.9), rgba(52, 58, 64, 0.9)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stats-col {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.15rem !important;
+        width: 30px;
+        min-width: 30px;
+    }
+
+    .team-col {
+        min-width: 80px;
+        font-size: 0.75rem;
+    }
+
+    .position-col {
+        width: 30px;
+        min-width: 30px;
+        font-size: 0.8rem;
+    }
+
+    .match-card,
+    .no-match {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .featured-badge {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
+    }
+
+    .standings-scroll-container {
+        max-height: 300px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .stats-col {
+        font-size: 0.65rem;
+        width: 25px;
+        min-width: 25px;
+    }
+
+    .team-col {
+        min-width: 70px;
+        font-size: 0.7rem;
+    }
+
+    .table-dark.table-sm th {
+        font-size: 0.65rem;
+        padding: 0.4rem 0.2rem;
+    }
+
+    .table-dark.table-sm td {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.15rem;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.standings-scroll-container {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Team Crest Placeholder */
+.team-crest {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.5rem;
+}
+
+/* Form Display (Last 5 matches) */
+.form-display {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.form-display .form-w {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.form-display .form-d {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.form-display .form-l {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Points per Game Display */
+.ppg-display {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Legend Styling */
+.standings-legend {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.3rem;
+    padding: 0.5rem;
+    font-size: 0.7rem;
+}
+
+/* Hover Effects */
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @keyframes bell {
     0% {
         transform: rotate(0deg);
