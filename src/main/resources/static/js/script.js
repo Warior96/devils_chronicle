@@ -85,7 +85,7 @@ if (removeGalleryBtn) {
 
 
 // Chat
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const askBtn = document.getElementById('ask-btn');
     const summarySection = document.getElementById('summary-section');
     const chatContainer = document.getElementById('chat-container');
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
     sendBtn.addEventListener('click', async () => {
         const question = chatInput.value;
         if (question.trim() === '') return;
-        
+
         addMessageToChat('user', question);
         chatInput.value = '';
         chatInput.disabled = true;
@@ -157,8 +157,8 @@ document.addEventListener('DOMContentLoaded', function() {
             chatMessages.removeChild(loadingMessage);
 
             if (response.ok) {
-                 const aiResponse = await response.text();
-                 addMessageToChat('ai', aiResponse);
+                const aiResponse = await response.text();
+                addMessageToChat('ai', aiResponse);
             } else {
                 const errorResponse = await response.text();
                 addMessageToChat('ai', `Errore AI: ${errorResponse}`);
@@ -179,4 +179,20 @@ document.addEventListener('DOMContentLoaded', function() {
             sendBtn.click();
         }
     });
+});
+
+
+// Classifica - centra il Milan
+document.addEventListener('DOMContentLoaded', function () {
+    // Centra automaticamente il Milan nella classifica
+    const milanRow = document.querySelector('.table-danger');
+    if (milanRow) {
+        const container = document.getElementById('standingsContainer');
+        if (container) {
+            const rowTop = milanRow.offsetTop;
+            const containerHeight = container.clientHeight;
+            const scrollTo = rowTop - (containerHeight / 2);
+            container.scrollTop = Math.max(0, scrollTo);
+        }
+    }
 });

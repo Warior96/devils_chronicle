@@ -143,8 +143,7 @@
                     <!-- Featured Article -->
                     <div th:if="${featuredArticle != null}" class="col-12 col-md-6 px-0 px-md-2">
                         <h3 class="border-bottom border-danger pb-2 mb-3 mt-4 pt-2 pt-md-0 mt-md-0">
-                            <i class="fas fa-star"></i> Featured
-                            <span class="featured-badge ms-2" th:if="${featuredArticle.isFeatured}">EXCLUSIVE</span>
+                            <i class="fas fa-star"></i> Featured article
                         </h3>
 
                         <!-- Card Featured Article -->
@@ -249,128 +248,50 @@
                         </a>
                     </div>
 
-                    <!-- Serie A Standings - Milan Centered (5 teams) -->
-                    <div th:if="${standingAroundMilan != null and !standingAroundMilan.isEmpty()}"
-                        class="col-12 col-md-6 px-0 px-md-2 mt-4 pt-2">
+                    <!-- Serie A Complete Standings -->
+                    <div th:if="${fullStanding != null and !fullStanding.isEmpty()}"
+                        class="col-12 px-0 px-md-2 mt-4 pt-2">
                         <h3 class="border-bottom border-danger pb-2 mb-3">
-                            <i class="fas fa-trophy"></i> Serie A - Milan Area
+                            <i class="fas fa-list-ol"></i> Standing Serie A
                         </h3>
 
-                        <!-- Card Milan Standings -->
+                        <!-- Card Full Standings -->
                         <div class="card shadow container-fluid px-0">
-                            <!-- Milan position badge -->
-                            <div class="position-absolute top-0 end-0 z-2" th:if="${milanStanding != null}">
-                                <span class="badge bg-danger rounded-0 rounded-start">
-                                    <i class="fas fa-trophy"></i> <span th:text="${milanStanding.position}">4</span>°
-                                </span>
-                            </div>
-
                             <div class="card-body p-2">
-                                <div class="table-responsive">
+                                <div class="standings-scroll-container" style="max-height: 400px; overflow-y: auto;"
+                                    id="standingsContainer">
                                     <table class="table table-dark table-sm mb-0">
-                                        <thead>
-                                            <tr class="text-center">
+                                        <thead class="sticky-top">
+                                            <tr class="text-center bg-dark">
                                                 <th class="position-col">#</th>
+                                                <th class="crest-col"></th>
                                                 <th class="team-col text-start">Team</th>
                                                 <th class="stats-col">P</th>
                                                 <th class="stats-col">W</th>
                                                 <th class="stats-col">D</th>
                                                 <th class="stats-col">L</th>
-                                                <th class="stats-col">Pts</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="team : ${standingAroundMilan}"
-                                                th:class="${team.isMilan() ? 'table-danger fw-bold' : ''}"
-                                                class="text-center">
-                                                <td th:text="${team.position}" class="position-col">1</td>
-                                                <td class="team-col text-start">
-                                                    <span th:if="${team.isMilan()}" class="me-1">🔴⚫</span>
-                                                    <span th:text="${team.teamName}">AC Milan</span>
-                                                </td>
-                                                <td th:text="${team.playedGames}" class="stats-col">10</td>
-                                                <td th:text="${team.won}" class="stats-col">6</td>
-                                                <td th:text="${team.draw}" class="stats-col">2</td>
-                                                <td th:text="${team.lost}" class="stats-col">2</td>
-                                                <td th:text="${team.points}" class="stats-col fw-bold">20</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- Milan Stats -->
-                                <div th:if="${milanStanding != null}" class="mt-3 p-2 bg-dark rounded">
-                                    <h6 class="text-danger mb-2">
-                                        <i class="fas fa-chart-line"></i> Milan Stats
-                                    </h6>
-                                    <div class="row text-center">
-                                        <div class="col-3">
-                                            <small class="text-muted">GF</small><br>
-                                            <strong th:text="${milanStanding.goalsFor}">19</strong>
-                                        </div>
-                                        <div class="col-3">
-                                            <small class="text-muted">GA</small><br>
-                                            <strong th:text="${milanStanding.goalsAgainst}">12</strong>
-                                        </div>
-                                        <div class="col-3">
-                                            <small class="text-muted">GD</small><br>
-                                            <strong
-                                                th:text="${milanStanding.goalDifference > 0 ? '+' + milanStanding.goalDifference : milanStanding.goalDifference}">+7</strong>
-                                        </div>
-                                        <div class="col-3">
-                                            <small class="text-muted">PPG</small><br>
-                                            <strong
-                                                th:text="${#numbers.formatDecimal(milanStanding.pointsPerGame, 1, 1)}">2.0</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Serie A Full Standings -->
-                    <div th:if="${fullStanding != null and !fullStanding.isEmpty()}"
-                        class="col-12 col-md-6 px-0 px-md-2 mt-4 pt-2">
-                        <h3 class="border-bottom border-danger pb-2 mb-3">
-                            <i class="fas fa-list-ol"></i> Serie A Classifica
-                        </h3>
-
-                        <!-- Card Full Standings -->
-                        <div class="card shadow container-fluid px-0">
-                            <!-- Competition badge -->
-                            <div class="position-absolute top-0 end-0 z-2">
-                                <span class="badge bg-success rounded-0 rounded-start">
-                                    <i class="fas fa-futbol"></i> Serie A 2025/26
-                                </span>
-                            </div>
-
-                            <div class="card-body p-2">
-                                <div class="standings-scroll-container" style="max-height: 400px; overflow-y: auto;">
-                                    <table class="table table-dark table-sm mb-0">
-                                        <thead class="sticky-top">
-                                            <tr class="text-center bg-dark">
-                                                <th class="position-col">#</th>
-                                                <th class="team-col text-start">Squadra</th>
-                                                <th class="stats-col">P</th>
-                                                <th class="stats-col">V</th>
-                                                <th class="stats-col">N</th>
-                                                <th class="stats-col">S</th>
                                                 <th class="stats-col">GF</th>
                                                 <th class="stats-col">GS</th>
-                                                <th class="stats-col">DR</th>
+                                                <th class="stats-col">GD</th>
                                                 <th class="stats-col">Pts</th>
+                                                <th class="form-col">Form</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr th:each="team : ${fullStanding}"
-                                                th:class="${team.isMilan() ? 'table-danger fw-bold' : (team.position <= 4 ? 'table-primary' : (team.position <= 6 ? 'table-warning' : (team.position >= 18 ? 'table-secondary' : '')))}"
+                                                th:class="${team.isMilan() ? 'table-danger fw-bold' : ''}"
+                                                th:style="${team.position <= 4 ? 'border-left: 4px solid #28a745;' : (team.position == 5 ? 'border-left: 4px solid #ffc107;' : (team.position == 6 ? 'border-left: 4px solid #17a2b8;' : (team.position >= 18 ? 'border-left: 4px solid #dc3545;' : '')))}"
                                                 class="text-center">
-                                                <td th:text="${team.position}" class="position-col">
-                                                    <span th:if="${team.position <= 4}" class="text-success">🟢</span>
-                                                    <span th:if="${team.position == 5 or team.position == 6}"
-                                                        class="text-warning">🟡</span>
-                                                    <span th:if="${team.position >= 18}" class="text-danger">🔴</span>
-                                                    [[${team.position}]]
+                                                <td th:text="${team.position}" class="position-col">[[${team.position}]]
+                                                </td>
+                                                <td class="crest-col">
+                                                    <img th:if="${team.teamCrest != null and !team.teamCrest.isEmpty()}"
+                                                        th:src="${team.teamCrest}" th:alt="${team.teamName + ' crest'}"
+                                                        class="team-crest"
+                                                        style="width: 20px; height: 20px; object-fit: contain;">
+                                                    <span
+                                                        th:unless="${team.teamCrest != null and !team.teamCrest.isEmpty()}"
+                                                        class="text-muted">-</span>
                                                 </td>
                                                 <td class="team-col text-start">
                                                     <span th:if="${team.isMilan()}" class="me-1">🔴⚫</span>
@@ -387,6 +308,14 @@
                                                     th:classappend="${team.goalDifference > 0 ? 'text-success' : (team.goalDifference < 0 ? 'text-danger' : '')}">
                                                     +7</td>
                                                 <td th:text="${team.points}" class="stats-col fw-bold">20</td>
+                                                <td class="form-col">
+                                                    <span th:if="${team.form != null and !team.form.isEmpty()}"
+                                                        th:each="result, iterStat : ${#strings.listSplit(team.form, '')}"
+                                                        th:class="${result == 'W' ? 'badge bg-success me-1' : (result == 'D' ? 'badge bg-warning text-dark me-1' : (result == 'L' ? 'badge bg-danger me-1' : 'badge bg-secondary me-1'))}"
+                                                        th:text="${result}" style="font-size: 0.7em;">W</span>
+                                                    <span th:unless="${team.form != null and !team.form.isEmpty()}"
+                                                        class="text-muted">-</span>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -394,9 +323,39 @@
 
                                 <!-- Legend -->
                                 <div class="mt-2 p-2 bg-dark rounded">
-                                    <small class="text-muted">
-                                        🟢 Champions League | 🟡 Europa League | 🔴 Retrocessione
+                                    <small class="text-white">
+                                        <span style="color: #28a745;">■</span> Champions League (1-4) |
+                                        <span style="color: #ffc107;">■</span> Europa League (5) |
+                                        <span style="color: #17a2b8;">■</span> Conference League (6) |
+                                        <span style="color: #dc3545;">■</span> Retrocessione (18-20)
                                     </small>
+                                </div>
+
+                                <!-- Milan Stats -->
+                                <div th:if="${milanStanding != null}" class="mt-3 p-2 bg-dark rounded">
+                                    <h6 class="c-red mb-2">
+                                        <i class="fas fa-chart-line"></i> Milan Stats
+                                    </h6>
+                                    <div class="row text-center">
+                                        <div class="col-3">
+                                            <small class="text-white">GF</small><br>
+                                            <strong class="c-red" th:text="${milanStanding.goalsFor}">19</strong>
+                                        </div>
+                                        <div class="col-3">
+                                            <small class="text-white">GA</small><br>
+                                            <strong class="c-red" th:text="${milanStanding.goalsAgainst}">12</strong>
+                                        </div>
+                                        <div class="col-3">
+                                            <small class="text-white">GD</small><br>
+                                            <strong class="c-red"
+                                                th:text="${milanStanding.goalDifference > 0 ? '+' + milanStanding.goalDifference : milanStanding.goalDifference}">+7</strong>
+                                        </div>
+                                        <div class="col-3">
+                                            <small class="text-white">PPG</small><br>
+                                            <strong class="c-red"
+                                                th:text="${#numbers.formatDecimal(milanStanding.pointsPerGame, 1, 1)}">2.0</strong>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

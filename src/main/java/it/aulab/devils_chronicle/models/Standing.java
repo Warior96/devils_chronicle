@@ -108,7 +108,7 @@ public class Standing {
 
     public Boolean isMilan() {
         return teamName != null &&
-                (teamName.toLowerCase().contains("milan") ||
-                        teamName.equalsIgnoreCase("AC Milan"));
+                (teamName.equalsIgnoreCase("AC Milan") ||
+                        teamName.equalsIgnoreCase("Milan"));
     }
 }

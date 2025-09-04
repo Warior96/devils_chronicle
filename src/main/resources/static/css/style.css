@@ -175,6 +175,20 @@ h6,
     min-width: 40px;
 }
 
+.crest-col {
+    width: 30px;
+    text-align: center;
+}
+
+.form-col {
+    width: 80px;
+    text-align: center;
+}
+
+.team-crest {
+    border-radius: 2px;
+}
+
 /* Table Styling */
 .table-dark.table-sm td {
     padding: 0.5rem 0.3rem;
@@ -192,11 +206,6 @@ h6,
     position: sticky;
     top: 0;
     z-index: 10;
-}
-
-.table-dark.table-sm tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    transform: scale(1.01);
 }
 
 /* Milan Special Highlighting */
@@ -407,7 +416,9 @@ h6,
 }
 
 /* Hover Effects */
-.card:hover {
+.card:hover,
+.match-card:hover,
+.no-match:hover {
     transform: translateY(-2px);
     transition: transform 0.3s ease;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
