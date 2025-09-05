@@ -25,7 +25,8 @@
     <!-- inizio fragment navbar -->
     <nav th:fragment="navbar"
         class="navbar navbar-expand-lg navbar-light bg-white position-fixed top-0 left-0 w-100 z-3">
-        <h2 class="fw-bold mb-0 position-absolute top-50 start-50 translate-middle d-none d-md-block c-black">DEVIL'S CHRONICLE</h2>
+        <h2 class="fw-bold mb-0 position-absolute top-50 start-50 translate-middle d-none d-md-block c-black">DEVIL'S
+            CHRONICLE</h2>
         <div class="container-fluid">
             <a th:href="@{/}" class="navbar-brand me-0 pe-2">
                 <i class="fa-regular fa-newspaper"></i>
@@ -52,8 +53,7 @@
                             Admin dashboard
                             <span class="position-relative me-2" th:if="${careerRequests > 0}">
                                 <i class="fa-solid fa-bell ms-1"></i>
-                                <span
-                                    class="badge rounded-pill bg-danger text-white fs-7 position-absolute notification"
+                                <span class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification"
                                     th:text="${careerRequests}"></span>
                             </span>
                         </a>
@@ -63,8 +63,7 @@
                             Revisor dashboard
                             <span class="position-relative me-2" th:if="${articlesToBeRevised > 0}">
                                 <i class="fa-solid fa-bell ms-1"></i>
-                                <span
-                                    class="badge rounded-pill bg-danger text-white fs-7 position-absolute notification"
+                                <span class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification"
                                     th:text="${articlesToBeRevised}"></span>
                             </span>
                         </a>
@@ -75,11 +74,11 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="accessDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Access
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <ul class="dropdown-menu" aria-labelledby="accessDropdown">
                             <li sec:authorize="isAnonymous">
                                 <a th:href="@{/register}" class="dropdown-item" aria-current="page">
                                     Register
@@ -93,6 +92,20 @@
                             <li sec:authorize="isAuthenticated">
                                 <a th:href="@{/logout}" class="dropdown-item" aria-current="page">
                                     Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Category
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item"
+                                    th:href="@{/articles/category/{categoryId}(categoryId=${category.id})}"
+                                    th:text="${category.name}">
                                 </a>
                             </li>
                         </ul>
@@ -147,7 +160,7 @@
 
 
     <!-- inizio fragment footer -->
-    <footer th:fragment="footer" class="bg-dark text-white pt-4">
+    <footer th:fragment="footer" class="bg-dark c-white pt-4">
         <div class="container">
             <div class="row justify-content-between">
                 <!-- Company info -->

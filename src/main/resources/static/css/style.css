@@ -1,6 +1,8 @@
 :root {
     --milan-red: #FB090B;
+    --milan-red-dark: #A40000;
     --milan-black: #000000;
+    --milan-white: #FFFFFF;
     --featured-badge: #FFD700;
     --gradient: linear-gradient(135deg, var(--milan-red) 0%, var(--milan-black) 100%);
 }
@@ -38,25 +40,45 @@ h6,
     background-color: var(--milan-red);
 }
 
+.bg-red-dark {
+    background-color: var(--milan-red-dark);
+}
+
 .bg-black {
     background-color: var(--milan-black);
+}
+
+.bg-white {
+    background-color: var(--milan-white);
 }
 
 .bg-gradient {
     background: var(--gradient);
 }
 
+.bg-transparent {
+    background-color: transparent !important;
+}
+
 .c-red {
     color: var(--milan-red);
+}
+
+.c-red-dark {
+    color: var(--milan-red-dark);
 }
 
 .c-black {
     color: var(--milan-black);
 }
 
+.c-white {
+    color: var(--milan-white);
+}
+
+
 .match-card {
     background: var(--gradient);
-    color: white;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
@@ -83,6 +105,9 @@ h6,
     font-size: 0.9rem !important;
 }
 
+.card {
+    border-width: 0 !important;
+}
 
 
 
@@ -139,6 +164,8 @@ h6,
     border-radius: 0.5rem;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
+    max-height: 250px; 
+    overflow-y: auto;
 }
 
 /* Custom Scrollbar */
