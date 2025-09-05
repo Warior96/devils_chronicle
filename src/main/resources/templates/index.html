@@ -48,6 +48,23 @@
                             All articles
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item"
+                                    th:href="@{/categories/search/{categoryId}(categoryId=${category.id})}"
+                                    th:text="${category.name}">
+                                </a>
+                            </li>
+                            <li th:if="${categories.isEmpty()}">
+                                <span class="dropdown-item text-muted">No categories available</span>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                         <a class="nav-link d-flex align-items-center pe-3" href="/admin/dashboard">
                             Admin dashboard
@@ -92,20 +109,6 @@
                             <li sec:authorize="isAuthenticated">
                                 <a th:href="@{/logout}" class="dropdown-item" aria-current="page">
                                     Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Category
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                            <li th:each="category : ${categories}">
-                                <a class="dropdown-item"
-                                    th:href="@{/articles/category/{categoryId}(categoryId=${category.id})}"
-                                    th:text="${category.name}">
                                 </a>
                             </li>
                         </ul>
