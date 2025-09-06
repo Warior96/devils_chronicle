@@ -95,12 +95,6 @@ body {
     box-shadow: 1px 0 0 rgba(0, 0, 0, 0.2);
 }
 
-.navbar-brand:hover,
-.nav-link:hover {
-    color: var(--milan-red);
-    transform: translateY(-1px);
-}
-
 .navbar .c-black {
     color: var(--milan-black);
     font-weight: 600;
@@ -145,38 +139,43 @@ body {
     background: rgba(255, 255, 255, 0.95) !important;
     border: 2px solid var(--milan-red) !important;
     border-right: none !important;
-    border-radius: 25px 0 0 25px !important;
+    border-radius: 20px 0 0 20px !important;
     color: var(--milan-black) !important;
-    padding: 0.6rem 1.2rem !important;
+    padding: 0.4rem 1rem !important;
     font-weight: 500 !important;
     transition: all 0.3s ease !important;
-}
-
-#search-input-desktop {
-    /* padding:  0 1rem !important; */
+    font-size: 0.9rem !important;
+    height: 38px !important;
 }
 
 .custom-search-input:focus {
     background: rgba(255, 255, 255, 1) !important;
     border-color: var(--milan-red-dark) !important;
-    box-shadow: 0 0 15px rgba(251, 9, 11, 0.3) !important;
+    box-shadow: 0 0 10px rgba(251, 9, 11, 0.3) !important;
     color: var(--milan-black) !important;
 }
 
 .custom-search-input::placeholder {
     color: rgba(0, 0, 0, 0.6) !important;
     font-style: italic;
+    font-size: 0.85rem !important;
 }
 
 .custom-search-btn {
     background: var(--gradient) !important;
     border: 2px solid var(--milan-red) !important;
     border-left: none !important;
-    border-radius: 0 25px 25px 0 !important;
+    border-radius: 0 20px 20px 0 !important;
     color: var(--milan-white) !important;
     font-weight: bold !important;
-    padding: 0.6rem 1.2rem !important;
+    padding: 0.4rem 1rem !important;
     transition: all 0.3s ease !important;
+    height: 38px !important;
+}
+
+/* Logo */
+.logo {
+    height: 38px;
 }
 
 /* Custom User Info Styling */
@@ -215,9 +214,15 @@ body {
     padding: 0.2rem 0.5rem !important;
 }
 
-/* Search Bar Responsive Styling */
+/* Search bar */
+.custom-search-desktop {
+    align-items: center !important;
+    height: auto !important;
+}
+
 .custom-search-desktop .input-group {
-    width: 280px;
+    width: 250px;
+    height: 38px;
 }
 
 .custom-search-mobile .input-group {
@@ -1213,6 +1218,11 @@ input[type="file"]::file-selector-button {
     }
 
     /* Hover Effects */
+    .nav-link:hover {
+        color: var(--milan-red);
+        transform: translateY(-1px);
+    }
+
     .card:hover,
     .match-card:hover,
     .no-match:hover,

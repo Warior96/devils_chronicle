@@ -28,8 +28,8 @@
     <nav th:fragment="navbar"
         class="navbar navbar-expand-lg navbar-light bg-white position-fixed top-0 left-0 w-100 z-3">
         <div class="container-fluid">
-            <a th:href="@{/}" class="navbar-brand me-0 pe-2">
-                <i class="fa-regular fa-newspaper c-red"></i>
+            <a th:href="@{/}" class="navbar-brand p-0 me-0 pe-2">
+                <img th:src="@{/images/logo.png}" alt="Devil's Chronicle logo" class="logo">
             </a>
             <button class="navbar-toggler z-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -154,8 +154,8 @@
         <!-- Search desktop e tablet -->
         <form class="d-none d-md-flex pe-3 custom-search-desktop" th:action="@{/articles/search}" method="GET">
             <div class="input-group">
-                <input class="form-control custom-search-input" id="search-input-desktop" type="search" placeholder="Search" name="keyword"
-                    aria-label="Search">
+                <input class="form-control custom-search-input" id="search-input-desktop" type="search"
+                    placeholder="Search" name="keyword" aria-label="Search">
                 <button class="btn btn-outline-success custom-search-btn" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
@@ -222,7 +222,8 @@
                 <div class="col-md-4 mb-3">
                     <a href="/" class="text-decoration-none">
                         <h5 class="c-red">
-                            <i class="fa-regular fa-newspaper me-2"></i>Devil's Chronicle
+                            <img th:src="@{/images/logo.png}" alt="Devil's Chronicle logo" class="logo">
+                            Devil's Chronicle
                         </h5>
                     </a>
                     <p class="text-white-50 mt-2">Your premier source for AC Milan news, analysis, and updates.</p>
