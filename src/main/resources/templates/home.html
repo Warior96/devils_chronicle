@@ -81,7 +81,7 @@
 
                                             <!-- Category and Author info -->
                                             <div class="mb-2">
-                                                <small class="me-2" th:if="${latestArticle.publishDate != null}">
+                                                <small class="me-3" th:if="${latestArticle.publishDate != null}">
                                                     <i class="fas fa-calendar me-1"></i>
                                                     <span th:text="${latestArticle.publishDate}">Date</span>
                                                 </small>
@@ -152,7 +152,7 @@
 
                                             <!-- Category and Author info -->
                                             <div class="mb-2">
-                                                <small class="me-2" th:if="${featuredArticle.publishDate != null}">
+                                                <small class="me-3" th:if="${featuredArticle.publishDate != null}">
                                                     <i class="fas fa-calendar me-1"></i>
                                                     <span th:text="${featuredArticle.publishDate}">Date</span>
                                                 </small>

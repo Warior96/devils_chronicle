@@ -26,18 +26,18 @@ h6,
 
 
 
-/* Global Styles */
+/* Global styles */
 body {
     background-color: var(--milan-black);
     color: var(--milan-white);
 }
 
-/* Font Sizes */
+/* Font sizes */
 .fs-7 {
     font-size: 0.60rem;
 }
 
-/* Background Colors */
+/* Background colors */
 .bg-red {
     background-color: var(--milan-red);
 }
@@ -62,7 +62,7 @@ body {
     background-color: transparent !important;
 }
 
-/* Text Colors */
+/* Text colors */
 .c-red {
     color: var(--milan-red);
 }
@@ -79,7 +79,7 @@ body {
     color: var(--milan-white);
 }
 
-/* navbar */
+/* Navbar */
 .navbar {
     background: rgba(255, 255, 255, 0.6) !important;
     backdrop-filter: blur(10px);
@@ -104,6 +104,125 @@ body {
 .navbar .c-black {
     color: var(--milan-black);
     font-weight: 600;
+}
+
+/* Dropdown */
+.custom-dropdown-menu {
+    background: rgba(33, 37, 41, 0.95) !important;
+    border: 2px solid var(--milan-red) !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(251, 9, 11, 0.3) !important;
+    margin-top: 8px !important;
+}
+
+.custom-dropdown-item {
+    color: var(--milan-white) !important;
+    padding: 0.8rem 1.5rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    border-radius: 8px !important;
+    margin: 0.2rem 0.5rem !important;
+}
+
+.custom-dropdown-item:focus {
+    background: linear-gradient(135deg, var(--milan-red), var(--milan-red-dark)) !important;
+    color: var(--milan-white) !important;
+}
+
+.custom-dropdown-item.disabled {
+    color: rgba(255, 255, 255, 0.5) !important;
+    cursor: not-allowed;
+}
+
+.custom-dropdown-toggle::after {
+    color: var(--milan-red) !important;
+    font-weight: bold !important;
+}
+
+/* Custom Search Bar Styling */
+.custom-search-input {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid var(--milan-red) !important;
+    border-right: none !important;
+    border-radius: 25px 0 0 25px !important;
+    color: var(--milan-black) !important;
+    padding: 0.6rem 1.2rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+#search-input-desktop {
+    /* padding:  0 1rem !important; */
+}
+
+.custom-search-input:focus {
+    background: rgba(255, 255, 255, 1) !important;
+    border-color: var(--milan-red-dark) !important;
+    box-shadow: 0 0 15px rgba(251, 9, 11, 0.3) !important;
+    color: var(--milan-black) !important;
+}
+
+.custom-search-input::placeholder {
+    color: rgba(0, 0, 0, 0.6) !important;
+    font-style: italic;
+}
+
+.custom-search-btn {
+    background: var(--gradient) !important;
+    border: 2px solid var(--milan-red) !important;
+    border-left: none !important;
+    border-radius: 0 25px 25px 0 !important;
+    color: var(--milan-white) !important;
+    font-weight: bold !important;
+    padding: 0.6rem 1.2rem !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Custom User Info Styling */
+.custom-user-info {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(251, 9, 11, 0.3);
+    border-radius: 20px !important;
+    padding: 0.5rem 1rem !important;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+}
+
+.custom-role-badge {
+    background: linear-gradient(135deg, var(--milan-red), var(--milan-red-dark));
+    color: var(--milan-white) !important;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Custom Notification Styling */
+.custom-notification-bell {
+    font-size: 1.1rem;
+}
+
+.custom-notification-badge {
+    background: linear-gradient(135deg, #dc3545, #c82333) !important;
+    font-size: 0.65rem !important;
+    font-weight: bold !important;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+    animation: pulse 2s infinite;
+    padding: 0.2rem 0.5rem !important;
+}
+
+/* Search Bar Responsive Styling */
+.custom-search-desktop .input-group {
+    width: 280px;
+}
+
+.custom-search-mobile .input-group {
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
 /* Notification */
@@ -960,16 +1079,25 @@ input[type="file"]::file-selector-button {
 
 
 /* Animations */
-@keyframes bell {
-    0% {
+@keyframes bellRing {
+
+    0%,
+    100% {
         transform: rotate(0deg);
     }
 
-    50% {
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
         transform: rotate(-15deg);
     }
 
-    100% {
+    20%,
+    40%,
+    60%,
+    80% {
         transform: rotate(15deg);
     }
 }
@@ -1079,14 +1207,9 @@ input[type="file"]::file-selector-button {
         left: 17%;
     }
 
-    .nav-item:hover .fa-bell,
-    .acc-notification:hover .fa-bell {
-        animation: bell 0.8s infinite;
-    }
-
-    .nav-item:hover .notification,
-    .acc-notification:hover .notification {
-        animation: none;
+    /* Animation */
+    .custom-notification-bell {
+        animation: bellRing 2s infinite ease-in-out;
     }
 
     /* Hover Effects */
@@ -1099,6 +1222,25 @@ input[type="file"]::file-selector-button {
         transform: translateY(-5px);
         transition: transform 0.3s ease;
         box-shadow: 0 15px 35px rgba(251, 9, 11, 0.3);
+    }
+
+    .custom-search-btn:hover {
+        background: linear-gradient(135deg, var(--milan-red-dark), var(--milan-black)) !important;
+        border-color: var(--milan-red-dark) !important;
+        color: var(--milan-white) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px var(--milan-red-dark);
+    }
+
+    .nav-item:hover .notification,
+    .acc-notification:hover .notification {
+        animation: none;
+    }
+
+    .custom-dropdown-item:hover {
+        background: linear-gradient(135deg, var(--milan-red), var(--milan-red-dark)) !important;
+        color: var(--milan-white) !important;
+        transform: translateX(5px) !important;
     }
 }
 

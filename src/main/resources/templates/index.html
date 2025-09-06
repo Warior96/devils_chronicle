@@ -38,105 +38,128 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Create article - Writer -->
                     <li sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')" class="nav-item">
                         <a class="nav-link" href="/articles/create">
                             <i class="fas fa-plus me-1"></i>Create article
                         </a>
                     </li>
+                    <!-- All articles -->
                     <li class="nav-item">
                         <a class="nav-link" href="/articles">
                             <i class="fas fa-newspaper me-1"></i>All articles
                         </a>
                     </li>
+                    <!-- Categories dropdown -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle custom-dropdown-toggle" href="#" id="categoryDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-layer-group me-1"></i>Categories
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                        <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="categoryDropdown">
                             <li th:each="category : ${categories}">
-                                <a class="dropdown-item"
+                                <a class="dropdown-item custom-dropdown-item"
                                     th:href="@{/categories/search/{categoryId}(categoryId=${category.id})}"
                                     th:text="${category.name}">
                                 </a>
                             </li>
+                            <!-- No categories -->
                             <li th:if="${categories.isEmpty()}">
-                                <span class="dropdown-item">No categories available</span>
+                                <span class="dropdown-item custom-dropdown-item disabled">No categories available</span>
                             </li>
                         </ul>
                     </li>
+                    <!-- Dashboard - Admin -->
                     <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                         <a class="nav-link d-flex align-items-center pe-3" href="/admin/dashboard">
                             <i class="fas fa-cog me-1"></i>Admin dashboard
                             <span class="position-relative me-2" th:if="${careerRequests > 0}">
-                                <i class="fa-solid fa-bell ms-1"></i>
-                                <span class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification"
+                                <i class="fa-solid fa-bell ms-1 custom-notification-bell"></i>
+                                <span
+                                    class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification custom-notification-badge"
                                     th:text="${careerRequests}"></span>
                             </span>
                         </a>
                     </li>
+                    <!-- Dashboard - Revisor -->
                     <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
                         <a class="nav-link d-flex align-items-center pe-3" href="/revisor/dashboard">
                             <i class="fas fa-eye me-1"></i>Revisor dashboard
                             <span class="position-relative me-2" th:if="${articlesToBeRevised > 0}">
-                                <i class="fa-solid fa-bell ms-1"></i>
-                                <span class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification"
+                                <i class="fa-solid fa-bell ms-1 custom-notification-bell c-black"></i>
+                                <span
+                                    class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification custom-notification-badge"
                                     th:text="${articlesToBeRevised}"></span>
                             </span>
                         </a>
                     </li>
+                    <!-- Dashboard - Writer -->
                     <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
                         <a class="nav-link" href="/writer/dashboard">
                             <i class="fas fa-pen me-1"></i>Writer dashboard
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="accessDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- Access dropdown -->
+                    <li class="nav-item dropdown custom-dropdown-toggle">
+                        <a class="nav-link dropdown-toggle custom-dropdown-toggle" href="#" id="accessDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user me-1"></i>Access
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="accessDropdown">
+                        <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="accessDropdown">
+                            <!-- Register -->
                             <li sec:authorize="isAnonymous">
-                                <a th:href="@{/register}" class="dropdown-item" aria-current="page">
+                                <a th:href="@{/register}" class="dropdown-item custom-dropdown-item"
+                                    aria-current="page">
                                     <i class="fas fa-user-plus me-1"></i>Register
                                 </a>
                             </li>
+                            <!-- Login -->
                             <li sec:authorize="isAnonymous">
-                                <a th:href="@{/login}" class="dropdown-item" aria-current="page">
+                                <a th:href="@{/login}" class="dropdown-item custom-dropdown-item" aria-current="page">
                                     <i class="fas fa-sign-in-alt me-1"></i>Login
                                 </a>
                             </li>
+                            <!-- Logout -->
                             <li sec:authorize="isAuthenticated">
-                                <a th:href="@{/logout}" class="dropdown-item" aria-current="page">
+                                <a th:href="@{/logout}" class="dropdown-item custom-dropdown-item" aria-current="page">
                                     <i class="fas fa-sign-out-alt me-1"></i>Logout
                                 </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
-                <div sec:authorize="isAuthenticated" class="c-black">
+                <!-- User info -->
+                <div sec:authorize="isAuthenticated" class="c-black custom-user-info">
                     <i class="fas fa-user-circle me-1"></i>Hello
-                    <span th:text="${#authentication.principal.fullname}">nome cognome</span>
+                    <span th:text="${#authentication.principal.fullname}">Name surname</span>
                     -
                     <span th:each="role, iStat : ${#authentication.principal.authorities}">
+                        <!-- Role -->
                         <span th:text="${role.authority.replace('ROLE_', '')}"></span>
                         <span th:if="${!iStat.last}"> - </span>
                     </span>
                 </div>
-                <form class="d-flex d-md-none pe-3" th:action="@{/articles/search}" method="GET">
-                    <input class="form-control me-2" type="search" placeholder="Search" name="keyword"
-                        aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
+                <!-- Search mobile -->
+                <form class="d-flex d-md-none pe-3 custom-search-mobile" th:action="@{/articles/search}" method="GET">
+                    <div class="input-group">
+                        <input class="form-control custom-search-input" type="search" placeholder="Search"
+                            name="keyword" aria-label="Search">
+                        <button class="btn btn-outline-success custom-search-btn" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
-        <form class="d-none d-md-flex pe-3" th:action="@{/articles/search}" method="GET">
-            <input class="form-control me-2" type="search" placeholder="Search" name="keyword" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">
-                <i class="fas fa-search"></i>
-            </button>
+        <!-- Search desktop e tablet -->
+        <form class="d-none d-md-flex pe-3 custom-search-desktop" th:action="@{/articles/search}" method="GET">
+            <div class="input-group">
+                <input class="form-control custom-search-input" id="search-input-desktop" type="search" placeholder="Search" name="keyword"
+                    aria-label="Search">
+                <button class="btn btn-outline-success custom-search-btn" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
         </form>
     </nav>
     <!-- fine fragment navbar -->
@@ -173,7 +196,7 @@
                         <p class="card-text truncate mb-3" th:text="${article.body}">Article Body</p>
 
                         <!-- Category and Author info -->
-                        <div class="mb-2">
+                        <div class="mb-2 d-flex justify-content-between w-100">
                             <small class="me-2" th:if="${article.publishDate != null}">
                                 <i class="fas fa-calendar me-1"></i>
                                 <span th:text="${article.publishDate}">Date</span>
