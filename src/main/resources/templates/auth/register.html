@@ -5,60 +5,108 @@
 
 <body>
     <div th:insert="~{index :: navbar}"></div>
-    <div class="vh-100">
-        <div class="container h-100 d-flex align-items-center">
-            <div class="row w-100">
-                <div class="col-md-8 offset-md-2">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="text-center">Registration</h2>
+
+    <div class="min-vh-100">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <h1>
+                            <i class="fas fa-user-plus me-3"></i>
+                            Create Account
+                        </h1>
+                        <p class="lead mb-0">
+                            <i class="fa-solid fa-handshake me-2"></i>
+                            Join the Devil's Chronicle community
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container pt-2">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8 col-xl-6">
+
+                    <!-- Success Message -->
+                    <div th:if="${param.success}">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            You have successfully registered! You can now log in.
                         </div>
-                        <div th:if="${param.success}">
-                            <div class="alert alert-info">
-                                You have successfully registered in our app!
-                            </div>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <div class="form-container">
+                        <div class="text-center mb-4">
+                            <h6 class="c-white">Create your account and become part of the </h6>
+                            <h5 class="c-red"><strong>Rossoneri family</strong></h5>
                         </div>
-                        <div class="card-body">
-                            <form th:action="@{/register/save}" method="POST" role="form" th:object="${user}">
-                                <div class="from-group mb-3">
-                                    <label for="firstname" class="form-label">First Name</label>
+
+                        <form th:action="@{/register/save}" method="POST" role="form" th:object="${user}">
+                            <!-- First Name and Last Name -->
+                            <div class="row mb-4">
+                                <div class="col-12 col-md-6">
+                                    <label for="firstname" class="form-label">
+                                        <i class="fas fa-user me-1"></i>First Name
+                                    </label>
                                     <input type="text" class="form-control" id="firstname" name="firstname"
                                         placeholder="Enter your first name" th:field="*{firstname}">
-                                    <p th:errors="*{firstname}" class="text-danger"
-                                        th:if="${#fields.hasErrors('firstname')}">
-                                    </p>
+                                    <p th:errors="*{firstname}" class="text-danger mt-1"
+                                        th:if="${#fields.hasErrors('firstname')}"></p>
                                 </div>
-                                <div class="from-group mb-3">
-                                    <label for="lastname" class="form-label">Last Name</label>
+                                <div class="col-12 col-md-6">
+                                    <label for="lastname" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Last Name
+                                    </label>
                                     <input type="text" class="form-control" id="lastname" name="lastname"
                                         placeholder="Enter your last name" th:field="*{lastname}">
-                                    <p th:errors="*{lastname}" class="text-danger"
-                                        th:if="${#fields.hasErrors('lastname')}">
-                                    </p>
+                                    <p th:errors="*{lastname}" class="text-danger mt-1"
+                                        th:if="${#fields.hasErrors('lastname')}"></p>
                                 </div>
-                                <div class="from-group mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email"
-                                        placeholder="Enter your email address" th:field="*{email}">
-                                    <p th:errors="*{email}" class="text-danger" th:if="${#fields.hasErrors('email')}">
-                                    </p>
-                                </div>
-                                <div class="from-group mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password"
-                                        placeholder="Enter your password" th:field="*{password}">
-                                    <p th:errors="*{password}" class="text-danger"
-                                        th:if="${#fields.hasErrors('password')}">
-                                    </p>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary" type="submit">Register</button>
-                                    <span>Already have an account?
-                                        <a th:href="@{/login}">Login here</a>
-                                    </span>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="mb-4">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>Email Address
+                                </label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Enter your email address" th:field="*{email}">
+                                <p th:errors="*{email}" class="text-danger mt-1" th:if="${#fields.hasErrors('email')}">
+                                </p>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    <i class="fas fa-lock me-1"></i>Password
+                                </label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Choose a strong password" th:field="*{password}">
+                                <!--                                 <div class="form-text">
+                                    Password should be at least 8 characters long and contain letters and numbers
+                                </div> -->
+                                <p th:errors="*{password}" class="text-danger mt-1"
+                                    th:if="${#fields.hasErrors('password')}"></p>
+                            </div>
+
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button class="btn btn-success btn-lg px-5 w-100 mb-3" type="submit">
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                </button>
+
+                                <p class="text-white-50">
+                                    Already have an account?
+                                    <a th:href="@{/login}" class="c-red text-decoration-none fw-bold">
+                                        Sign in here
+                                    </a>
+                                </p>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -66,7 +114,6 @@
     </div>
 
     <div th:insert="~{index :: footer}"></div>
-
 
 
     <!-- script esterno + bootstrap -->
