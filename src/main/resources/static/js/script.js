@@ -122,64 +122,70 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Evento per il bottone "Fai una domanda"
-    askBtn.addEventListener('click', () => {
-        showChat();
-        if (chatMessages.innerHTML === '') {
-            addMessageToChat('ai', 'Ciao! Sono pronto a rispondere alle tue domande su questo articolo.');
-        }
-    });
+    if (askBtn) {
+        askBtn.addEventListener('click', () => {
+            showChat();
+            if (chatMessages.innerHTML === '') {
+                addMessageToChat('ai', 'Ciao! Sono pronto a rispondere alle tue domande su questo articolo.');
+            }
+        });
+    }
 
     // Evento per il bottone "Invia" nella chat
-    sendBtn.addEventListener('click', async () => {
-        const question = chatInput.value;
-        if (question.trim() === '') return;
+    if (sendBtn) {
+        sendBtn.addEventListener('click', async () => {
+            const question = chatInput.value;
+            if (question.trim() === '') return;
 
-        addMessageToChat('user', question);
-        chatInput.value = '';
-        chatInput.disabled = true;
-        sendBtn.disabled = true;
+            addMessageToChat('user', question);
+            chatInput.value = '';
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
 
-        const loadingMessage = document.createElement('div');
-        loadingMessage.classList.add('p-2', 'rounded', 'mb-2', 'bg-light');
-        loadingMessage.style.maxWidth = '75%';
-        loadingMessage.textContent = 'AI: ...';
-        chatMessages.appendChild(loadingMessage);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+            const loadingMessage = document.createElement('div');
+            loadingMessage.classList.add('p-2', 'rounded', 'mb-2', 'bg-light');
+            loadingMessage.style.maxWidth = '75%';
+            loadingMessage.textContent = 'AI: ...';
+            chatMessages.appendChild(loadingMessage);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
 
-        try {
-            const response = await fetch(`/articles/detail/${articleId}/ask`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ question: question })
-            });
+            try {
+                const response = await fetch(`/articles/detail/${articleId}/ask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: question })
+                });
 
-            chatMessages.removeChild(loadingMessage);
+                chatMessages.removeChild(loadingMessage);
 
-            if (response.ok) {
-                const aiResponse = await response.text();
-                addMessageToChat('ai', aiResponse);
-            } else {
-                const errorResponse = await response.text();
-                addMessageToChat('ai', `Errore AI: ${errorResponse}`);
+                if (response.ok) {
+                    const aiResponse = await response.text();
+                    addMessageToChat('ai', aiResponse);
+                } else {
+                    const errorResponse = await response.text();
+                    addMessageToChat('ai', `Errore AI: ${errorResponse}`);
+                }
+            } catch (error) {
+                chatMessages.removeChild(loadingMessage);
+                addMessageToChat('ai', 'Errore nella comunicazione con l\'AI.');
+                console.error('Errore:', error);
+            } finally {
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
             }
-        } catch (error) {
-            chatMessages.removeChild(loadingMessage);
-            addMessageToChat('ai', 'Errore nella comunicazione con l\'AI.');
-            console.error('Errore:', error);
-        } finally {
-            chatInput.disabled = false;
-            sendBtn.disabled = false;
-        }
-    });
+        });
+    }
 
     // Permette di inviare la domanda premendo Invio
-    chatInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendBtn.click();
-        }
-    });
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendBtn.click();
+            }
+        });
+    }
 });
 
 
