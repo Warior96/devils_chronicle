@@ -92,9 +92,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
     const chatMessages = document.getElementById('chat-messages');
+    const chatPlaceholder = document.getElementById('chat-placeholder');
 
     // Recupera l'ID dell'articolo da un attributo dati del body o da un meta tag
-    // Lo recuperiamo dal body che è più semplice
     const articleId = document.body.dataset.articleId;
 
     // Funzione per mostrare la chat e nascondere il riassunto
@@ -106,18 +106,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // Funzione per aggiungere un messaggio alla chat
     function addMessageToChat(sender, message) {
         const messageElement = document.createElement('div');
-        messageElement.classList.add('p-2', 'rounded', 'mb-2');
+        messageElement.classList.add('px-4', 'py-3', 'mb-3');
         if (sender === 'user') {
-            messageElement.classList.add('bg-primary', 'text-white', 'ms-auto');
-            messageElement.style.maxWidth = '75%';
+            messageElement.classList.add('bg-red-dark', 'text-white', 'ms-auto', 'cus-round-user');
+            messageElement.style.maxWidth = '70%';
             messageElement.textContent = `Tu: ${message}`;
         } else {
-            messageElement.classList.add('bg-light', 'me-auto');
-            messageElement.style.maxWidth = '75%';
+            messageElement.classList.add('bg-black', 'me-auto', 'cus-round-ai');
+            messageElement.style.maxWidth = '70%';
             messageElement.textContent = `AI: ${message}`;
         }
         chatMessages.appendChild(messageElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        if (chatPlaceholder) chatPlaceholder.style.display = 'none';
     }
 
     // Evento per il bottone "Fai una domanda"

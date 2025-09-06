@@ -110,6 +110,11 @@ public class ArticleController {
     // rotta get per visualizzazione dettaglio articolo
     @GetMapping("detail/{id}")
     public String detailArticle(@PathVariable("id") Long id, Model viewModel) {
+        List<Article> latestArticles = articleRepository.findTop4ByIsAcceptedTrueOrderByPublishDateDesc();
+        List<ArticleDto> latestArticlesDto = latestArticles.stream()
+                .map(article -> modelMapper.map(article, ArticleDto.class))
+                .collect(Collectors.toList());
+        viewModel.addAttribute("latestArticles", latestArticlesDto);
         viewModel.addAttribute("title", "Article Detail");
         viewModel.addAttribute("article", articleService.read(id));
         return "article/detail";

@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- CDN Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <!-- CDN CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <!-- title -->
@@ -25,33 +27,31 @@
     <!-- inizio fragment navbar -->
     <nav th:fragment="navbar"
         class="navbar navbar-expand-lg navbar-light bg-white position-fixed top-0 left-0 w-100 z-3">
-        <h2 class="fw-bold mb-0 position-absolute top-50 start-50 translate-middle d-none d-md-block c-black">DEVIL'S
-            CHRONICLE</h2>
         <div class="container-fluid">
             <a th:href="@{/}" class="navbar-brand me-0 pe-2">
-                <i class="fa-regular fa-newspaper"></i>
+                <i class="fa-regular fa-newspaper c-red"></i>
             </a>
             <button class="navbar-toggler z-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <i class="fa-solid fa-bars c-red"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')" class="nav-item">
                         <a class="nav-link" href="/articles/create">
-                            Create article
+                            <i class="fas fa-plus me-1"></i>Create article
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/articles">
-                            All articles
+                            <i class="fas fa-newspaper me-1"></i>All articles
                         </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Categories
+                            <i class="fa-solid fa-layer-group me-1"></i>Categories
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
                             <li th:each="category : ${categories}">
@@ -61,13 +61,13 @@
                                 </a>
                             </li>
                             <li th:if="${categories.isEmpty()}">
-                                <span class="dropdown-item text-muted">No categories available</span>
+                                <span class="dropdown-item">No categories available</span>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                         <a class="nav-link d-flex align-items-center pe-3" href="/admin/dashboard">
-                            Admin dashboard
+                            <i class="fas fa-cog me-1"></i>Admin dashboard
                             <span class="position-relative me-2" th:if="${careerRequests > 0}">
                                 <i class="fa-solid fa-bell ms-1"></i>
                                 <span class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification"
@@ -77,7 +77,7 @@
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
                         <a class="nav-link d-flex align-items-center pe-3" href="/revisor/dashboard">
-                            Revisor dashboard
+                            <i class="fas fa-eye me-1"></i>Revisor dashboard
                             <span class="position-relative me-2" th:if="${articlesToBeRevised > 0}">
                                 <i class="fa-solid fa-bell ms-1"></i>
                                 <span class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification"
@@ -87,39 +87,35 @@
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
                         <a class="nav-link" href="/writer/dashboard">
-                            Writer dashboard
+                            <i class="fas fa-pen me-1"></i>Writer dashboard
                         </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="accessDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Access
+                            <i class="fas fa-user me-1"></i>Access
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="accessDropdown">
                             <li sec:authorize="isAnonymous">
                                 <a th:href="@{/register}" class="dropdown-item" aria-current="page">
-                                    Register
+                                    <i class="fas fa-user-plus me-1"></i>Register
                                 </a>
                             </li>
                             <li sec:authorize="isAnonymous">
                                 <a th:href="@{/login}" class="dropdown-item" aria-current="page">
-                                    Login
+                                    <i class="fas fa-sign-in-alt me-1"></i>Login
                                 </a>
                             </li>
                             <li sec:authorize="isAuthenticated">
                                 <a th:href="@{/logout}" class="dropdown-item" aria-current="page">
-                                    Logout
+                                    <i class="fas fa-sign-out-alt me-1"></i>Logout
                                 </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
-                <!-- <div th:if="${#authentication.principal.authorities.size() = 1}" sec:authorize="isAuthenticated"
-                    th:text="'Hello ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')}">
-                    Hello
-                </div> -->
                 <div sec:authorize="isAuthenticated" class="c-black">
-                    Hello
+                    <i class="fas fa-user-circle me-1"></i>Hello
                     <span th:text="${#authentication.principal.fullname}">nome cognome</span>
                     -
                     <span th:each="role, iStat : ${#authentication.principal.authorities}">
@@ -130,60 +126,122 @@
                 <form class="d-flex d-md-none pe-3" th:action="@{/articles/search}" method="GET">
                     <input class="form-control me-2" type="search" placeholder="Search" name="keyword"
                         aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </form>
             </div>
         </div>
         <form class="d-none d-md-flex pe-3" th:action="@{/articles/search}" method="GET">
             <input class="form-control me-2" type="search" placeholder="Search" name="keyword" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-success" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
         </form>
     </nav>
     <!-- fine fragment navbar -->
 
 
     <!-- inizio fragment card -->
-    <div th:fragment="card" th:each="article : ${articles}" class="col-12 d-flex justify-content-center">
-        <article class="row border border-1 mb-5 mx-3 py-3 w-100">
-            <div class="col-5">
-                <img th:if="${article.image != null}" th:src="${article.image.path}"
-                    th:alt="'image of ' + ${article.title}" class="card-img-top">
-                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
-                    class="card-img-top">
-            </div>
-            <div class="col-7 d-flex justify-content-around align-items-start flex-column px-3">
-                <h4 class="card-title" th:text="${article.title}"></h4>
-                <h6 class="card-text" th:text="${article.subtitle}"></h6>
-                <cite class="card-text" th:text="${article.user.username}"></cite>
-                <a th:href="@{/articles/detail/{id}(id=${article.id})}" class="btn btn-outline-primary">Read more</a>
-            </div>
-        </article>
+    <div th:fragment="card" th:each="article : ${articles}" class="col-12 col-md-6 d-flex justify-content-center">
+        <a th:href="@{/articles/detail/{id}(id=${article.id})}" class="text-decoration-none c-white">
+            <article class="article-card w-100">
+                <!-- Article type badge -->
+                <div class="position-absolute top-0 start-0 z-2">
+                    <span class="badge bg-warning text-dark" th:text="${article.articleType}">
+                        <i class="fa-solid fa-star"></i> Type
+                    </span>
+                </div>
+                <!-- Article category badge -->
+                <div th:if="${article.isFeatured}" class="position-absolute top-0 end-0 z-2">
+                    <span class="badge bg-primary" th:text="${article.category.name}">
+                        Category
+                    </span>
+                </div>
+                <div class="row align-items-center">
+                    <!-- Image -->
+                    <div class="col-12 col-md-4 px-0">
+                        <img th:if="${article.image != null}" th:src="${article.image.path}"
+                            th:alt="'image of ' + ${article.title}" class="img-fluid h-100 object-fit-cover">
+                        <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
+                            class="img-fluid h-100 object-fit-cover">
+                    </div>
+                    <!-- Text -->
+                    <div
+                        class="col-12 col-md-7  d-flex justify-content-between align-items-start flex-column py-3 ps-4">
+                        <h4 class="card-title" th:text="${article.title}">Article Title</h4>
+                        <p class="card-text truncate mb-3" th:text="${article.body}">Article Body</p>
+
+                        <!-- Category and Author info -->
+                        <div class="mb-2">
+                            <small class="me-2" th:if="${article.publishDate != null}">
+                                <i class="fas fa-calendar me-1"></i>
+                                <span th:text="${article.publishDate}">Date</span>
+                            </small>
+                            <cite class="card-text">
+                                <i class="fas fa-user me-1"></i>
+                                <span th:text="${article.user.username}">Author</span>
+                            </cite>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </a>
     </div>
     <!-- fine fragment card -->
 
 
     <!-- inizio fragment footer -->
-    <footer th:fragment="footer" class="bg-dark c-white pt-4">
+    <footer th:fragment="footer" class="pt-4 mt-5">
         <div class="container">
             <div class="row justify-content-between">
                 <!-- Company info -->
                 <div class="col-md-4 mb-3">
-                    <a href="/">
-                        <h5>Aulab IT</h5>
+                    <a href="/" class="text-decoration-none">
+                        <h5 class="c-red">
+                            <i class="fa-regular fa-newspaper me-2"></i>Devil's Chronicle
+                        </h5>
                     </a>
+                    <p class="text-white-50 mt-2">Your premier source for AC Milan news, analysis, and updates.</p>
+                </div>
+                <!-- Quick Links -->
+                <div class="col-md-4 mb-3">
+                    <h5 class="c-red">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-1">
+                            <a href="/articles" class="text-white-50 text-decoration-none">
+                                <i class="fas fa-newspaper me-1"></i>All Articles
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="https://github.com/Warior96/devils_chronicle" target="_blank"
+                                class="text-white-50 text-decoration-none">
+                                <i class="fab fa-github me-1"></i>GitHub Repository
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="https://www.linkedin.com/in/mozzillo-davide-nicolo-web-dev/" target="_blank"
+                                class="text-white-50 text-decoration-none">
+                                <i class="fab fa-linkedin me-1"></i>LinkedIn Profile
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 <!-- Contact info -->
                 <div class="col-md-4 mb-3 text-end">
-                    <h5>Work with us</h5>
+                    <h5 class="c-red">Work with us</h5>
+                    <p class="text-white-50">Join our team of passionate Milan supporters</p>
                     <a th:href="@{/operations/career/request}" class="btn btn-primary">
-                        Get in touch
+                        <i class="fas fa-briefcase me-1"></i>Get in touch
                     </a>
                 </div>
             </div>
         </div>
         <div class="bg-secondary text-center py-2">
-            <p class="mb-0">
-                &copy; 2025 Aulab Jost. All rights reserved.
+            <p class="mb-0 text-white-50">
+                &copy; 2025 Devil's Chronicle. All rights reserved.
+                <span class="c-red mx-2">|</span>
+                Forza Milan! 🔴⚫
             </p>
         </div>
     </footer>
@@ -191,9 +249,13 @@
 
     <!-- inizio fragment script esterno + bootstrap -->
     <div th:fragment="script">
+        <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
             crossorigin="anonymous"></script>
+        <!-- Swiper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+        <!-- CDN JS -->
         <script th:src="@{/js/script.js}"></script>
     </div>
     <!-- fine fragment script esterno + bootstrap -->

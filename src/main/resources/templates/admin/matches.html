@@ -37,7 +37,7 @@
                         <h5 class="card-title">
                             <i class="fas fa-cogs"></i> Azioni
                         </h5>
-                        <p class="card-text text-muted">
+                        <p class="card-text ">
                             Aggiorna le partite dall'API esterna o gestisci i dati esistenti.
                         </p>
                         <form th:action="@{/admin/matches/update}" method="post" class="d-inline">
@@ -129,9 +129,9 @@
                     </div>
                     <div class="card-body">
                         <div th:if="${#lists.isEmpty(matches)}" class="text-center py-4">
-                            <i class="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">Nessuna partita trovata</h5>
-                            <p class="text-muted">Prova ad aggiornare i dati dall'API</p>
+                            <i class="fas fa-exclamation-circle fa-3x  mb-3"></i>
+                            <h5 class="">Nessuna partita trovata</h5>
+                            <p class="">Prova ad aggiornare i dati dall'API</p>
                         </div>
 
                         <div th:unless="${#lists.isEmpty(matches)}" class="table-responsive">
@@ -150,16 +150,16 @@
                                     <tr th:each="match : ${matches}">
                                         <td>
                                             <small th:text="${#temporals.format(match.date, 'dd/MM/yyyy')}"></small><br>
-                                            <small class="text-muted"
+                                            <small class=""
                                                 th:text="${#temporals.format(match.date, 'HH:mm')}"></small>
                                         </td>
                                         <td>
                                             <strong>
                                                 <span th:text="${match.homeTeam}"></span>
-                                                <span class="mx-2 text-muted">vs</span>
+                                                <span class="mx-2 ">vs</span>
                                                 <span th:text="${match.awayTeam}"></span>
                                             </strong>
-                                            <div th:if="${match.stadium}" class="small text-muted">
+                                            <div th:if="${match.stadium}" class="small ">
                                                 <i class="fas fa-map-marker-alt"></i>
                                                 <span th:text="${match.stadium}"></span>
                                             </div>
@@ -170,7 +170,7 @@
                                                 th:class="'badge fs-6 ' + ${matchService.getResultBadgeClass(match)}"
                                                 th:text="${match.score}">
                                             </span>
-                                            <span th:unless="${match.score != null}" class="text-muted">-</span>
+                                            <span th:unless="${match.score != null}" class="">-</span>
 
                                             <!-- Indicatore testo risultato per Milan -->
                                             <div th:if="${match.score != null}" class="mt-1">
@@ -221,7 +221,7 @@
                         <h6 class="card-title">
                             <i class="fas fa-info-circle"></i> Informazioni
                         </h6>
-                        <p class="card-text small text-muted mb-0">
+                        <p class="card-text small  mb-0">
                             I dati delle partite vengono aggiornati automaticamente ogni 6 ore dall'API
                             Football-Data.org.
                             Se non è configurata alcuna API key, vengono utilizzati dati di esempio per il testing.

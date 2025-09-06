@@ -3,7 +3,7 @@
 
 <head th:insert="~{index :: head}"></head>
 
-<body class="c-white bg-black">
+<body>
 
     <div th:insert="~{index :: navbar}"></div>
 
@@ -29,122 +29,79 @@
 
         <div class="row mx-3 pt-5">
 
-            <!-- Title sm -->
-            <h1 class="fw-bold mb-0 d-md-none text-center mt-4 pt-2">
+
+            <!-- Title -->
+            <h1 class="fw-bold mb-0 text-center mt-4 mb-2 pt-1">
                 DEVIL'S CHRONICLE
             </h1>
 
+
             <!-- Left Column - Articles -->
-            <div class="col-12 col-md-8 pt-4 pt-md-5 px-0 px-md-2">
+            <div class="col-12 col-md-8 pt-2 px-0 px-md-2">
                 <div class="row m-0 p-0">
                     <!-- Latest Article -->
                     <div th:if="${latestArticle != null}" class="col-12 col-md-6 px-0 px-md-2">
-                        <h4 class="border-bottom border-danger pb-2 mb-3">
+                        <h5 class="border-bottom border-danger pb-2 mb-3">
                             <i class="fas fa-newspaper"></i> Last article
-                        </h4>
+                        </h5>
                         <!-- Card Latest Article -->
-                        <a th:href="@{/articles/detail/{id}(id=${latestArticle.id})}" class="text-decoration-none">
-                            <!-- card sm -->
-                            <div class="card shadow container-fluid px-0 d-md-none bg-white">
-                                <!-- Category badge -->
-                                <div class="position-absolute top-0 end-0 z-2">
-                                    <a th:href="@{/categories/search/{id}(id=${latestArticle.category.id})}">
-                                        <span class="badge bg-primary rounded-0 rounded-start"
-                                            th:text="${latestArticle.category.name}">
+                        <div class="col-12 d-flex justify-content-center">
+                            <a th:href="@{/articles/detail/{id}(id=${latestArticle.id})}"
+                                class="text-decoration-none c-white">
+                                <article class="article-card w-100">
+                                    <!-- Article type badge -->
+                                    <div class="position-absolute top-0 start-0 z-2">
+                                        <span class="badge bg-warning text-dark" th:text="${latestArticle.articleType}">
+                                            <i class="fa-solid fa-star"></i> Type
+                                        </span>
+                                    </div>
+                                    <!-- Article category badge -->
+                                    <div th:if="${latestArticle.isFeatured}" class="position-absolute top-0 end-0 z-2">
+                                        <span class="badge bg-primary " th:text="${latestArticle.category.name}">
                                             Category
                                         </span>
-                                    </a>
-                                </div>
-                                <!-- Article image and text -->
-                                <div class="row g-0">
-                                    <!-- Title -->
-                                    <div class="col-12">
-                                        <h4 class="card-title pt-4 mt-1 ms-3" th:text="${latestArticle.title}">Title
-                                        </h4>
                                     </div>
-                                    <!-- Image -->
-                                    <div class="col-12">
-                                        <img th:if="${latestArticle.image != null}" th:src="${latestArticle.image.path}"
-                                            th:alt="'image of ' + ${latestArticle.title}"
-                                            class="img-fluid rounded-start h-100 object-fit-cover">
-                                        <img th:unless="${latestArticle.image != null}" th:src="@{/images/default.jpg}"
-                                            alt="default image" class="img-fluid rounded-start h-100 object-fit-cover">
-                                    </div>
-                                    <!-- Text -->
-                                    <div class="col-12">
-                                        <div class="card-body">
-                                            <p class="card-text truncate" th:text="${latestArticle.body}">Body
-                                                truncated..</p>
-                                            <p class="card-text mb-1 d-flex">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-user"></i>
+                                    <div class="row align-items-stretch">
+                                        <!-- Image -->
+                                        <div class="col-12 col-md-4 px-0">
+                                            <img th:if="${latestArticle.image != null}"
+                                                th:src="${latestArticle.image.path}"
+                                                th:alt="'image of ' + ${latestArticle.title}"
+                                                class="img-fluid h-100 object-fit-cover">
+                                            <img th:unless="${latestArticle.image != null}"
+                                                th:src="@{/images/default.jpg}" alt="default image"
+                                                class="img-fluid h-100 object-fit-cover">
+                                        </div>
+                                        <!-- Text -->
+                                        <div
+                                            class="col-12 col-md-7  d-flex justify-content-between align-items-start flex-column py-3 ps-4">
+                                            <h5 class="card-title" th:text="${latestArticle.title}">Article Title</h5>
+                                            <p class="card-text truncate mb-3" th:text="${latestArticle.body}">Article
+                                                Body</p>
+
+                                            <!-- Category and Author info -->
+                                            <div class="mb-2">
+                                                <small class="me-2" th:if="${latestArticle.publishDate != null}">
+                                                    <i class="fas fa-calendar me-1"></i>
+                                                    <span th:text="${latestArticle.publishDate}">Date</span>
+                                                </small>
+                                                <cite class="card-text">
+                                                    <i class="fas fa-user me-1"></i>
                                                     <span th:text="${latestArticle.user.username}">Author</span>
-                                                </small>
-                                                <small class="text-muted ms-auto">
-                                                    <i class="fas fa-calendar"></i>
-                                                    <span
-                                                        th:text="${#temporals.format(latestArticle.publishDate, 'dd/MM/yyyy')}">Date</span>
-                                                </small>
-                                            </p>
+                                                </cite>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- card md lg -->
-                            <div class="card shadow container-fluid px-0 d-none d-md-block bg-white">
-                                <!-- Category badge -->
-                                <div class="position-absolute top-0 end-0 z-2">
-                                    <a th:href="@{/categories/search/{id}(id=${latestArticle.category.id})}">
-                                        <span class="badge bg-primary rounded-0 rounded-start"
-                                            th:text="${latestArticle.category.name}">
-                                            Category
-                                        </span>
-                                    </a>
-                                </div>
-                                <!-- Article image and text -->
-                                <div class="row g-0">
-                                    <!-- Image -->
-                                    <div class="col-5">
-                                        <img th:if="${latestArticle.image != null}" th:src="${latestArticle.image.path}"
-                                            th:alt="'image of ' + ${latestArticle.title}"
-                                            class="img-fluid rounded-start h-100 object-fit-cover">
-                                        <img th:unless="${latestArticle.image != null}" th:src="@{/images/default.jpg}"
-                                            alt="default image" class="img-fluid rounded-start h-100 object-fit-cover">
-                                    </div>
-                                    <!-- Text -->
-                                    <div class="col-7">
-                                        <div class="card-body pb-2">
-                                            <h4 class="card-title pt-2" th:text="${latestArticle.title}">Title</h4>
-                                            <p class="card-text truncate" th:text="${latestArticle.body}">Body
-                                                truncated..</p>
-
-                                            <p class="card-text mb-1">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-user"></i>
-                                                    <span th:text="${latestArticle.user.username}">Author</span>
-                                                </small>
-                                            </p>
-                                            <p class="card-text mb-3">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-calendar"></i>
-                                                    <span
-                                                        th:text="${#temporals.format(latestArticle.publishDate, 'dd/MM/yyyy')}">Date</span>
-                                                </small>
-                                            </p>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+                                </article>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- No Articles Message -->
                     <div th:unless="${latestArticle != null}" class="col-12 col-md-6">
-                        <h4 class="border-bottom border-danger pb-2 mb-3">
+                        <h5 class="border-bottom border-danger pb-2 mb-3">
                             <i class="fas fa-newspaper"></i> Articles
-                        </h4>
+                        </h5>
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle"></i> No articles have been published yet.
                         </div>
@@ -152,148 +109,90 @@
 
                     <!-- Featured Article -->
                     <div th:if="${featuredArticle != null}" class="col-12 col-md-6 px-0 px-md-2">
-                        <h4 class="border-bottom border-danger pb-2 mb-3 mt-4 pt-2 pt-md-0 mt-md-0">
+                        <h5 class="border-bottom border-danger pb-2 mb-3 mt-4 pt-2 pt-md-0 mt-md-0">
                             <i class="fas fa-star"></i> Featured article
-                        </h4>
+                        </h5>
 
                         <!-- Card Featured Article -->
-                        <a th:href="@{/articles/detail/{id}(id=${featuredArticle.id})}" class="text-decoration-none">
-                            <!-- card sm -->
-                            <div class="card shadow container-fluid px-0 d-md-none bg-white">
-                                <!-- Article type badge -->
-                                <div class="position-absolute top-0 start-0 z-2">
-                                    <span class="badge bg-warning text-dark rounded-0 rounded-end"
-                                        th:text="${featuredArticle.articleType}">
-                                        <i class="fa-solid fa-star"></i> Type
-                                    </span>
-                                </div>
-                                <!-- Article category badge -->
-                                <div class="position-absolute top-0 end-0 z-2">
-                                    <a th:href="@{/categories/search/{id}(id=${featuredArticle.category.id})}">
-                                        <span class="badge bg-primary rounded-0 rounded-start"
-                                            th:text="${featuredArticle.category.name}">
+                        <div class="col-12 d-flex justify-content-center">
+                            <a th:href="@{/articles/detail/{id}(id=${featuredArticle.id})}"
+                                class="text-decoration-none c-white">
+                                <article class="article-card w-100">
+                                    <!-- Article type badge -->
+                                    <div class="position-absolute top-0 start-0 z-2">
+                                        <span class="badge bg-warning text-dark"
+                                            th:text="${featuredArticle.articleType}">
+                                            <i class="fa-solid fa-star"></i> Type
+                                        </span>
+                                    </div>
+                                    <!-- Article category badge -->
+                                    <div th:if="${featuredArticle.isFeatured}"
+                                        class="position-absolute top-0 end-0 z-2">
+                                        <span class="badge bg-primary " th:text="${featuredArticle.category.name}">
                                             Category
                                         </span>
-                                    </a>
-                                </div>
-                                <!-- Article image and text -->
-                                <div class="row g-0">
-                                    <!-- Title -->
-                                    <h4 class="card-title pt-4 mt-1 ms-3" th:text="${featuredArticle.title}">Title</h4>
-                                    <!-- Image -->
-                                    <div class="col-12">
-                                        <img th:if="${featuredArticle.image != null}"
-                                            th:src="${featuredArticle.image.path}"
-                                            th:alt="'image of ' + ${featuredArticle.title}"
-                                            class="img-fluid rounded-start h-100 object-fit-cover">
-                                        <img th:unless="${featuredArticle.image != null}"
-                                            th:src="@{/images/default.jpg}" alt="default image"
-                                            class="img-fluid rounded-start h-100 object-fit-cover">
                                     </div>
-                                    <!-- Text -->
-                                    <div class="col-12">
-                                        <div class="card-body">
-                                            <p class="card-text truncate" th:text="${featuredArticle.body}">Body
-                                                truncated..</p>
-                                            <p class="card-text mb-1 d-flex">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-user"></i>
+                                    <div class="row align-items-stretch">
+                                        <!-- Image -->
+                                        <div class="col-12 col-md-4 px-0">
+                                            <img th:if="${featuredArticle.image != null}"
+                                                th:src="${featuredArticle.image.path}"
+                                                th:alt="'image of ' + ${featuredArticle.title}"
+                                                class="img-fluid h-100 object-fit-cover">
+                                            <img th:unless="${featuredArticle.image != null}"
+                                                th:src="@{/images/default.jpg}" alt="default image"
+                                                class="img-fluid h-100 object-fit-cover">
+                                        </div>
+                                        <!-- Text -->
+                                        <div
+                                            class="col-12 col-md-7  d-flex justify-content-between align-items-start flex-column py-3 ps-4">
+                                            <h5 class="card-title" th:text="${featuredArticle.title}">Article Title</h5>
+                                            <p class="card-text truncate mb-3" th:text="${featuredArticle.body}">Article
+                                                Body</p>
+
+                                            <!-- Category and Author info -->
+                                            <div class="mb-2">
+                                                <small class="me-2" th:if="${featuredArticle.publishDate != null}">
+                                                    <i class="fas fa-calendar me-1"></i>
+                                                    <span th:text="${featuredArticle.publishDate}">Date</span>
+                                                </small>
+                                                <cite class="card-text">
+                                                    <i class="fas fa-user me-1"></i>
                                                     <span th:text="${featuredArticle.user.username}">Author</span>
-                                                </small>
-                                                <small class="text-muted ms-auto">
-                                                    <i class="fas fa-calendar"></i>
-                                                    <span
-                                                        th:text="${#temporals.format(featuredArticle.publishDate, 'dd/MM/yyyy')}">Date</span>
-                                                </small>
-                                            </p>
+                                                </cite>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- card md lg -->
-                            <div class="card shadow container-fluid px-0 d-none d-md-block bg-white">
-                                <!-- Article type badge -->
-                                <div class="position-absolute top-0 start-0 z-2">
-                                    <span class="badge bg-warning text-dark rounded-0 rounded-end"
-                                        th:text="${featuredArticle.articleType}">
-                                        <i class="fa-solid fa-star"></i> Type
-                                    </span>
-                                </div>
-                                <!-- Article category badge -->
-                                <div class="position-absolute top-0 end-0 z-2">
-                                    <a th:href="@{/categories/search/{id}(id=${featuredArticle.category.id})}">
-                                        <span class="badge bg-primary rounded-0 rounded-start"
-                                            th:text="${featuredArticle.category.name}">
-                                            Category
-                                        </span>
-                                    </a>
-                                </div>
-                                <!-- Article image and text -->
-                                <div class="row g-0">
-                                    <!-- Image -->
-                                    <div class="col-5">
-                                        <img th:if="${featuredArticle.image != null}"
-                                            th:src="${featuredArticle.image.path}"
-                                            th:alt="'image of ' + ${featuredArticle.title}"
-                                            class="img-fluid rounded-start h-100 object-fit-cover">
-                                        <img th:unless="${featuredArticle.image != null}"
-                                            th:src="@{/images/default.jpg}" alt="default image"
-                                            class="img-fluid rounded-start h-100 object-fit-cover">
-                                    </div>
-                                    <!-- Text -->
-                                    <div class="col-7">
-                                        <div class="card-body pb-2">
-                                            <h4 class="card-title pt-2" th:text="${featuredArticle.title}">Title</h4>
-                                            <p class="card-text truncate" th:text="${featuredArticle.body}">Body
-                                                truncated..</p>
-                                            <p class="card-text mb-1">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-user"></i>
-                                                    <span th:text="${featuredArticle.user.username}">Author</span>
-                                                </small>
-                                            </p>
-                                            <p class="card-text mb-3">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-calendar"></i>
-                                                    <span
-                                                        th:text="${#temporals.format(featuredArticle.publishDate, 'dd/MM/yyyy')}">Date</span>
-                                                </small>
-                                            </p>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+                                </article>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- Serie A Complete Standings -->
-                    <div th:if="${fullStanding != null and !fullStanding.isEmpty()}"
-                        class="col-12 px-0 px-md-2 mt-3 pt-2">
-                        <h4 class="border-bottom border-danger pb-2 mb-3">
+                    <div th:if="${fullStanding != null and !fullStanding.isEmpty()}" class="col-12 px-0 px-md-2">
+                        <h5 class="border-bottom border-danger pb-2 mb-3">
                             <i class="fas fa-list-ol"></i> Standing Serie A
-                        </h4>
+                        </h5>
 
                         <!-- Card Full Standings -->
                         <div class="card shadow container-fluid px-0 bg-transparent">
                             <div class="card-body p-0">
                                 <div class="standings-scroll-container" id="standingsContainer">
-                                    <table class="table table-dark table-sm mb-0">
+                                    <table class="table table-striped table-dark table-sm mb-0">
                                         <thead class="sticky-top">
                                             <tr class="text-center bg-dark">
-                                                <th class="position-col">#</th>
-                                                <th class="crest-col"></th>
-                                                <th class="team-col text-start">Team</th>
-                                                <th class="stats-col">P</th>
-                                                <th class="stats-col">W</th>
-                                                <th class="stats-col">D</th>
-                                                <th class="stats-col">L</th>
-                                                <th class="stats-col">GF</th>
-                                                <th class="stats-col">GS</th>
-                                                <th class="stats-col">GD</th>
-                                                <th class="stats-col">Pts</th>
-                                                <th class="form-col">Form</th>
+                                                <th>#</th>
+                                                <th></th>
+                                                <th class="text-start">Team</th>
+                                                <th>P</th>
+                                                <th>W</th>
+                                                <th>D</th>
+                                                <th>L</th>
+                                                <th>GF</th>
+                                                <th>GS</th>
+                                                <th>GD</th>
+                                                <th>Pts</th>
+                                                <th>Form</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -301,39 +200,38 @@
                                                 th:class="${team.isMilan() ? 'table-danger fw-bold' : ''}"
                                                 th:style="${team.position <= 4 ? 'border-left: 4px solid #28a745;' : (team.position == 5 ? 'border-left: 4px solid #ffc107;' : (team.position == 6 ? 'border-left: 4px solid #17a2b8;' : (team.position >= 18 ? 'border-left: 4px solid #dc3545;' : '')))}"
                                                 class="text-center">
-                                                <td th:text="${team.position}" class="position-col">[[${team.position}]]
+                                                <td th:text="${team.position}" class="text-center">[[${team.position}]]
                                                 </td>
-                                                <td class="crest-col text-center">
+                                                <td class="text-center">
                                                     <img th:if="${team.teamCrest != null and !team.teamCrest.isEmpty()}"
                                                         th:src="${team.teamCrest}" th:alt="${team.teamName + ' crest'}"
-                                                        class="team-crest"
-                                                        style="width: 20px; height: 20px; object-fit: contain;">
+                                                        class="team-crest">
                                                     <span
-                                                        th:unless="${team.teamCrest != null and !team.teamCrest.isEmpty()}"
-                                                        class="text-muted">-</span>
+                                                        th:unless="${team.teamCrest != null and !team.teamCrest.isEmpty()}">-</span>
                                                 </td>
-                                                <td class="team-col text-start">
+                                                <td class="text-start">
                                                     <span th:if="${team.isMilan()}" class="me-1">🔴⚫</span>
                                                     <span th:text="${team.teamName}">Team Name</span>
                                                 </td>
-                                                <td th:text="${team.playedGames}" class="stats-col text-center">10</td>
-                                                <td th:text="${team.won}" class="stats-col text-center">6</td>
-                                                <td th:text="${team.draw}" class="stats-col text-center">2</td>
-                                                <td th:text="${team.lost}" class="stats-col text-center">2</td>
-                                                <td th:text="${team.goalsFor}" class="stats-col text-center">19</td>
-                                                <td th:text="${team.goalsAgainst}" class="stats-col text-center">12</td>
+                                                <td th:text="${team.playedGames}" class="text-center">10</td>
+                                                <td th:text="${team.won}" class="text-center">6</td>
+                                                <td th:text="${team.draw}" class="text-center">2</td>
+                                                <td th:text="${team.lost}" class="text-center">2</td>
+                                                <td th:text="${team.goalsFor}" class="text-center">19</td>
+                                                <td th:text="${team.goalsAgainst}" class="text-center">12</td>
                                                 <td th:text="${team.goalDifference > 0 ? '+' + team.goalDifference : team.goalDifference}"
-                                                    class="stats-col text-center"
+                                                    class="text-center"
                                                     th:classappend="${team.goalDifference > 0 ? 'text-success' : (team.goalDifference < 0 ? 'text-danger' : '')}">
                                                     +7</td>
-                                                <td th:text="${team.points}" class="stats-col text-center fw-bold">20</td>
-                                                <td class="form-col text-center">
+                                                <td th:text="${team.points}" class="text-center fw-bold">20
+                                                </td>
+                                                <td class="text-center">
                                                     <span th:if="${team.form != null and !team.form.isEmpty()}"
                                                         th:each="result, iterStat : ${#strings.listSplit(team.form, '')}"
                                                         th:class="${result == 'W' ? 'badge bg-success me-1' : (result == 'D' ? 'badge bg-warning text-dark me-1' : (result == 'L' ? 'badge bg-danger me-1' : 'badge bg-secondary me-1'))}"
                                                         th:text="${result}" style="font-size: 0.7em;">W</span>
-                                                    <span th:unless="${team.form != null and !team.form.isEmpty()}"
-                                                        class="text-muted">-</span>
+                                                    <span
+                                                        th:unless="${team.form != null and !team.form.isEmpty()}">-</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -343,10 +241,18 @@
                                 <!-- Legend -->
                                 <div class="mt-2 p-2 bg-dark rounded">
                                     <small class="c-white">
-                                        <span style="color: #28a745;">■</span> Champions League (1-4) |
-                                        <span style="color: #ffc107;">■</span> Europa League (5) |
-                                        <span style="color: #17a2b8;">■</span> Conference League (6) |
-                                        <span style="color: #dc3545;">■</span> Retrocessione (18-20)
+                                        <span class="champions">
+                                            <i class="fa-solid fa-square"></i>
+                                        </span> Champions League (1°-4°) |
+                                        <span class="europe">
+                                            <i class="fa-solid fa-square"></i>
+                                        </span> Europa League (5°) |
+                                        <span class="conference">
+                                            <i class="fa-solid fa-square"></i>
+                                        </span> Conference League (6°) |
+                                        <span class="relegation">
+                                            <i class="fa-solid fa-square"></i>
+                                        </span> Retrocessione (18°-20°)
                                     </small>
                                 </div>
 
@@ -369,12 +275,11 @@
             </div>
 
 
-
             <!-- Right Column - Match Info -->
-            <div class="col-12 col-md-4 pt-5 px-0 px-md-2">
-                <h4 class="border-bottom border-danger pb-2 mb-3">
+            <div class="col-12 col-md-4 pt-2 px-0 px-md-2">
+                <h5 class="border-bottom border-danger pb-2 mb-3">
                     <i class="fas fa-futbol"></i> Matches and stats
-                </h4>
+                </h5>
 
                 <!-- Last Match -->
                 <div th:if="${lastMatch != null}" class="match-card">
@@ -449,7 +354,7 @@
                 </div>
 
                 <!-- Milan Stats -->
-                <div class="match-card mt-5">
+                <div class="match-card">
                     <div class="card-body">
                         <div th:if="${milanStanding != null}" class="c-white">
                             <h5 class="card-title mb-3 text-center">

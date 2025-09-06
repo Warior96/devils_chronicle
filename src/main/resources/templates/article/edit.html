@@ -3,168 +3,234 @@
 
 <head th:insert="~{index :: head}"></head>
 
-<body>
+<body class="text-white bg-black">
     <div th:insert="~{index :: navbar}"></div>
 
-
     <div class="min-vh-100">
-        <div class="container">
-            <div class="row justify-content-center my-5">
 
-                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
-                    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-                        <h1 th:text="${title}">Edit Article</h1>
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <h1>
+                            <i class="fas fa-edit me-3"></i>
+                            <span th:text="${title}">Edit Article</span>
+                        </h1>
+                        <p class="lead mb-0">
+                            <i class="fa-solid fa-share-nodes me-2"></i>
+                            Update your passion for AC Milan with our community
+                        </p>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="alert alert-warning d-flex align-items-center col-7" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <div>
-                        <strong>Notice: </strong>
-                        If you update any of the article fields, it will be sent back for the
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Warning Notice -->
+                <div class="col-12 col-xl-8 mb-4">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Notice:</strong> If you update any of the article fields, it will be sent back for
                         review.
                     </div>
                 </div>
 
-                <div class="col-7 mb-5">
-                    <form th:action="@{/articles/update/{id}(id=${article.id})}" method="POST" th:object="${article}"
-                        enctype="multipart/form-data">
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="articleTitle" class="form-label">Title</label>
-                                <input id="articleTitle" type="text" class="form-control" th:field="*{title}"
-                                    placeholder="Enter article title">
-                                <p th:errors="*{title}" class="text-danger" th:if="${#fields.hasErrors('title')}"></p>
-                            </div>
-                            <div class="col">
-                                <label for="subtitle" class="form-label">Subtitle</label>
-                                <input id="subtitle" type="text" class="form-control" th:field="*{subtitle}"
-                                    placeholder="Enter article subtitle">
-                                <p th:errors="*{subtitle}" class="text-danger" th:if="${#fields.hasErrors('subtitle')}">
-                                </p>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="body" class="form-label">Article:</label>
-                            <input id="body" type="text" class="form-control" th:field="*{body}"
-                                placeholder="Enter article description">
-                            <p th:errors="*{body}" class="text-danger" th:if="${#fields.hasErrors('body')}"></p>
-                        </div>
-                        <div class="mb-3">
-                            <label for="date" class="form-label">Publish Date (yyyy-mm-dd)</label>
-                            <input id="date" type="date" class="form-control" th:field="*{publishDate}"
-                                placeholder="Enter article publish date yyyy-mm-dd">
-                            <p th:errors="*{publishDate}" class="text-danger"
-                                th:if="${#fields.hasErrors('publishDate')}"></p>
-                        </div>
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select id="category" th:field="*{category}" class="form-select">
-                                <option th:each="category:${categories}" th:value="${category.id}"
-                                    th:text="${category.name}"></option>
-                                <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}">
-                                </p>
-                            </select>
-                        </div>
+                <div class="col-12 col-xl-8">
+                    <div class="form-container">
+                        <form th:action="@{/articles/update/{id}(id=${article.id})}" method="POST"
+                            th:object="${article}" enctype="multipart/form-data">
 
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" th:field="*{isFeatured}"
-                                    id="isFeatured">
-                                <label class="form-check-label" for="isFeatured">
-                                    Mark as Featured Article
+                            <!-- Article Title | Subtitle -->
+                            <div class="row mb-4">
+                                <div class="col-12 col-md-6">
+                                    <label for="articleTitle" class="form-label">
+                                        <i class="fas fa-heading me-1"></i>Title
+                                    </label>
+                                    <input id="articleTitle" type="text" class="form-control" th:field="*{title}"
+                                        placeholder="Enter article title">
+                                    <p th:errors="*{title}" class="text-danger mt-1"
+                                        th:if="${#fields.hasErrors('title')}"></p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="subtitle" class="form-label">
+                                        <i class="fas fa-align-left me-1"></i>Subtitle
+                                    </label>
+                                    <input id="subtitle" type="text" class="form-control" th:field="*{subtitle}"
+                                        placeholder="Enter article subtitle">
+                                    <p th:errors="*{subtitle}" class="text-danger mt-1"
+                                        th:if="${#fields.hasErrors('subtitle')}"></p>
+                                </div>
+                            </div>
+
+                            <!-- Article Body -->
+                            <div class="mb-4">
+                                <label for="body" class="form-label">
+                                    <i class="fas fa-file-text me-1"></i>Article Content
                                 </label>
+                                <textarea id="body" class="form-control" th:field="*{body}" rows="6"
+                                    placeholder="Enter article description"></textarea>
+                                <p th:errors="*{body}" class="text-danger mt-1" th:if="${#fields.hasErrors('body')}">
+                                </p>
                             </div>
-                            <small class="form-text text-muted fs-7">Featured articles will be highlighted on the
-                                homepage</small>
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="articleType" class="form-label">Article Type</label>
-                            <select id="articleType" th:field="*{articleType}" class="form-select">
-                                <option value="">-- Select Type --</option>
-                                <option value="Match Report">Match Report</option>
-                                <option value="Interview">Interview</option>
-                                <option value="Analysis">Analysis</option>
-                                <option value="News">News</option>
-                                <option value="Opinion">Opinion</option>
-                                <option value="Transfer">Transfer</option>
-                                <option value="Youth">Youth</option>
-                                <option value="History">History</option>
-                            </select>
-                        </div>
+                            <!-- Publish Date -->
+                            <div class="mb-4">
+                                <label for="date" class="form-label">
+                                    <i class="fas fa-calendar-alt me-1"></i>Publish Date
+                                </label>
+                                <input id="date" type="date" class="form-control" th:field="*{publishDate}">
+                                <p th:errors="*{publishDate}" class="text-danger mt-1"
+                                    th:if="${#fields.hasErrors('publishDate')}"></p>
+                            </div>
 
-                        <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
-                            <label for="oldImage" class="form-label">Cover of article</label>
-                            <img th:src="${article.image.path}" th:alt="'image of ' + ${article.title}" id="oldImage">
-                        </div>
-                        <div class="mb-3" th:unless="${article.image != null}">
-                            <label for="noImage" class="form-label">Cover of article</label>
-                            <p>No image uploaded</p>
-                        </div>
-                        <div class="mb-3">
-                            <label for="image" class="form-label">New cover</label>
-                            <input type="file" name="file" id="image" class="form-control">
-                        </div>
+                            <!-- Category -->
+                            <div class="mb-4">
+                                <label for="category" class="form-label">
+                                    <i class="fas fa-folder me-1"></i>Category
+                                </label>
+                                <select id="category" th:field="*{category}" class="form-select">
+                                    <option th:each="category:${categories}" th:value="${category.id}"
+                                        th:text="${category.name}"></option>
+                                </select>
+                                <p th:errors="*{category}" class="text-danger mt-1"
+                                    th:if="${#fields.hasErrors('category')}"></p>
+                            </div>
 
+                            <!-- Is Featured -->
+                            <div class="mb-4">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" th:field="*{isFeatured}"
+                                        id="isFeatured">
+                                    <label class="form-check-label" for="isFeatured">
+                                        <i class="fas fa-star me-1 c-red"></i>Mark as Featured Article
+                                    </label>
+                                </div>
+                                <small class="form-text ">Featured articles will be highlighted on the
+                                    homepage</small>
+                            </div>
 
-                        <div th:if="${article.galleryImages != null and !article.galleryImages.isEmpty()}"
-                            class="col-12 col-md-5">
-                            <label for="galleryImages" class="form-label">Gallery of article</label>
-                            <div id="galleryImages" class="carousel slide">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item"
-                                        th:each="galleryImage, iterStat : ${article.galleryImages}"
-                                        th:classappend="${iterStat.index == 0} ? ' active'">
-                                        <img th:src="${galleryImage.path}" th:alt="|gallery image of ${article.title}|"
-                                            class="d-block w-100">
+                            <!-- Article Type -->
+                            <div class="mb-4">
+                                <label for="articleType" class="form-label">
+                                    <i class="fas fa-tag me-1"></i>Article Type
+                                </label>
+                                <select id="articleType" th:field="*{articleType}" class="form-select">
+                                    <option value="">-- Select Type --</option>
+                                    <option value="Match Report">⚽ Match Report</option>
+                                    <option value="Interview">🎤 Interview</option>
+                                    <option value="Analysis">📊 Analysis</option>
+                                    <option value="News">📰 News</option>
+                                    <option value="Opinion">💭 Opinion</option>
+                                    <option value="Transfer">🔄 Transfer</option>
+                                    <option value="Youth">👥 Youth</option>
+                                    <option value="History">📚 History</option>
+                                </select>
+                            </div>
+
+                            <!-- Current Cover Image -->
+                            <div class="mb-4">
+                                <div th:if="${article.image != null}">
+                                    <label class="form-label">
+                                        <i class="fas fa-image me-1"></i>Current Cover Image
+                                    </label>
+                                    <div class="current-image-container mb-3">
+                                        <img th:src="${article.image.path}" th:alt="'image of ' + ${article.title}"
+                                            class="img-fluid rounded edit-cover" style="max-height: 200px;">
                                     </div>
                                 </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#galleryImages"
-                                    data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#galleryImages"
-                                    data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
+                                <div th:unless="${article.image != null}">
+                                    <label class="form-label">
+                                        <i class="fas fa-image me-1"></i>Current Cover Image
+                                    </label>
+                                    <p class=" mb-3">No image uploaded</p>
+                                </div>
+
+                                <label for="image" class="form-label">
+                                    <i class="fas fa-upload me-1"></i>Update Cover Image
+                                </label>
+                                <input type="file" name="file" id="image" class="form-control" accept=".jpg,.jpeg,.png">
                             </div>
-                        </div>
-                        <div class="mb-3"
-                            th:unless="${article.galleryImages != null and !article.galleryImages.isEmpty()}">
-                            <label for="noGallery" class="form-label">Gallery of article</label>
-                            <p>No image uploaded</p>
-                        </div>
-                        <div class="mb-3">
-                            <label for="oldGalleryImages" class="form-label">Gallery images
-                                <small>(optional)</small></label>
-                            <input type="file" name="galleryFiles" id="oldGalleryImages" class="form-control" multiple>
-                        </div>
 
-                        <div class="alert alert-warning d-flex align-items-center" role="alert">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            <div>
-                                <strong>Notice: </strong>
-                                If you update any of the article fields, it will be sent back for the review.
+                            <!-- Current Gallery -->
+                            <div class="mb-4">
+                                <div th:if="${article.galleryImages != null and !article.galleryImages.isEmpty()}">
+                                    <label class="form-label">
+                                        <i class="fas fa-images me-1"></i>Current Gallery
+                                    </label>
+
+                                    <!-- Single Image Display -->
+                                    <div th:if="${article.galleryImages.size() == 1}" class="mb-3">
+                                        <div class="current-image-container">
+                                            <img th:src="${article.galleryImages[0].path}"
+                                                th:alt="|gallery image of ${article.title}|" class="img-fluid rounded"
+                                                style="max-height: 300px; width: auto;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Multiple Images Swiper Carousel -->
+                                    <div th:if="${article.galleryImages.size() > 1}"
+                                        class="gallery-swiper-container mb-3 w-100">
+                                        <swiper-container class="gallery-swiper" space-between="60"
+                                            slides-per-view="2.2" pagination="true" pagination-clickable="true"
+                                            navigation="true" centered-slides="true" grab-cursor="true">
+                                            <swiper-slide th:each="galleryImage : ${article.galleryImages}">
+                                                <div class="gallery-slide-content">
+                                                    <img th:src="${galleryImage.path}"
+                                                        th:alt="|gallery image of ${article.title}|"
+                                                        class="gallery-image">
+                                                </div>
+                                            </swiper-slide>
+                                        </swiper-container>
+                                    </div>
+                                </div>
+                                <div th:unless="${article.galleryImages != null and !article.galleryImages.isEmpty()}">
+                                    <label class="form-label">
+                                        <i class="fas fa-images me-1"></i>Current Gallery
+                                    </label>
+                                    <div class="text-center p-4 border rounded mb-3">
+                                        <i class="fas fa-images fa-3x  mb-2"></i>
+                                        <p class=" mb-0">No gallery images uploaded</p>
+                                    </div>
+                                </div>
+
+                                <label for="oldGalleryImages" class="form-label">
+                                    <i class="fas fa-upload me-1"></i>Update Gallery Images
+                                    <small class="">(optional)</small>
+                                </label>
+                                <input type="file" name="galleryFiles" id="oldGalleryImages" class="form-control"
+                                    multiple accept=".jpg,.jpeg,.png">
                             </div>
-                        </div>
 
+                            <!-- Final Warning -->
+                            <div class="alert alert-warning mb-4">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Final Notice:</strong> Any changes made will require re-approval before
+                                publication.
+                            </div>
 
-                        <button type="submit" class="btn btn-warning">Update article</button>
-                        <button type="reset" class="btn btn-outline-danger">Reset form</button>
-                    </form>
+                            <!-- Action Buttons -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-warning btn-lg px-5">
+                                    <i class="fas fa-save me-2"></i>Update Article
+                                </button>
+                                <button type="reset" class="btn btn-outline-danger btn-lg px-5 ms-3">
+                                    <i class="fas fa-undo me-2"></i>Reset Form
+                                </button>
+                                <a th:href="@{/articles/detail/{id}(id=${article.id})}"
+                                    class="btn btn-secondary btn-lg px-5 ms-3">
+                                    <i class="fas fa-eye me-2"></i>View Article
+                                </a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-
     <div th:insert="~{index :: footer}"></div>
-
-
 
     <!-- script esterno + bootstrap -->
     <div th:replace="~{index :: script}"></div>
