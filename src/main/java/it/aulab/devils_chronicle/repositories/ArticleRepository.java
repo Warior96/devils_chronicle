@@ -42,8 +42,8 @@ public interface ArticleRepository extends ListCrudRepository<Article, Long> {
     // Secondo articolo accettato (serve se non ci sono featured)
     List<Article> findTop2ByIsAcceptedTrueOrderByPublishDateDesc();
 
-    // Trova gli ultimi 4 articoli accettati
-    List<Article> findTop4ByIsAcceptedTrueOrderByPublishDateDesc();
+    // Trova gli ultimi 3 articoli accettati
+    List<Article> findTop3ByIsAcceptedTrueOrderByPublishDateDesc();
 
     // Trova articoli per tipo
     List<Article> findByArticleTypeAndIsAcceptedTrue(String articleType);

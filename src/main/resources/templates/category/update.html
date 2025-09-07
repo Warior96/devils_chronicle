@@ -6,40 +6,150 @@
 <body>
     <div th:insert="~{index :: navbar}"></div>
 
-
-    <div class="vh-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
-                    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-                        <h1 th:text="${title}">Update Category</h1>
+    <div class="min-vh-100">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <h1>
+                            <i class="fas fa-edit me-3"></i>
+                            <span th:text="${title}">Update Category</span>
+                        </h1>
+                        <p class="lead mb-0">
+                            <i class="fa-solid fa-pencil-alt me-2"></i>
+                            Modify category information
+                        </p>
                     </div>
                 </div>
-                <div class="col-8 my-5">
-                    <form th:action="@{/categories/update/{id}(id=${category.id})}" method="POST"
-                        th:object="${category}">
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="name" class="form-label">Name category</label>
-                                <input id="name" type="text" class="form-control" th:field="*{name}"
-                                    placeholder="Enter category name">
-                                <p th:errors="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></p>
-                            </div>
-                            <button type="submit" class="btn btn-success">Update category</button>
+            </div>
+        </div>
+
+        <div class="container pt-2">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6">
+                    <div class="enhanced-form-container">
+                        
+                        <!-- Form Header -->
+                        <div class="form-header">
+                            <h2>Edit Category</h2>
+                            <p>Update the category name and information</p>
                         </div>
-                    </form>
+
+                        <!-- Current Category Info -->
+                        <div class="request-info-card mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-info-circle fa-lg c-red me-3"></i>
+                                <h3>Current Category</h3>
+                            </div>
+                            <div class="ms-4">
+                                <p>
+                                    <strong>Current Name:</strong>
+                                    <span class="badge bg-primary fs-6 px-3 py-2 ms-2" 
+                                          th:text="${category.name}">Category Name</span>
+                                </p>
+                                <small class="text-white-50">
+                                    You are editing the category shown above
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Category Update Form -->
+                        <form th:action="@{/categories/update/{id}(id=${category.id})}" method="POST" th:object="${category}">
+                            
+                            <!-- Category Name -->
+                            <div class="mb-4">
+                                <label for="name" class="enhanced-form-label">
+                                    <i class="fas fa-tag me-2"></i>New Category Name
+                                </label>
+                                <input id="name" type="text" class="form-control enhanced-form-control" 
+                                       th:field="*{name}" placeholder="Enter new category name"
+                                       required>
+                                <p th:errors="*{name}" class="text-danger mt-2" 
+                                   th:if="${#fields.hasErrors('name')}"></p>
+                                <div class="form-text mt-2">
+                                    Choose a clear, descriptive name that will help users find relevant articles
+                                </div>
+                            </div>
+
+                            <!-- Warning Notice -->
+                            <div class="alert alert-warning mb-4">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Important Notice:
+                                </h6>
+                                <p class="mb-2">
+                                    Changing the category name will affect all articles currently assigned to this category.
+                                </p>
+                                <small>
+                                    <i class="fas fa-articles me-1"></i>
+                                    Articles using this category will automatically display the new name.
+                                </small>
+                            </div>
+
+                            <!-- Category Usage Stats (if available) -->
+                            <div class="request-info-card mb-4" th:if="${articleCount != null}">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-chart-bar fa-lg c-red me-3"></i>
+                                    <h3>Category Usage</h3>
+                                </div>
+                                <div class="ms-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="text-center">
+                                            <i class="fas fa-newspaper fa-2x c-red"></i>
+                                            <div class="mt-2">
+                                                <strong class="fs-4" th:text="${articleCount != null ? articleCount : '0'}">0</strong>
+                                                <br>
+                                                <small class="text-white-50">Articles</small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="mb-1">
+                                                <strong th:text="${articleCount != null ? articleCount : '0'}">0</strong>
+                                                articles are currently using this category
+                                            </p>
+                                            <small class="text-white-50">
+                                                All these articles will reflect the category name change
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Actions -->
+                            <div class="action-buttons-container">
+                                <button type="submit" class="btn btn-warning btn-lg px-5">
+                                    <i class="fas fa-save me-2"></i>
+                                    Update Category
+                                </button>
+                                <a href="javascript:history.back()" class="btn btn-secondary btn-lg px-5 ms-3">
+                                    <i class="fas fa-times me-2"></i>
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+
+                        <!-- Additional Actions -->
+                        <div class="mt-4 pt-4 border-top border-secondary">
+                            <div class="text-center">
+                                <h6 class="text-white-50 mb-3">Need to do something else?</h6>
+                                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                    <a href="/categories" class="btn btn-outline-primary">
+                                        <i class="fas fa-list me-1"></i>View All Categories
+                                    </a>
+                                    <a href="/categories/create" class="btn btn-outline-success">
+                                        <i class="fas fa-plus me-1"></i>Create New Category
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
     <div th:insert="~{index :: footer}"></div>
-
-
-    
-    <!-- script esterno + bootstrap -->
     <div th:replace="~{index :: script}"></div>
 </body>
-
 </html>

@@ -31,27 +31,34 @@ public class SecurityConfig {
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(
                                                 (authorize) -> authorize
-                                                                .requestMatchers("/css/**", "/js/**", "/images/**")
+                                                                // Static resources - permit all
+                                                                .requestMatchers("/css/**", "/js/**", "/images/**",
+                                                                                "/static/**")
                                                                 .permitAll()
                                                                 .requestMatchers("/register/**").permitAll()
+                                                                // Admin routes - only for ADMIN role
                                                                 .requestMatchers("/admin/dashboard",
                                                                                 "/categories/create",
                                                                                 "/categories/edit/{id}",
                                                                                 "/categories/delete/{id}")
                                                                 .hasRole("ADMIN")
+                                                                // Revisor routes - only for REVISOR role
                                                                 .requestMatchers("/revisor/dashboard",
                                                                                 "/revisor/detail/{id}", "/accept")
                                                                 .hasRole("REVISOR")
+                                                                // Writer routes - only for WRITER role
                                                                 .requestMatchers("/writer/dashboard",
                                                                                 "/articles/create",
                                                                                 "/articles/update/{id}",
                                                                                 "/articles/delete/{id}")
                                                                 .hasRole("WRITER")
+                                                                // Public routes - permit all
                                                                 .requestMatchers("/register", "/", "/articles",
                                                                                 "/images/**", "/articles/detail/**",
                                                                                 "/categories/search/{id}",
                                                                                 "/search/{id}", "/articles/search")
                                                                 .permitAll()
+                                                                // Any other request - authenticated users
                                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form.loginPage("/login")
                                                 .loginProcessingUrl("/login")

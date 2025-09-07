@@ -6,38 +6,107 @@
 <body>
     <div th:insert="~{index :: navbar}"></div>
 
-
-    <div class="vh-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
-                    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-                        <h1 th:text="${title}">Create Category</h1>
+    <div class="min-vh-100">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <h1>
+                            <i class="fas fa-plus-circle me-3"></i>
+                            <span th:text="${title}">Create Category</span>
+                        </h1>
+                        <p class="lead mb-0">
+                            <i class="fa-solid fa-layer-group me-2"></i>
+                            Add a new category to organize articles better
+                        </p>
                     </div>
                 </div>
-                <div class="col-8 my-5">
-                    <form th:action="@{'/categories'}" method="POST" th:object="${category}">
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="name" class="form-label">Name category</label>
-                                <input id="name" type="text" class="form-control" th:field="*{name}"
-                                    placeholder="Enter category name">
-                                <p th:errors="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></p>
-                            </div>
-                            <button type="submit" class="btn btn-success">Create category</button>
+            </div>
+        </div>
+
+        <div class="container pt-2">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6">
+                    <div class="enhanced-form-container">
+
+                        <!-- Form Header -->
+                        <div class="form-header">
+                            <h2>New Category</h2>
+                            <p>Create a new category to help organize and classify articles</p>
                         </div>
-                    </form>
+
+                        <!-- Category Creation Form -->
+                        <form th:action="@{'/categories'}" method="POST" th:object="${category}">
+
+                            <!-- Category Name -->
+                            <div class="mb-4">
+                                <label for="name" class="enhanced-form-label">
+                                    <i class="fas fa-tag me-2"></i>Category Name
+                                </label>
+                                <input id="name" type="text" class="form-control enhanced-form-control"
+                                    th:field="*{name}"
+                                    placeholder="Enter category name (e.g., Match Reports, Transfer News)" required>
+                                <p th:errors="*{name}" class="text-danger mt-2" th:if="${#fields.hasErrors('name')}">
+                                </p>
+                                <div class="form-text mt-2">
+                                    Choose a clear, descriptive name that will help users find relevant articles
+                                </div>
+                            </div>
+
+                            <!-- Current Categories Display -->
+                            <div class="request-info-card mb-4" th:if="${categories != null and !categories.isEmpty()}">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-list fa-lg c-red me-3"></i>
+                                    <h3>Existing Categories</h3>
+                                </div>
+                                <div class="ms-4">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span th:each="existingCategory : ${categories}"
+                                            class="badge bg-secondary fs-6 px-3 py-2"
+                                            th:text="${existingCategory.name}">Category</span>
+                                    </div>
+                                    <small class="text-white-50 mt-2 d-block">
+                                        Make sure your new category doesn't duplicate existing ones
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Submit Actions -->
+                            <div class="action-buttons-container">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fas fa-plus-circle me-2"></i>
+                                    Create Category
+                                </button>
+                                <a href="javascript:history.back()" class="btn btn-secondary btn-lg px-5 ms-3">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Go Back
+                                </a>
+                            </div>
+                        </form>
+
+                        <!-- Additional Tips -->
+                        <div class="mt-4 pt-4 border-top border-secondary">
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Category Guidelines:
+                                </h6>
+                                <ul class="mb-0 mt-2">
+                                    <li>Use clear, descriptive names</li>
+                                    <li>Keep names concise (2-3 words max)</li>
+                                    <li>Avoid special characters</li>
+                                    <li>Consider how it will appear in navigation menus</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
     <div th:insert="~{index :: footer}"></div>
-
-
-
-    <!-- script esterno + bootstrap -->
     <div th:replace="~{index :: script}"></div>
 </body>
 

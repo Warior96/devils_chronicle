@@ -194,7 +194,7 @@
                                             <td th:text="${category.name}"></td>
                                             <td>
                                                 <span class="badge bg-info"
-                                                    th:text="${category.numeberOfArticles ?: 0}"></span>
+                                                    th:text="${category.numberOfArticles ?: 0}"></span>
                                             </td>
                                             <td>
                                                 <a th:href="@{/categories/search/{id}(id=${category.id})}"

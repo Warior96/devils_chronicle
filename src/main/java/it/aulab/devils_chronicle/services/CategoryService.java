@@ -2,7 +2,9 @@ package it.aulab.devils_chronicle.services;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,17 @@ public class CategoryService implements CrudService<CategoryDto, Category, Long>
     public List<CategoryDto> readAll() {
 
         List<CategoryDto> dtos = new ArrayList<CategoryDto>();
+        List<Object[]> counts = categoryRepository.findCategoryArticleCounts();
+        Map<Long, Integer> categoryCounts = new HashMap<>();
+        for (Object[] row : counts) {
+            Long categoryId = (Long) row[0];
+            Long count = (Long) row[1];
+            categoryCounts.put(categoryId, count.intValue());
+        }
         for (Category category : categoryRepository.findAll()) {
-            dtos.add(modelMapper.map(category, CategoryDto.class));
+            CategoryDto dto = modelMapper.map(category, CategoryDto.class);
+            dto.setNumberOfArticles(categoryCounts.getOrDefault(category.getId(), 0));
+            dtos.add(dto);
         }
         return dtos;
 

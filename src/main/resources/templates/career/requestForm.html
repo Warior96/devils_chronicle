@@ -6,47 +6,140 @@
 <body>
     <div th:insert="~{index :: navbar}"></div>
 
-
-    <div class="vh-100">
-        <div class="container mt-5">
-            <div class="row justify-content-center">
-
-                <div class="col-12 my-5 justify-content-between align-items-center">
-                    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-                        <h1 th:text="${title}">request</h1>
+    <div class="min-vh-100">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <h1>
+                            <i class="fas fa-handshake me-3"></i>
+                            <span th:text="${title}">Career Request</span>
+                        </h1>
+                        <p class="lead mb-0">
+                            <i class="fa-solid fa-star me-2"></i>
+                            Join the Devil's Chronicle team and share your passion for AC Milan
+                        </p>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-7 my-5">
-                    <!-- enctype="multipart/form-data" -->
-                    <form th:action="@{/operations/career/request/save}" method="POST" th:object="${careerRequest}">
-                        <div class="mb-3">
-                            <label for="body" class="form-label">Reason for request:</label>
-                            <textarea id="body" class="form-control" th:field="*{body}"
-                                placeholder="Enter reason"></textarea>
+        <div class="container pt-2">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <div class="form-container">
+
+                        <!-- Form Header -->
+                        <div class="form-header">
+                            <h2>Work with Us</h2>
+                            <p class="mb-4">Tell us why you want to join our team and which role interests you most</p>
                         </div>
-                        <div class="mb-3">
-                            <label for="role" class="form-label">For which role?</label>
-                            <select id="role" th:field="*{role}" class="form-select">
-                                <option th:each="role:${roles}" th:value="${role.id}"
-                                    th:text="${#strings.substring(role.name, 5)}"></option>
-                            </select>
+
+                        <!-- Career Request Form -->
+                        <form th:action="@{/operations/career/request/save}" method="POST" th:object="${careerRequest}">
+
+                            <!-- Role Selection -->
+                            <div class="mb-4">
+                                <label for="role" class="enhanced-form-label">
+                                    <i class="fas fa-user-tag me-2"></i>Which role are you applying for?
+                                </label>
+                                <select id="role" th:field="*{role}" class="form-select enhanced-form-select" required>
+                                    <option value="">-- Select a role --</option>
+                                    <option th:each="role:${roles}" th:value="${role.id}"
+                                        th:text="${#strings.substring(role.name, 5)}"></option>
+                                </select>
+                                <div class="form-text mt-2">
+                                    Choose the role that best matches your skills and interests
+                                </div>
+                            </div>
+
+                            <!-- Request Body -->
+                            <div class="mb-4">
+                                <label for="body" class="enhanced-form-label">
+                                    <i class="fas fa-pen-fancy me-2"></i>Why do you want to join us?
+                                </label>
+                                <textarea id="body" class="form-control enhanced-textarea" th:field="*{body}"
+                                    placeholder="Tell us about your passion for AC Milan, your experience, and why you'd be a great addition to our team..."
+                                    rows="6" required></textarea>
+                                <div class="form-text mt-2">
+                                    Share your motivation, experience, and what makes you the right person for this role
+                                </div>
+                            </div>
+
+                            <!-- Info Cards -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <strong>Writer role:</strong> Create engaging articles about AC Milan news,
+                                        matches, and analysis
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-eye me-2"></i>
+                                        <strong>Revisor role:</strong> Review and edit articles to ensure quality and
+                                        accuracy
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-eye me-2"></i>
+                                        <strong>Admin role:</strong> Manage site content, user roles, and overall site operations
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Actions -->
+                            <div class="action-buttons-container">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    Send Request
+                                </button>
+                                <a href="/" class="btn btn-secondary btn-lg px-5 ms-3">
+                                    <i class="fas fa-times me-2"></i>
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+
+                        <!-- Additional Info -->
+                        <div class="mt-4 pt-4 border-top border-secondary">
+                            <div class="text-center">
+                                <h5 class="c-red mb-4">
+                                    <i class="fas fa-question-circle me-2"></i>
+                                    What happens next?
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <i class="fas fa-paper-plane fa-2x c-red mb-2"></i>
+                                            <small class="text-white-50">1. Submit your request</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <i class="fas fa-search fa-2x c-red mb-2"></i>
+                                            <small class="text-white-50">2. Admin review</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <i class="fas fa-check-circle fa-2x c-red mb-2"></i>
+                                            <small class="text-white-50">3. Get notified of decision</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Send request</button>
-                    </form>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-
-
     <div th:insert="~{index :: footer}"></div>
-
-
-
-    <!-- script esterno + bootstrap -->
     <div th:replace="~{index :: script}"></div>
 </body>
 
