@@ -16,8 +16,11 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     // Trova la prossima partita da giocare
     Match findTopByIsPlayedFalseAndDateAfterOrderByDateAsc(LocalDateTime date);
 
-    // Trova tutte le partite ordinate per data
+    // Trova tutte le partite ordinate per data decrescente
     List<Match> findAllByOrderByDateDesc();
+
+    // Trova tutte le partite ordinate per data crescente
+    List<Match> findAllByOrderByDateAsc();
 
     // Trova partite per competizione
     List<Match> findByCompetitionOrderByDateDesc(String competition);

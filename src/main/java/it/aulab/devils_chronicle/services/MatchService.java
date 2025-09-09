@@ -532,7 +532,7 @@ public class MatchService {
      * Recupera tutte le partite ordinate per data
      */
     public List<Match> getAllMatches() {
-        return matchRepository.findAllByOrderByDateDesc();
+        return matchRepository.findAllByOrderByDateAsc();
     }
 
     /**

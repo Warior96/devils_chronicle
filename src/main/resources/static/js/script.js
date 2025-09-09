@@ -203,3 +203,44 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
+// Auto-dismiss alerts after 5 seconds
+setTimeout(function () {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function (alert) {
+        const bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+    });
+}, 5000);
+
+// Calculate Milan match statistics
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+        const rows = document.querySelectorAll('.match-table tbody tr');
+        let winsCount = 0;
+        let drawsCount = 0;
+        let lossesCount = 0;
+
+        rows.forEach(function (row) {
+            const winBadge = row.querySelector('.milan-result-win');
+            const drawBadge = row.querySelector('.milan-result-draw');
+            const lossBadge = row.querySelector('.milan-result-loss');
+
+            if (winBadge) {
+                winsCount++;
+            } else if (drawBadge) {
+                drawsCount++;
+            } else if (lossBadge) {
+                lossesCount++;
+            }
+        });
+
+        // Update the counters
+        if (document.getElementById('winsCount') && document.getElementById('drawsCount') && document.getElementById('lossesCount')) {
+            document.getElementById('winsCount').textContent = winsCount;
+            document.getElementById('drawsCount').textContent = drawsCount;
+            document.getElementById('lossesCount').textContent = lossesCount;
+        }
+
+    }, 100);
+});

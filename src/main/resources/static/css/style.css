@@ -79,6 +79,10 @@ body {
     color: var(--milan-white);
 }
 
+input {
+    caret-color: var(--milan-red);
+}
+
 /* Navbar */
 .navbar {
     background: rgba(255, 255, 255, 0.6) !important;
@@ -799,6 +803,23 @@ input[type="search"] {
 
 .requestedRole {
     border-top-left-radius: 15px !important;
+}
+
+/* Match list */
+.competitionBadge {
+    border-top-right-radius: 15px !important;
+}
+
+.match-vs {
+    color: var(--milan-red);
+    font-weight: bold;
+    margin: 0 0.5rem;
+}
+
+.stadium-info {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
 }
 
 /* Footer Styling */
