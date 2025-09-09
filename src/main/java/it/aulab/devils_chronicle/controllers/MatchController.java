@@ -20,7 +20,7 @@ public class MatchController {
     // Vista per gestione partite
     @GetMapping
     public String matchesIndex(Model model) {
-        System.out.println("Accesso alla pagina di gestione partite");
+        System.out.println("Access to the game management page");
 
         model.addAttribute("title", "Partite AC Milan");
         model.addAttribute("matches", matchService.getAllMatches());
@@ -35,17 +35,17 @@ public class MatchController {
     // Endpoint per aggiornare manualmente le partite dall'API
     @PostMapping("/update")
     public String updateMatches(RedirectAttributes redirectAttributes) {
-        System.out.println("Richiesta di aggiornamento manuale delle partite");
+        System.out.println("Request for manual update of matches");
 
         try {
             matchService.updateMatchesFromAPI();
-            redirectAttributes.addFlashAttribute("successMessage", "Partite aggiornate con successo dall'API");
-            System.out.println("Aggiornamento manuale completato con successo");
+            redirectAttributes.addFlashAttribute("successMessage", "Games successfully updated by the API");
+            System.out.println("Manual update successfully completed");
         } catch (Exception e) {
-            System.err.println("Errore durante l'aggiornamento manuale delle partite: " + e.getMessage());
+            System.err.println("Error during manual game update: " + e.getMessage());
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage",
-                    "Errore durante l'aggiornamento delle partite: " + e.getMessage());
+                    "Error while updating matches: " + e.getMessage());
         }
 
         return "redirect:/admin/matches";
@@ -54,17 +54,17 @@ public class MatchController {
     // Endpoint per aggiornare manualmente la classifica dall'API
     @PostMapping("/update-standings")
     public String updateStandings(RedirectAttributes redirectAttributes) {
-        System.out.println("Richiesta di aggiornamento manuale della classifica");
+        System.out.println("Request for manual update of the ranking");
 
         try {
             matchService.updateStandingsFromAPI();
-            redirectAttributes.addFlashAttribute("successMessage", "Classifica aggiornata con successo dall'API");
-            System.out.println("Aggiornamento manuale classifica completato con successo");
+            redirectAttributes.addFlashAttribute("successMessage", "Ranking successfully updated by API");
+            System.out.println("Manual ranking update successfully completed");
         } catch (Exception e) {
-            System.err.println("Errore durante l'aggiornamento manuale della classifica: " + e.getMessage());
+            System.err.println("Error during manual ranking update: " + e.getMessage());
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage",
-                    "Errore durante l'aggiornamento della classifica: " + e.getMessage());
+                    "Error while updating the ranking: " + e.getMessage());
         }
 
         return "redirect:/admin/matches";
@@ -73,19 +73,19 @@ public class MatchController {
     // Endpoint per aggiornare sia partite che classifica
     @PostMapping("/update-all")
     public String updateAll(RedirectAttributes redirectAttributes) {
-        System.out.println("Richiesta di aggiornamento completo partite e classifica");
+        System.out.println("Request for complete update of matches and standings");
 
         try {
             matchService.updateMatchesFromAPI();
             matchService.updateStandingsFromAPI();
             redirectAttributes.addFlashAttribute("successMessage",
-                    "Partite e classifica aggiornate con successo dall'API");
-            System.out.println("Aggiornamento completo completato con successo");
+                    "Matches and rankings successfully updated from the API");
+            System.out.println("Full update successfully completed");
         } catch (Exception e) {
-            System.err.println("Errore durante l'aggiornamento completo: " + e.getMessage());
+            System.err.println("Error during full update: " + e.getMessage());
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage",
-                    "Errore durante l'aggiornamento: " + e.getMessage());
+                    "Error during update: " + e.getMessage());
         }
 
         return "redirect:/admin/matches";
