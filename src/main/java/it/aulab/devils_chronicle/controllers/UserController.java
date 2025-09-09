@@ -235,7 +235,7 @@ public class UserController {
     @GetMapping("/writer/dashboard")
     public String writerDashboard(Model viewModel, Principal principal) {
 
-        viewModel.addAttribute("title", "Writer Dashboard: your articles");
+        viewModel.addAttribute("title", "Writer Dashboard");
 
         List<ArticleDto> userArticles = articleService.readAll().stream()
                 .filter(article -> article.getUser().getEmail().equals(principal.getName()))

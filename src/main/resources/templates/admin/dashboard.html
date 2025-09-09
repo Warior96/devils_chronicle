@@ -46,22 +46,22 @@
                             <div class="row">
                                 <div class="col-md-3 mb-2">
                                     <a href="/categories/create" class="btn btn-info w-100">
-                                        <i class="fas fa-plus me-2"></i> New Category
+                                        <i class="fas fa-plus me-2"></i> New category
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
                                     <a href="/admin/matches" class="btn btn-primary w-100">
-                                        <i class="fas fa-futbol me-2"></i> Manage Matches
+                                        <i class="fas fa-futbol me-2"></i> Manage matches
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
                                     <a href="/articles" class="btn btn-warning w-100">
-                                        <i class="fas fa-newspaper me-2"></i> View Articles
+                                        <i class="fas fa-newspaper me-2"></i> View articles
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
                                     <a href="/" class="btn btn-secondary w-100">
-                                        <i class="fas fa-home me-2"></i> Back to Home
+                                        <i class="fas fa-home me-2"></i> Back to home
                                     </a>
                                 </div>
                             </div>
@@ -150,13 +150,14 @@
                                                             <th class="text-center">ID</th>
                                                             <th>Name</th>
                                                             <th class="text-center">Articles Count</th>
-                                                            <th class="position-relative">
+                                                            <th class="position-relative text-center">
                                                                 Actions
                                                                 <a href="/categories/create" class="plus-category"
                                                                     title="Add category">
                                                                     <i class="fas fa-plus"></i>
                                                                 </a>
                                                             </th>
+                                                            <th class="text-center">Details</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -164,14 +165,10 @@
                                                             <td class="text-center" th:text="${category.id}"></td>
                                                             <td th:text="${category.name}"></td>
                                                             <td class="text-center">
-                                                                <span class="badge badge-info fs-"
+                                                                <span class="badge badge-info"
                                                                     th:text="${category.numberOfArticles ?: 0}"></span>
                                                             </td>
-                                                            <td>
-                                                                <a th:href="@{/categories/search/{id}(id=${category.id})}"
-                                                                    class="btn btn-sm btn-outline-info me-2">
-                                                                    <i class="fas fa-eye"></i> View
-                                                                </a>
+                                                            <td class="text-center">
                                                                 <a th:href="@{/categories/edit/{id}(id=${category.id})}"
                                                                     class="btn btn-sm btn-outline-warning me-2">
                                                                     <i class="fas fa-edit"></i> Edit
@@ -180,6 +177,12 @@
                                                                     class="btn btn-sm btn-outline-danger"
                                                                     onclick="return confirm('Delete this category?')">
                                                                     <i class="fas fa-trash"></i> Delete
+                                                                </a>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <a th:href="@{/categories/search/{id}(id=${category.id})}"
+                                                                    class="btn btn-sm btn-outline-info me-2">
+                                                                    <i class="fas fa-eye"></i> View
                                                                 </a>
                                                             </td>
                                                         </tr>
@@ -272,7 +275,7 @@
                                                             <td>
                                                                 <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
                                                                     class="btn btn-sm btn-outline-info me-2">
-                                                                    <i class="fas fa-eye"></i> Details
+                                                                    <i class="fas fa-eye"></i> View
                                                                 </a>
                                                             </td>
                                                         </tr>
@@ -329,7 +332,7 @@
                                                         <td>
                                                             <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
                                                                 class="btn btn-sm btn-outline-info me-2">
-                                                                <i class="fas fa-eye"></i> Details
+                                                                <i class="fas fa-eye"></i> View
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -377,7 +380,7 @@
                                                                 th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
                                                                 method="POST" class="d-inline">
                                                                 <button type="submit"
-                                                                     class="btn btn-sm btn-success me-2"
+                                                                    class="btn btn-sm btn-success me-2"
                                                                     onclick="return confirm('Accept this request?')">
                                                                     <i class="fas fa-check"></i> Accept
                                                             </form>
@@ -385,7 +388,7 @@
                                                         <td>
                                                             <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
                                                                 class="btn btn-sm btn-outline-info me-2">
-                                                                <i class="fas fa-eye"></i> Details
+                                                                <i class="fas fa-eye"></i> View
                                                             </a>
                                                         </td>
                                                     </tr>
