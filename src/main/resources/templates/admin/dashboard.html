@@ -3,49 +3,65 @@
 
 <head th:insert="~{index :: head}"></head>
 
+
 <body>
     <div th:insert="~{index :: navbar}"></div>
 
-    <div class="mt-5">
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
+    <div class="min-vh-100">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <h1>
+                            <i class="fas fa-tachometer-alt me-3"></i>
+                            <span th:text="${title}">Admin Dashboard</span>
+                        </h1>
+                        <p class="lead mb-0">
+                            <i class="fa-solid fa-shield-halved me-2"></i>
+                            Management panel for Devil's Chronicle
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="container min-vh-100">
-        <div class="row justify-content-center mb-5">
-
-            <div class="col-12 d-flex justify-content-center align-items-center pt-5 pb-4">
-                <h1 th:text="${title}">Dashboard</h1>
+        <div class="container pt-2">
+            <!-- Success Message -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <i class="fas fa-check-circle"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
-            <!-- Menu rapido -->
+            <!-- Quick Actions Card -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="quick-actions-card">
                         <div class="card-body">
                             <h5 class="card-title">
-                                <i class="fas fa-bolt"></i> Azioni Rapide
+                                <i class="fas fa-bolt me-2"></i> Quick Actions
                             </h5>
                             <div class="row">
                                 <div class="col-md-3 mb-2">
-                                    <a href="/categories/create" class="btn btn-success btn-block w-100">
-                                        <i class="fas fa-plus"></i> Nuova Categoria
+                                    <a href="/categories/create" class="btn btn-info w-100">
+                                        <i class="fas fa-plus me-2"></i> New Category
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="/admin/matches" class="btn btn-info btn-block w-100">
-                                        <i class="fas fa-futbol"></i> Gestisci Partite
+                                    <a href="/admin/matches" class="btn btn-primary w-100">
+                                        <i class="fas fa-futbol me-2"></i> Manage Matches
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="/articles" class="btn btn-primary btn-block w-100">
-                                        <i class="fas fa-newspaper"></i> Vedi Articoli
+                                    <a href="/articles" class="btn btn-warning w-100">
+                                        <i class="fas fa-newspaper me-2"></i> View Articles
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="/" class="btn btn-secondary btn-block w-100">
-                                        <i class="fas fa-home"></i> Torna alla Home
+                                    <a href="/" class="btn btn-secondary w-100">
+                                        <i class="fas fa-home me-2"></i> Back to Home
                                     </a>
                                 </div>
                             </div>
@@ -54,388 +70,340 @@
                 </div>
             </div>
 
-            <!-- Statistiche richieste carriera -->
+            <!-- Career Request Statistics -->
             <div class="row mb-4">
+                <!-- Pending Career Requests -->
                 <div class="col-md-4">
-                    <div class="card c-white bg-warning">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Richieste in Attesa</h6>
-                                    <h3 th:text="${#lists.size(pendingRequests)}">0</h3>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-clock fa-2x"></i>
-                                </div>
+                    <div class="stats-card pending-card">
+                        <div class="d-flex justify-content-between align-items-center c-white">
+                            <div>
+                                <h5>Pending career requests</h5>
+                                <h3 th:text="${#lists.size(pendingRequests)}">0</h3>
+                            </div>
+                            <div>
+                                <i class="fas fa-clock fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Accepted Career Requests -->
                 <div class="col-md-4">
-                    <div class="card c-white bg-success">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Richieste Accettate</h6>
-                                    <h3 th:text="${#lists.size(acceptedRequests)}">0</h3>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-check-circle fa-2x"></i>
-                                </div>
+                    <div class="stats-card accepted-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>Accepted career requests</h5>
+                                <h3 th:text="${#lists.size(acceptedRequests)}">0</h3>
+                            </div>
+                            <div>
+                                <i class="fas fa-check-circle fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Rejected Career Requests -->
                 <div class="col-md-4">
-                    <div class="card c-white bg-danger">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title">Richieste Rifiutate</h6>
-                                    <h3 th:text="${#lists.size(rejectedRequests)}">0</h3>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-times-circle fa-2x"></i>
-                                </div>
+                    <div class="stats-card rejected-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>Rejected career requests</h5>
+                                <h3 th:text="${#lists.size(rejectedRequests)}">0</h3>
+                            </div>
+                            <div>
+                                <i class="fas fa-times-circle fa-2x"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-
-            <!-- Richieste in attesa -->
-          <div class="row mb-4" th:if="${#lists.size(pendingRequests) > 0}">
+            <!-- Categories management section -->
+            <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-hourglass-half"></i> Richieste di Carriera in Attesa
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Utente</th>
-                                            <th>Ruolo Richiesto</th>
-                                            <th>Azioni</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="request : ${pendingRequests}">
-                                            <td th:text="${request.user.username}"></td>
-                                            <td>
-                                                <span class="badge bg-info" th:text="${request.role.name}"></span>
-                                            </td>
-                                            <td>
-                                                <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
-                                                    class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye"></i> Dettagli
-                                                </a>
-                                                <form
-                                                    th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
-                                                    method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-success"
-                                                        onclick="return confirm('Accettare questa richiesta?')">
-                                                        <i class="fas fa-check"></i> Accetta
-                                                    </button>
-                                                </form>
-                                                <form
-                                                    th:action="@{/operations/career/request/reject/{id}(id=${request.id})}"
-                                                    method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Rifiutare questa richiesta?')">
-                                                        <i class="fas fa-times"></i> Rifiuta
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="accordion-container">
+                        <div class="accordion dashboard-accordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header category-accordion">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#categoriesManagement" aria-expanded="false">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-tags me-2"></i> Categories management
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="categoriesManagement" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div th:if="${#lists.isEmpty(categories)}" class="text-center py-4">
+                                            <i class="fas fa-exclamation-circle fa-2x c-red mb-3"></i>
+                                            <h5>No categories found</h5>
+                                            <p>
+                                                Create your first category to start organizing articles
+                                            </p>
+                                            <a href="/categories/create" class="btn btn-success">
+                                                <i class="fas fa-plus me-2"></i> Create First Category
+                                            </a>
+                                        </div>
+                                        <div th:unless="${#lists.isEmpty(categories)}">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-dark table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">ID</th>
+                                                            <th>Name</th>
+                                                            <th class="text-center">Articles Count</th>
+                                                            <th class="position-relative">
+                                                                Actions
+                                                                <a href="/categories/create" class="plus-category"
+                                                                    title="Add category">
+                                                                    <i class="fas fa-plus"></i>
+                                                                </a>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="category : ${categories}">
+                                                            <td class="text-center" th:text="${category.id}"></td>
+                                                            <td th:text="${category.name}"></td>
+                                                            <td class="text-center">
+                                                                <span class="badge badge-info fs-"
+                                                                    th:text="${category.numberOfArticles ?: 0}"></span>
+                                                            </td>
+                                                            <td>
+                                                                <a th:href="@{/categories/search/{id}(id=${category.id})}"
+                                                                    class="btn btn-sm btn-outline-info me-2">
+                                                                    <i class="fas fa-eye"></i> View
+                                                                </a>
+                                                                <a th:href="@{/categories/edit/{id}(id=${category.id})}"
+                                                                    class="btn btn-sm btn-outline-warning me-2">
+                                                                    <i class="fas fa-edit"></i> Edit
+                                                                </a>
+                                                                <a th:href="@{/categories/delete/{id}(id=${category.id})}"
+                                                                    class="btn btn-sm btn-outline-danger"
+                                                                    onclick="return confirm('Delete this category?')">
+                                                                    <i class="fas fa-trash"></i> Delete
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Categorie esistenti -->
+            <!-- Career requests sections -->
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="fas fa-tags"></i> Gestione Categorie
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div th:if="${#lists.isEmpty(categories)}" class="text-center py-4">
-                                <i class="fas fa-exclamation-circle fa-3x mb-3"></i>
-                                <h5>Nessuna categoria trovata</h5>
-                                <a href="/categories/create" class="btn btn-success">
-                                    <i class="fas fa-plus"></i> Crea Prima Categoria
-                                </a>
+                    <div class="accordion-container">
+                        <div class="accordion dashboard-accordion">
+                            <!-- Pending Career Requests Accordion -->
+                            <div class="accordion-item career-m">
+                                <h2 class="accordion-header pending-accordion">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#pendingCareerRequests" aria-expanded="false">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-clock me-2"></i>
+                                            <h5 class="mb-0 me-3">Pending career requests</h5>
+                                            <span class="position-relative me-2" th:if="${careerPending > 0}">
+                                                <i class="fa-solid fa-bell ms-1 custom-notification-bell"></i>
+                                                <span
+                                                    class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification custom-notification-badge"
+                                                    th:text="${careerPending}"></span>
+                                            </span>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div id="pendingCareerRequests" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div th:if="${#lists.isEmpty(pendingRequests)}" class="text-center py-4">
+                                            <i class="fas fa-clock me-2"></i>
+                                            <p class="mb-0">No pending requests at the moment</p>
+                                        </div>
+                                        <div th:unless="${#lists.isEmpty(pendingRequests)}">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-dark table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="ps-4">User</th>
+                                                            <th>Requested Role</th>
+                                                            <th>Opened</th>
+                                                            <th>Actions</th>
+                                                            <th>Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="request : ${pendingRequests}">
+                                                            <td class="ps-4" th:text="${request.user.username}"></td>
+                                                            <td>
+                                                                <span class="badge bg-warning text-dark requestedRole"
+                                                                    th:text="${request.role.name.replace('ROLE_', '')}"></span>
+                                                            </td>
+                                                            <td>
+                                                                <i th:if="${request.isChecked == true}"
+                                                                    class="fas fa-2x fa-check-circle text-success"
+                                                                    title="Read"></i>
+                                                                <i th:if="${request.isChecked == false}"
+                                                                    class="fas fa-2x fa-times-circle text-danger"
+                                                                    title="Unread"></i>
+                                                            </td>
+                                                            <td>
+                                                                <form
+                                                                    th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
+                                                                    method="post" class="d-inline">
+                                                                    <button type="submit"
+                                                                        class="btn btn-sm btn-success me-2"
+                                                                        onclick="return confirm('Accept this request?')">
+                                                                        <i class="fas fa-check"></i> Accept
+                                                                    </button>
+                                                                </form>
+                                                                <form
+                                                                    th:action="@{/operations/career/request/reject/{id}(id=${request.id})}"
+                                                                    method="post" class="d-inline">
+                                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                                        onclick="return confirm('Reject this request?')">
+                                                                        <i class="fas fa-times"></i> Reject
+                                                                    </button>
+                                                                </form>
+                                                            </td>
+                                                            <td>
+                                                                <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
+                                                                    class="btn btn-sm btn-outline-info me-2">
+                                                                    <i class="fas fa-eye"></i> Details
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div th:unless="${#lists.isEmpty(categories)}" class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nome</th>
-                                            <th>Numero Articoli</th>
-                                            <th>Azioni</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="category : ${categories}">
-                                            <td th:text="${category.id}"></td>
-                                            <td th:text="${category.name}"></td>
-                                            <td>
-                                                <span class="badge bg-info"
-                                                    th:text="${category.numberOfArticles ?: 0}"></span>
-                                            </td>
-                                            <td>
-                                                <a th:href="@{/categories/search/{id}(id=${category.id})}"
-                                                    class="btn btn-sm btn-outline-info">
-                                                    <i class="fas fa-eye"></i> Vedi Articoli
-                                                </a>
-                                                <a th:href="@{/categories/edit/{id}(id=${category.id})}"
-                                                    class="btn btn-sm btn-outline-warning">
-                                                    <i class="fas fa-edit"></i> Modifica
-                                                </a>
-                                                <a th:href="@{/categories/delete/{id}(id=${category.id})}"
-                                                    class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Eliminare questa categoria? Gli articoli associati non verranno eliminati.')">
-                                                    <i class="fas fa-trash"></i> Elimina
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <!-- Accepted Requests Accordion -->
+                            <div class="accordion-item career-m">
+                                <h2 class="accordion-header accepted-accordion">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#acceptedRequests" aria-expanded="false">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        <h5 class="mb-0">Accepted career requests</h5>
+                                    </button>
+                                </h2>
+                                <div id="acceptedRequests" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div th:if="${#lists.isEmpty(acceptedRequests)}" class="text-center py-4">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            <p>No accepted requests.</p>
+                                        </div>
+                                        <div th:unless="${#lists.isEmpty(acceptedRequests)}" class="table-responsive">
+                                            <table class="table table-success table-striped table-dark table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="ps-4">Username</th>
+                                                        <th>Current role</th>
+                                                        <th>Action</th>
+                                                        <th>Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="request : ${acceptedRequests}">
+                                                        <td class="ps-4" th:text="${request.user.username}"></td>
+                                                        <td>
+                                                            <span class="badge bg-warning text-dark requestedRole"
+                                                                th:text="${request.role.name.replace('ROLE_', '')}"></span>
+                                                        </td>
+                                                        <td>
+                                                            <form
+                                                                th:action="@{/operations/career/request/revoke/{id}(id=${request.id})}"
+                                                                method="POST" class="d-inline">
+                                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                                    onclick="return confirm('Reject this request?')">
+                                                                    <i class="fas fa-times"></i> Reject
+                                                                </button>
+                                                            </form>
+                                                        </td>
+                                                        <td>
+                                                            <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
+                                                                class="btn btn-sm btn-outline-info me-2">
+                                                                <i class="fas fa-eye"></i> Details
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rejected Requests Accordion -->
+                            <div class="accordion-item career-m">
+                                <h2 class="accordion-header rejected-accordion">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#rejectedRequests" aria-expanded="false">
+                                        <i class="fas fa-times-circle me-2"></i>
+                                        <h5 class="mb-0">Rejected career requests</h5>
+                                    </button>
+                                </h2>
+                                <div id="rejectedRequests" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <div th:if="${#lists.isEmpty(rejectedRequests)}" class="text-center py-4">
+                                            <i class="fas fa-times-circle me-2"></i>
+                                            <p>No rejected requests.</p>
+                                        </div>
+                                        <div th:unless="${#lists.isEmpty(rejectedRequests)}" class="table-responsive">
+                                            <table class="table table-danger table-striped table-dark table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="ps-4">Username</th>
+                                                        <th>Rejected role</th>
+                                                        <th>Action</th>
+                                                        <th>Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="request : ${rejectedRequests}">
+                                                        <td class="ps-4" th:text="${request.user.username}"></td>
+                                                        <td>
+                                                            <span class="badge bg-warning text-dark requestedRole"
+                                                                th:text="${request.role.name.replace('ROLE_', '')}"></span>
+                                                        </td>
+                                                        <td>
+                                                            <form
+                                                                th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
+                                                                method="POST" class="d-inline">
+                                                                <button type="submit"
+                                                                     class="btn btn-sm btn-success me-2"
+                                                                    onclick="return confirm('Accept this request?')">
+                                                                    <i class="fas fa-check"></i> Accept
+                                                            </form>
+                                                        </td>
+                                                        <td>
+                                                            <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
+                                                                class="btn btn-sm btn-outline-info me-2">
+                                                                <i class="fas fa-eye"></i> Details
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            <div class="accordion col-10 mt-4">
-                <!-- table pending requests -->
-                <div class="accordion-item acc-notification">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseOne">
-                            <h5>Pending Requests</h5>
-                            <span class="position-relative me-2" th:if="${careerPending > 0}">
-                                <i class="fa-solid fa-bell ms-1"></i>
-                                <span
-                                    class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification"
-                                    th:text="${careerPending}"></span>
-                            </span>
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div th:if="${#lists.isEmpty(pendingRequests)}">
-                                <p>No pending requests.</p>
-                            </div>
-                            <table class="table table-striped table-responsive-lg"
-                                th:unless="${#lists.isEmpty(pendingRequests)}">
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Requested role</th>
-                                        <th>Read</th>
-                                        <th>Detail</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="request : ${pendingRequests}">
-                                        <td th:text="${request.user.username}"></td>
-                                        <td th:text="${request.role.name.replace('ROLE_', '')}"></td>
-                                        <td>
-                                            <i th:if="${request.isChecked == true}"
-                                                class="fa-regular fa-circle-check text-success"></i>
-                                            <i th:if="${request.isChecked == false}"
-                                                class="fa-regular fa-circle-xmark text-danger"></i>
-                                        </td>
-                                        <td>
-                                            <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
-                                                class="text-decoration-none">
-                                                <i class="fa-solid fa-circle-info mx-2"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- table accepted requests -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseTwo">
-                            <h5>Accepted Requests</h5>
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div th:if="${#lists.isEmpty(acceptedRequests)}">
-                                <p>No accepted requests.</p>
-                            </div>
-                            <table class="table table-success table-striped table-responsive-lg"
-                                th:unless="${#lists.isEmpty(acceptedRequests)}">
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Current role</th>
-                                        <th>Action</th>
-                                        <th>Detail</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="request : ${acceptedRequests}">
-                                        <td th:text="${request.user.username}"></td>
-                                        <td th:text="${request.role.name.replace('ROLE_', '')}"></td>
-                                        <td>
-                                            <form
-                                                th:action="@{/operations/career/request/revoke/{id}(id=${request.id})}"
-                                                method="POST" class="d-inline">
-                                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
-                                                class="text-decoration-none">
-                                                <i class="fa-solid fa-circle-info mx-2"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- table rejected requests -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseThree">
-                            <h5>Rejected Requests</h5>
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div th:if="${#lists.isEmpty(rejectedRequests)}">
-                                <p>No rejected requests.</p>
-                            </div>
-                            <table class="table table-danger table-striped table-responsive-lg"
-                                th:unless="${#lists.isEmpty(rejectedRequests)}">
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Rejected role</th>
-                                        <th>Action</th>
-                                        <th>Detail</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="request : ${rejectedRequests}">
-                                        <td th:text="${request.user.username}"></td>
-                                        <td th:text="${request.role.name.replace('ROLE_', '')}"></td>
-                                        <td>
-                                            <form
-                                                th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
-                                                method="POST" class="d-inline">
-                                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
-                                                class="text-decoration-none">
-                                                <i class="fa-solid fa-circle-info mx-2"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- table categories -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseFour">
-                            <h5 class="mt-1">All categories</h5>
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div th:if="${#lists.isEmpty(categories)}" class="d-flex justify-content-between">
-                                <p>No categories.</p>
-                                <a th:href="@{'/categories/create'}" class="btn btn-success me-4" title="Add category">
-                                    <i class="fa-solid fa-plus"></i>
-                                </a>
-                            </div>
-                            <table class="table table-striped table-responsive-lg"
-                                th:unless="${#lists.isEmpty(categories)}">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th class="position-relative">Actions
-                                            <a th:href="@{'/categories/create'}" class="btn btn-success plus-category"
-                                                title="Add category">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </a>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="category : ${categories}">
-                                        <td th:text="${category.id}"></td>
-                                        <td th:text="${category.name}"></td>
-                                        <td>
-                                            <a th:href="@{/categories/edit/{id}(id=${category.id})}"
-                                                class="btn btn-warning mx-2"
-                                                th:title="|Edit category ${category.name}|">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </a>
-                                            <a th:href="@{/categories/delete/{id}(id=${category.id})}"
-                                                class="btn btn-danger mx-2"
-                                                th:title="|Delete category ${category.name}|">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-            </div>
-
-
         </div>
     </div>
 
-
     <div th:insert="~{index :: footer}"></div>
+    <div th:replace="~{index :: script}"></div>
 
     <script>
         // Auto-dismiss alerts after 5 seconds
@@ -447,9 +415,6 @@
             });
         }, 5000);
     </script>
-
-    <!-- script esterno + bootstrap -->
-    <div th:replace="~{index :: script}"></div>
 </body>
 
 </html>
