@@ -10,12 +10,6 @@
 
     <div class="container-fluid min-vh-100 pb-4 pb-md-0">
 
-
-
-
-
-
-
         <div class="row mx-3 pt-5">
             <div th:if="${param.notAuthorized}">
                 <div class="alert alert-danger alert-dismissible fade show mt-3">
@@ -56,7 +50,7 @@
                                         </span>
                                     </div>
                                     <!-- Article category badge -->
-                                    <div th:if="${latestArticle.isFeatured}" class="position-absolute top-0 end-0 z-2">
+                                    <div th:if="${latestArticle}" class="position-absolute top-0 end-0 z-2">
                                         <span class="badge bg-primary " th:text="${latestArticle.category.name}">
                                             Category
                                         </span>
@@ -74,23 +68,25 @@
                                         </div>
                                         <!-- Text -->
                                         <div
-                                            class="col-12 col-md-7  d-flex justify-content-between align-items-start flex-column py-3 ps-4">
-                                            <h5 class="card-title" th:text="${latestArticle.title}">Article Title
+                                            class="col-12 col-md-7 d-flex justify-content-between align-items-start flex-column py-3 ps-4">
+                                            <h5 class="card-title my-2" th:text="${latestArticle.title}">
+                                                Article Title
                                             </h5>
-                                            <p class="card-text truncate mb-3" th:text="${latestArticle.body}">
-                                                Article
-                                                Body</p>
+                                            <p class="card-text truncate mb-1" th:text="${latestArticle.body}">
+                                                Article body
+                                            </p>
 
                                             <!-- Category and Author info -->
-                                            <div class="mb-2 row mb-0">
+                                            <div class="row mb-0 w-100">
                                                 <div class="col-6 pe-0">
-                                                    <small class="me-3" th:if="${latestArticle.publishDate != null}">
+                                                    <small class="me-3 fs-7"
+                                                        th:if="${latestArticle.publishDate != null}">
                                                         <i class="fas fa-calendar me-1"></i>
                                                         <span th:text="${latestArticle.publishDate}">Date</span>
                                                     </small>
                                                 </div>
-                                                <div class="col-6 px-0">
-                                                    <cite class="card-text">
+                                                <div class="col-6 px-0 text-end">
+                                                    <cite class="card-text fs-7">
                                                         <i class="fas fa-user me-1"></i>
                                                         <span th:text="${latestArticle.user.username}">Author</span>
                                                     </cite>
@@ -151,23 +147,24 @@
                                         </div>
                                         <!-- Text -->
                                         <div
-                                            class="col-12 col-md-7  d-flex justify-content-between align-items-start flex-column py-3 ps-4">
-                                            <h5 class="card-title" th:text="${featuredArticle.title}">Article Title
+                                            class="col-12 col-md-7 d-flex justify-content-between align-items-start flex-column py-3 ps-4">
+                                            <h5 class="card-title my-2" th:text="${featuredArticle.title}">Article Title
                                             </h5>
-                                            <p class="card-text truncate mb-3" th:text="${featuredArticle.body}">
+                                            <p class="card-text truncate mb-1" th:text="${featuredArticle.body}">
                                                 Article
                                                 Body</p>
 
                                             <!-- Category and Author info -->
-                                            <div class="mb-2 row mb-0">
+                                            <div class="row mb-0 w-100">
                                                 <div class="col-6 pe-0">
-                                                    <small class="me-3" th:if="${featuredArticle.publishDate != null}">
+                                                    <small class="me-3 fs-7"
+                                                        th:if="${featuredArticle.publishDate != null}">
                                                         <i class="fas fa-calendar me-1"></i>
                                                         <span th:text="${featuredArticle.publishDate}">Date</span>
                                                     </small>
                                                 </div>
-                                                <div class="col-6 px-0">
-                                                    <cite class="card-text">
+                                                <div class="col-6 px-0 text-end">
+                                                    <cite class="card-text fs-7 ">
                                                         <i class="fas fa-user me-1"></i>
                                                         <span th:text="${featuredArticle.user.username}">Author</span>
                                                     </cite>

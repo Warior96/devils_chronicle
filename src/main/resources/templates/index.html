@@ -176,7 +176,7 @@
                     </span>
                 </div>
                 <!-- Article category badge -->
-                <div th:if="${article.isFeatured}" class="position-absolute top-0 end-0 z-2">
+                <div th:if="${article}" class="position-absolute top-0 end-0 z-2">
                     <span class="badge bg-primary" th:text="${article.category.name}">
                         Category
                     </span>
@@ -195,17 +195,6 @@
                         <h4 class="card-title" th:text="${article.title}">Article Title</h4>
                         <p class="card-text truncate mb-3" th:text="${article.body}">Article Body</p>
 
-                        <!-- Category and Author info -->
-<!--                         <div class="mb-2 d-flex justify-content-between w-100">
-                            <small class="me-2" th:if="${article.publishDate != null}">
-                                <i class="fas fa-calendar me-1"></i>
-                                <span th:text="${article.publishDate}">Date</span>
-                            </small>
-                            <cite class="card-text">
-                                <i class="fas fa-user me-1"></i>
-                                <span th:text="${article.user.username}">Author</span>
-                            </cite>
-                        </div> -->
                         <div class="mb-2 row mb-0 justify-content-between w-100">
                             <div class="col-6 pe-0">
                                 <small class="me-3" th:if="${article.publishDate != null}">
@@ -213,7 +202,7 @@
                                     <span th:text="${article.publishDate}">Date</span>
                                 </small>
                             </div>
-                            <div class="col-6 px-0">
+                            <div class="col-6 px-0 text-end">
                                 <cite class="card-text">
                                     <i class="fas fa-user me-1"></i>
                                     <span th:text="${article.user.username}">Author</span>
