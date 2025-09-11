@@ -11,23 +11,23 @@
     <div class="container-fluid min-vh-100 pb-4 pb-md-0">
 
 
-        <div th:if="${param.notAuthorized}">
-            <div class="alert alert-danger alert-dismissible fade show mt-3">
-                Not authorized!
-            </div>
-        </div>
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mt-3">
-            <p th:text="${successMessage}"></p>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mt-3">
-            <p th:text="${errorMessage}"></p>
-        </div>
 
 
 
 
 
         <div class="row mx-3 pt-5">
+            <div th:if="${param.notAuthorized}">
+                <div class="alert alert-danger alert-dismissible fade show mt-3">
+                    Not authorized!
+                </div>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mt-3">
+                <p th:text="${successMessage}"></p>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mt-3">
+                <p th:text="${errorMessage}"></p>
+            </div>
 
 
             <!-- Title -->
@@ -75,8 +75,10 @@
                                         <!-- Text -->
                                         <div
                                             class="col-12 col-md-7  d-flex justify-content-between align-items-start flex-column py-3 ps-4">
-                                            <h5 class="card-title" th:text="${latestArticle.title}">Article Title</h5>
-                                            <p class="card-text truncate mb-3" th:text="${latestArticle.body}">Article
+                                            <h5 class="card-title" th:text="${latestArticle.title}">Article Title
+                                            </h5>
+                                            <p class="card-text truncate mb-3" th:text="${latestArticle.body}">
+                                                Article
                                                 Body</p>
 
                                             <!-- Category and Author info -->
@@ -150,8 +152,10 @@
                                         <!-- Text -->
                                         <div
                                             class="col-12 col-md-7  d-flex justify-content-between align-items-start flex-column py-3 ps-4">
-                                            <h5 class="card-title" th:text="${featuredArticle.title}">Article Title</h5>
-                                            <p class="card-text truncate mb-3" th:text="${featuredArticle.body}">Article
+                                            <h5 class="card-title" th:text="${featuredArticle.title}">Article Title
+                                            </h5>
+                                            <p class="card-text truncate mb-3" th:text="${featuredArticle.body}">
+                                                Article
                                                 Body</p>
 
                                             <!-- Category and Author info -->
@@ -208,7 +212,8 @@
                                                 th:class="${team.isMilan() ? 'table-danger fw-bold' : ''}"
                                                 th:style="${team.position <= 4 ? 'border-left: 4px solid #28a745;' : (team.position == 5 ? 'border-left: 4px solid #ffc107;' : (team.position == 6 ? 'border-left: 4px solid #17a2b8;' : (team.position >= 18 ? 'border-left: 4px solid #dc3545;' : '')))}"
                                                 class="text-center">
-                                                <td th:text="${team.position}" class="text-center">[[${team.position}]]
+                                                <td th:text="${team.position}" class="text-center">
+                                                    [[${team.position}]]
                                                 </td>
                                                 <td class="text-center">
                                                     <img th:if="${team.teamCrest != null and !team.teamCrest.isEmpty()}"
