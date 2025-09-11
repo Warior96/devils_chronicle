@@ -79,36 +79,34 @@
 
                             <div class="ms-4">
                                 <!-- Accepted Status -->
-                                <div th:if="${request.isAccepted == true}"
-                                    class="d-flex flex-column flex-md-row align-items-md-center gap-3">
-                                    <div class="status-badge-accepted">
-                                        <i class="fas fa-check-circle"></i>
-                                        Request Approved
+                                <div th:if="${request.isAccepted == true}">
+                                    <div class="alert-request alert-success mb-4">
+                                        <i class="fas fa-check me-2"></i>
+                                        <strong>Accepted request</strong> - This request is approved by admin decision
                                     </div>
                                     <div class="action-buttons-container">
                                         <form th:action="@{/operations/career/request/revoke/{id}(id=${request.id})}"
                                             method="POST">
                                             <button type="submit" class="btn btn-outline-danger btn-lg">
                                                 <i class="fas fa-times-circle me-2"></i>
-                                                Revoke Approval
+                                                Revoke approval
                                             </button>
                                         </form>
                                     </div>
                                 </div>
 
                                 <!-- Rejected Status -->
-                                <div th:if="${request.isAccepted == false}"
-                                    class="d-flex flex-column flex-md-row align-items-md-center gap-3">
-                                    <div class="status-badge-rejected">
-                                        <i class="fas fa-times-circle"></i>
-                                        Request Rejected
+                                <div th:if="${request.isAccepted == false}">
+                                    <div class="alert-request alert-danger mb-4">
+                                        <i class="fas fa-times me-2"></i>
+                                        <strong>Rejected request</strong> - This request is rejected by admin decision
                                     </div>
                                     <div class="action-buttons-container">
                                         <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
                                             method="POST">
                                             <button type="submit" class="btn btn-success btn-lg">
                                                 <i class="fas fa-check-circle me-2"></i>
-                                                Accept Request
+                                                Accept request
                                             </button>
                                         </form>
                                     </div>
@@ -116,23 +114,23 @@
 
                                 <!-- Pending Status -->
                                 <div th:if="${request.isAccepted == null}">
-                                    <div class="alert alert-warning mb-4">
+                                    <div class="alert-request alert-warning mb-4">
                                         <i class="fas fa-clock me-2"></i>
-                                        <strong>Pending Review</strong> - This request is awaiting admin decision
+                                        <strong>Pending request</strong> - This request is awaiting admin decision
                                     </div>
                                     <div class="action-buttons-container">
                                         <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
                                             method="POST" class="me-3">
                                             <button type="submit" class="btn btn-success btn-lg">
                                                 <i class="fas fa-check-circle me-2"></i>
-                                                Accept Request
+                                                Accept request
                                             </button>
                                         </form>
                                         <form th:action="@{/operations/career/request/reject/{id}(id=${request.id})}"
                                             method="POST">
                                             <button type="submit" class="btn btn-outline-danger btn-lg">
                                                 <i class="fas fa-times-circle me-2"></i>
-                                                Reject Request
+                                                Reject request
                                             </button>
                                         </form>
                                     </div>

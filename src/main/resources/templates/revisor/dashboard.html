@@ -13,11 +13,11 @@
                 <div class="row justify-content-center">
                     <div class="col-12 text-center">
                         <h1>
-                            <i class="fas fa-search me-3"></i>
+                            <i class="fas fa-user-shield me-3"></i>
                             <span th:text="${title}">Revisor Dashboard</span>
                         </h1>
                         <p class="lead mb-0">
-                            <i class="fa-solid fa-magnifying-glass me-2"></i>
+                            <i class="fas fa-tasks me-2"></i>
                             Content review panel for Devil's Chronicle
                         </p>
                     </div>
@@ -30,7 +30,6 @@
             <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
                 <i class="fas fa-check-circle"></i>
                 <span th:text="${successMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
             <!-- Quick Actions Card -->
@@ -43,18 +42,18 @@
                             </h5>
                             <div class="row">
                                 <div class="col-md-3 mb-2">
-                                    <a href="/articles" class="btn btn-info w-100">
-                                        <i class="fas fa-newspaper me-2"></i> View articles
+                                    <a href="/articles/create" class="btn btn-info w-100">
+                                        <i class="fas fa-plus me-2"></i> New article
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                   <!--  <a href="/categories" class="btn btn-warning w-100">
-                                        <i class="fas fa-tags me-2"></i> Browse categories
-                                    </a> -->
+                                    <a th:href="@{/operations/career/request}" class="btn btn-primary w-100">
+                                        <i class="fas fa-briefcase me-1"></i> Change role
+                                    </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="/articles/create" class="btn btn-success w-100">
-                                        <i class="fas fa-plus me-2"></i> New article
+                                    <a href="/articles" class="btn btn-warning w-100">
+                                        <i class="fas fa-newspaper me-2"></i> View articles
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">

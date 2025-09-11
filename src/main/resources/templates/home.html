@@ -12,14 +12,14 @@
 
 
         <div th:if="${param.notAuthorized}">
-            <div class="alert alert-danger mt-5">
+            <div class="alert alert-danger alert-dismissible fade show mt-3">
                 Not authorized!
             </div>
         </div>
-        <div th:if="${successMessage}" class="alert alert-success mt-5">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mt-3">
             <p th:text="${successMessage}"></p>
         </div>
-        <div th:if="${errorMessage}" class="alert alert-success mt-5">
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mt-3">
             <p th:text="${errorMessage}"></p>
         </div>
 
@@ -80,15 +80,19 @@
                                                 Body</p>
 
                                             <!-- Category and Author info -->
-                                            <div class="mb-2">
-                                                <small class="me-3" th:if="${latestArticle.publishDate != null}">
-                                                    <i class="fas fa-calendar me-1"></i>
-                                                    <span th:text="${latestArticle.publishDate}">Date</span>
-                                                </small>
-                                                <cite class="card-text">
-                                                    <i class="fas fa-user me-1"></i>
-                                                    <span th:text="${latestArticle.user.username}">Author</span>
-                                                </cite>
+                                            <div class="mb-2 row mb-0">
+                                                <div class="col-6 pe-0">
+                                                    <small class="me-3" th:if="${latestArticle.publishDate != null}">
+                                                        <i class="fas fa-calendar me-1"></i>
+                                                        <span th:text="${latestArticle.publishDate}">Date</span>
+                                                    </small>
+                                                </div>
+                                                <div class="col-6 px-0">
+                                                    <cite class="card-text">
+                                                        <i class="fas fa-user me-1"></i>
+                                                        <span th:text="${latestArticle.user.username}">Author</span>
+                                                    </cite>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -151,15 +155,19 @@
                                                 Body</p>
 
                                             <!-- Category and Author info -->
-                                            <div class="mb-2">
-                                                <small class="me-3" th:if="${featuredArticle.publishDate != null}">
-                                                    <i class="fas fa-calendar me-1"></i>
-                                                    <span th:text="${featuredArticle.publishDate}">Date</span>
-                                                </small>
-                                                <cite class="card-text">
-                                                    <i class="fas fa-user me-1"></i>
-                                                    <span th:text="${featuredArticle.user.username}">Author</span>
-                                                </cite>
+                                            <div class="mb-2 row mb-0">
+                                                <div class="col-6 pe-0">
+                                                    <small class="me-3" th:if="${featuredArticle.publishDate != null}">
+                                                        <i class="fas fa-calendar me-1"></i>
+                                                        <span th:text="${featuredArticle.publishDate}">Date</span>
+                                                    </small>
+                                                </div>
+                                                <div class="col-6 px-0">
+                                                    <cite class="card-text">
+                                                        <i class="fas fa-user me-1"></i>
+                                                        <span th:text="${featuredArticle.user.username}">Author</span>
+                                                    </cite>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

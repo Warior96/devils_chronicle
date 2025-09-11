@@ -3,94 +3,242 @@
 
 <head th:insert="~{index :: head}"></head>
 
-<body>
+<body th:data-article-id="${article.id}" class="text-white bg-black">
     <div th:insert="~{index :: navbar}"></div>
 
-    <div class="container-fluid p-5 bg-secondary-subtle text-center">
-        <div class="row justify-content-center">
-            <div class="col-12 py-4">
-                <h1>Detail</h1>
-                <h2 th:text="${article.title}">Title</h2>
-            </div>
-        </div>
-    </div>
+    <div class="min-vh-100">
 
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-5">
-                <img th:if="${article.image != null}" th:src="${article.image.path}"
-                    th:alt="'image of ' + ${article.title}" class="card-img-top">
-                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" alt="default image"
-                    class="card-img-top">
-            </div>
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <h1 th:text="${article.title}">Article Title</h1>
+                        <!-- Author and Date -->
+                        <div>
+                            <i class="fas fa-user c-black me-1"></i>
+                            By:
+                            <a class="text-decoration-none c-white me-5"
+                                th:href="@{/search/{id}(id=${article.user.id})}">
+                                <strong th:text="${article.user.username}">User</strong>
+                            </a>
 
-            <div th:if="${article.galleryImages != null and !article.galleryImages.isEmpty()}" class="col-12 col-md-5">
-                <div id="carouselExample" class="carousel slide">
-                    <div class="carousel-inner">
-                        <div class="carousel-item" th:each="galleryImage, iterStat : ${article.galleryImages}"
-                            th:classappend="${iterStat.index == 0} ? ' active'">
-                            <img th:src="${galleryImage.path}" th:alt="|gallery image of ${article.title}|"
-                                class="d-block w-100">
+                            <i class="fas fa-calendar-alt c-black me-1"></i>
+                            Edited at:
+                            <span th:text="${#temporals.format(article.publishDate, 'dd MMMM yyyy')}">date</span>
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
             </div>
-            <div class="col-12 col-md-8 d-flex flex-column">
-                <div class="text-center">
-                    <h2 th:text="${article.subtitle}">Subtitle</h2>
-                    <p class="fs-5" th:if="${article.category != null}">Category:
-                        <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
-                            class="text-capitalize fw-bold" th:text="${article.category.name}">category</a>
-                    </p>
-                    <p class="fs-5" th:if="${article.category == null}">No category</p>
-                    <div class="my-3">
-                        <p>Edited at
-                            <span th:text="${article.publishDate}">date</span>
-                            by
-                            <a th:href="@{/search/{id}(id=${article.user.id})}">
-                                <p th:text="${article.user.username}">User</p>
-                            </a>
-                        </p>
+        </div>
+
+        <!-- Article Detail Section -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Main Content -->
+                <div class="col-12 col-lg-10">
+                    <div class="detail-content">
+                        <div class="row justify-content-around align-items-center mb-5">
+
+                            <!-- Cover Image No Gallery -->
+                            <div th:if="${article.galleryImages == null || article.galleryImages.size() == 0}"
+                                class="col-12 col-lg-4 d-flex justify-content-center current-image-container">
+                                <img th:if="${article.image != null}" th:src="${article.image.path}"
+                                    th:alt="'image of ' + ${article.title}" class="img-fluid">
+                                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"
+                                    alt="default image" class="img-fluid w-100">
+                            </div>
+
+                            <!-- Cover Image Single Gallery -->
+                            <div th:if="${article.galleryImages != null && article.galleryImages.size() == 1}"
+                                class="col-12 col-lg-4 d-flex justify-content-center current-image-container">
+                                <img th:if="${article.image != null}" th:src="${article.image.path}"
+                                    th:alt="'image of ' + ${article.title}" class="img-fluid">
+                                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"
+                                    alt="default image" class="img-fluid w-100">
+                            </div>
+
+                            <!-- Single Image Display -->
+                            <div th:if="${article.galleryImages != null && article.galleryImages.size() == 1}"
+                                class=" d-flex justify-content-center col-12 col-lg-4 current-image-container">
+                                <img th:src="${article.galleryImages[0].path}"
+                                    th:alt="|gallery image of ${article.title}|" class="img-fluid">
+                            </div>
+
+                            <!-- Cover Image Multiple Gallery -->
+                            <div th:if="${article.galleryImages != null && article.galleryImages.size() > 1}"
+                                class="col-12 col-lg-4 d-flex justify-content-center current-image-container">
+                                <img th:if="${article.image != null}" th:src="${article.image.path}"
+                                    th:alt="'image of ' + ${article.title}" class="object-fit-contain img-fluid">
+                                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"
+                                    alt="default image" class="img-fluid w-100">
+                            </div>
+                            <!-- Multiple Images Swiper Carousel -->
+                            <div th:if="${article.galleryImages != null && article.galleryImages.size() > 1}"
+                                class="gallery-swiper-container mb-3 col-12 col-lg-7">
+                                <swiper-container class="gallery-swiper" space-between="60" slides-per-view="1.7"
+                                    pagination="true" pagination-clickable="true" navigation="true"
+                                    centered-slides="false" grab-cursor="true">
+                                    <swiper-slide th:each="galleryImage : ${article.galleryImages}">
+                                        <div class="gallery-slide-content">
+                                            <img th:src="${galleryImage.path}"
+                                                th:alt="|gallery image of ${article.title}|" class="gallery-image">
+                                        </div>
+                                    </swiper-slide>
+                                </swiper-container>
+                            </div>
+                        </div>
+
+                        <!-- Article Metadata -->
+                        <div class="row mx-3 mb-0">
+                            <h2 class="col-12 text-center" th:text="${article.subtitle}">Article Subtitle</h2>
+                        </div>
+
+                        <!-- Article Body -->
+                        <div class="row mx-3">
+                            <div class="col-12 artcle-body mb-2">
+                                <p th:text="${article.body}" class="lead">Article content goes here...</p>
+                            </div>
+                        </div>
+
+                        <div class="row mx-3 mb-4">
+                            <div class="col-12">
+
+                                <div class="d-flex flex-wrap gap-3 align-items-center">
+
+                                    <!-- Category -->
+                                    <div th:if="${article.category != null}">
+                                        <i class="fas fa-folder c-red me-1"></i>
+                                        Category:
+                                        <strong>
+                                            <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
+                                                class="text-capitalize text-decoration-none c-red"
+                                                th:text="${article.category.name}">category</a>
+                                        </strong>
+                                    </div>
+                                    <!-- No Category -->
+                                    <div th:if="${article.category == null}">
+                                        <i class="fas fa-folder c-red me-1"></i>
+                                        Category:
+                                        <strong>No category</strong>
+                                    </div>
+                                    <!-- Featured -->
+                                    <div th:if="${article.isFeatured}" class="d-inline-block me-2">
+                                        <span class="featured-badge">
+                                            <i class="fa-solid fa-star c-red"></i> Featured Article
+                                        </span>
+                                    </div>
+                                    <!-- Article Type -->
+                                    <div th:if="${article.articleType == true}">
+                                        <i class="fas fa-tag c-red me-1"></i>
+                                        Article type:
+                                        <strong class="text-capitalize c-red"
+                                            th:text="${article.articleType}">Type</strong>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status and Actions Section -->
+                        <div class="row mx-3 mb-4">
+                            <div class="col-12">
+                                <div>
+                                    <!-- Status Display -->
+                                    <div th:if="${article.isAccepted == true}" class="alert-request alert-success mb-4">
+                                        <i class="fas fa-check me-2"></i>
+                                        <strong>Accepted article</strong> - This article is approved by revisor decision
+                                    </div>
+                                    <div th:if="${article.isAccepted == false}" class="alert-request alert-danger mb-4">
+                                        <i class="fas fa-times me-2"></i>
+                                        <strong>Rejected article</strong> - This article is rejected by revisor decision
+                                    </div>
+                                    <div th:if="${article.isAccepted == null}" class="alert-request alert-warning mb-4">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <strong>Pending article</strong> - This article is awaiting revisor decision
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="action-buttons-container">
+                                        <form th:action="@{/articles/accept(action='accept', articleId=${article.id})}"
+                                            method="POST" th:object="${article}"
+                                            th:if="${article.isAccepted == false || article.isAccepted == null}">
+                                            <button type="submit" class="btn btn-success btn-lg">
+                                                <i class="fas fa-check me-3"></i>Accept article
+                                            </button>
+                                        </form>
+                                        <form th:action="@{/articles/accept(action='reject', articleId=${article.id})}"
+                                            method="POST" th:object="${article}"
+                                            th:if="${article.isAccepted == true || article.isAccepted == null}">
+                                            <button type="submit" class="btn btn-outline-danger btn-lg">
+                                                <i class="fas fa-times me-2"></i>Reject article
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Navigation Links -->
+                                <div class="text-center mt-4 pt-3 border-top border-secondary">
+                                    <a href="javascript:history.back()"
+                                        class="c-red-dark text-decoration-none me-4 fs-5">
+                                        <i class="fas fa-arrow-left me-1"></i>Go back
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <p th:text="${article.body}"></p>
-
-                <div class="text-center">
-                    <a href="#" class="text-secondary pointer" onclick="goBack()">Go back</a>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <form th:action="@{/articles/accept(action='accept', articleId=${article.id})}" method="POST"
-                        th:object="${article}" th:if="${article.isAccepted == false || article.isAccepted == null}">
-                        <button type="submit" class="btn btn-success mx-2">Accept</button>
-                    </form>
-                    <div class="text-danger" th:if="${article.isAccepted == false}">Article rejected</div>
-                    <div class="text-success" th:if="${article.isAccepted == true}">Article accepted</div>
-                    <form th:action="@{/articles/accept(action='reject', articleId=${article.id})}" method="POST"
-                        th:object="${article}" th:if="${article.isAccepted == true || article.isAccepted == null}">
-                        <button type="submit" class="btn btn-danger mx-2">Reject</button>
-                    </form>
+                <!-- More Section -->
+                <div class="col-12 col-lg-10 mt-4">
+                    <div class="detail-content">
+                        <h3 class="c-red mb-4">
+                            <i class="fas fa-newspaper me-2"></i>More from Devil's Chronicle
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <a href="/articles" class="text-decoration-none">
+                                    <div class="p-3 bg-dark rounded mb-3 more-content">
+                                        <i class="fas fa-newspaper fa-3x c-red mb-2"></i>
+                                        <h5 class="text-white">All Articles</h5>
+                                        <p class="">Browse our complete collection</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4 text-center" th:if="${article.category != null}">
+                                <a th:href="@{/categories/search/{id}(id=${article.category.id})}"
+                                    class="text-decoration-none">
+                                    <div class="p-3 bg-dark rounded mb-3 more-content">
+                                        <i class="fas fa-folder fa-3x c-red mb-2"></i>
+                                        <h5 class="text-white" th:text="${article.category.name}">Category</h5>
+                                        <p class="">More from this category</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <a href="/" class="text-decoration-none">
+                                    <div class="p-3 bg-dark rounded mb-3 more-content">
+                                        <i class="fas fa-home fa-3x c-red mb-2"></i>
+                                        <h5 class="text-white">Homepage</h5>
+                                        <p class="">Latest Milan news</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
 
+        <!-- Navigation -->
+        <div class="text-center mt-4 fs-5">
+            <a href="javascript:history.back()" class=" text-decoration-none c-red-dark">
+                <i class="fas fa-arrow-left me-1"></i>Go back
+            </a>
+        </div>
     </div>
 
     <div th:insert="~{index :: footer}"></div>
-
-
 
     <!-- script esterno + bootstrap -->
     <div th:replace="~{index :: script}"></div>

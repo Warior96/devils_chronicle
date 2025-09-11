@@ -28,12 +28,12 @@ spring.mail.properties.mail.smtp.strattls.required=true
 football.api.key=YOUR_FOOTBALL_KEY
 football.api.url=https://api.football-data.org/v4/
 
-# Cache per le partite
-spring.cache.type=simple
-spring.cache.cache-names=matches
-
-# Configurazione per abilitare lo scheduling
+# Scheduling Configuration
 spring.task.scheduling.enabled=true
 
-# Evita conflitti di bean definition
+# Server Configuration
+server.port=8080
+
+# Spring Boot Configuration
 spring.main.allow-bean-definition-overriding=false
+spring.mvc.hiddenmethod.filter.enabled=true
