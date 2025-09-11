@@ -48,9 +48,9 @@
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <a href="/categories" class="btn btn-warning w-100">
+                                   <!--  <a href="/categories" class="btn btn-warning w-100">
                                         <i class="fas fa-tags me-2"></i> Browse categories
-                                    </a>
+                                    </a> -->
                                 </div>
                                 <div class="col-md-3 mb-2">
                                     <a href="/articles/create" class="btn btn-success w-100">
@@ -127,6 +127,12 @@
                                         <div class="d-flex align-items-center">
                                             <i class="fas fa-clock me-2"></i>
                                             <h5 class="mb-0 me-3">Articles to be revised</h5>
+                                            <span class="position-relative me-2" th:if="${articlesToBeRevised > 0}">
+                                                <i class="fa-solid fa-bell ms-1 custom-notification-bell c-black"></i>
+                                                <span
+                                                    class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification custom-notification-badge"
+                                                    th:text="${pendingArticles.size()}"></span>
+                                            </span>
                                         </div>
                                     </button>
                                 </h2>
@@ -222,7 +228,8 @@
                                                                 th:action="@{/articles/accept(action='reject', articleId=${article.id})}"
                                                                 method="POST" class="d-inline">
                                                                 <button type="submit" class="btn btn-sm btn-danger"
-                                                                    onclick="return confirm('Reject this article?')" title="Reject Article">
+                                                                    onclick="return confirm('Reject this article?')"
+                                                                    title="Reject Article">
                                                                     <i class="fas fa-times"></i> Reject
                                                                 </button>
                                                             </form>
@@ -287,7 +294,8 @@
                                                                 th:action="@{/articles/accept(action='accept', articleId=${article.id})}"
                                                                 method="POST" class="d-inline">
                                                                 <button type="submit" class="btn btn-sm btn-success"
-                                                                    onclick="return confirm('Accept this article?')" title="Accept Article">
+                                                                    onclick="return confirm('Accept this article?')"
+                                                                    title="Accept Article">
                                                                     <i class="fas fa-check"></i> Accept
                                                                 </button>
                                                             </form>

@@ -73,11 +73,11 @@
                     <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                         <a class="nav-link d-flex align-items-center pe-3" href="/admin/dashboard">
                             <i class="fas fa-cog me-1"></i>Admin dashboard
-                            <span class="position-relative me-2" th:if="${careerRequests > 0}">
+                            <span class="position-relative me-2" th:if="${careerPending > 0}">
                                 <i class="fa-solid fa-bell ms-1 custom-notification-bell"></i>
                                 <span
                                     class="badge rounded-pill bg-danger c-white fs-7 position-absolute notification custom-notification-badge"
-                                    th:text="${careerRequests}"></span>
+                                    th:text="${careerPending}"></span>
                             </span>
                         </a>
                     </li>
@@ -100,7 +100,7 @@
                         </a>
                     </li>
                     <!-- Access dropdown -->
-                    <li class="nav-item dropdown custom-dropdown-toggle">
+                    <li sec:authorize="isAnonymous" class="nav-item dropdown custom-dropdown-toggle">
                         <a class="nav-link dropdown-toggle custom-dropdown-toggle" href="#" id="accessDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user me-1"></i>Access
@@ -119,13 +119,13 @@
                                     <i class="fas fa-sign-in-alt me-1"></i>Login
                                 </a>
                             </li>
-                            <!-- Logout -->
-                            <li sec:authorize="isAuthenticated">
-                                <a th:href="@{/logout}" class="dropdown-item custom-dropdown-item" aria-current="page">
-                                    <i class="fas fa-sign-out-alt me-1"></i>Logout
-                                </a>
-                            </li>
                         </ul>
+                    </li>
+                    <!-- Logout -->
+                    <li sec:authorize="isAuthenticated">
+                        <a th:href="@{/logout}" class="nav-link">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
                     </li>
                 </ul>
                 <!-- User info -->
