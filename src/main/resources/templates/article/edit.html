@@ -172,8 +172,8 @@
                                     <!-- Multiple Images Swiper Carousel -->
                                     <div th:if="${article.galleryImages.size() > 1}"
                                         class="gallery-swiper-container mb-3 w-100">
-                                        <swiper-container class="gallery-swiper" space-between="60"
-                                            slides-per-view="2.2" pagination="true" pagination-clickable="true"
+                                        <swiper-container class="gallery-swiper" space-between="50"
+                                            slides-per-view="2.5" pagination="true" pagination-clickable="true"
                                             navigation="true" centered-slides="true" grab-cursor="true">
                                             <swiper-slide th:each="galleryImage : ${article.galleryImages}">
                                                 <div class="gallery-slide-content">

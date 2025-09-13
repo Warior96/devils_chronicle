@@ -76,7 +76,7 @@
                             <!-- Multiple Images Swiper Carousel -->
                             <div th:if="${article.galleryImages.size() > 1}"
                                 class="gallery-swiper-container mb-3 col-12 col-lg-7">
-                                <swiper-container class="gallery-swiper" space-between="60" slides-per-view="1.7"
+                                <swiper-container class="gallery-swiper" space-between="50" slides-per-view="1.4"
                                     pagination="true" pagination-clickable="true" navigation="true"
                                     centered-slides="false" grab-cursor="true">
                                     <swiper-slide th:each="galleryImage : ${article.galleryImages}">
@@ -160,7 +160,7 @@
                                     </span>
                                 </div>
                                 <!-- Article category badge -->
-                                <div th:if="${article.isFeatured}" class="position-absolute top-0 end-0 z-2">
+                                <div th:if="${article}" class="position-absolute top-0 end-0 z-2">
                                     <span class="badge bg-primary" th:text="${article.category.name}">
                                         Category
                                     </span>
@@ -177,8 +177,8 @@
                                     <!-- Text -->
                                     <div
                                         class="col-12 col-md-7 d-flex justify-content-between align-items-start flex-column pt-2 ps-3 pe-0">
-                                        <h5 class="card-title pb-2" th:text="${article.title}">Article Title</h5>
-                                        <small class="card-text truncate-2 pt-1 mb-3" th:text="${article.body}">
+                                        <h5 class="card-title pt-3 mt-1" th:text="${article.title}">Article Title</h5>
+                                        <small class="card-text truncate-2 pt-1" th:text="${article.body}">
                                             Article Body
                                         </small>
                                     </div>
@@ -186,13 +186,13 @@
                                 <div class="row">
                                     <!-- Category and Author info -->
                                     <div class="mb-1 col-6 pe-0">
-                                        <small class="ms-2" th:if="${article.publishDate != null}">
+                                        <small class="ms-2 fs-7" th:if="${article.publishDate != null}">
                                             <i class="fas fa-calendar me-1"></i>
                                             <span th:text="${article.publishDate}">Date</span>
                                         </small>
                                     </div>
                                     <div class="mb-1 col-6 text-end ps-0">
-                                        <cite class="card-text me-2">
+                                        <cite class="card-text me-2 fs-7">
                                             <i class="fas fa-user me-1"></i>
                                             <span th:text="${article.user.username}">Author</span>
                                         </cite>
